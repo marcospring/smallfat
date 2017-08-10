@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resultMessages>
+	<!-- 字典模块-->
+	<resultMessage code="010101" key="SYSDIC_IS_NULL" message="字典不存在"/>
+	<resultMessage code="010102" key="SYSDICITEM_IS_NULL" message="字典项不存在"/>
+	<resultMessage code="010103" key="SYSDIC_HAS_ITEMS" message="字典中含有字典项"/>
+    <resultMessage code="010104" key="SYSDICITEM_IS_EXIST" message="字典子项已存在"/>
+    <resultMessage code="010105" key="SYSDIC_ITEM_IS_LOCKED" message="该字典正在被修改"/>
+
+
+
+    <!--用户管理-->
+    <resultMessage code="010201" key="SYSUSER_IS_NULL" message="系统用户为空"/>
+    <resultMessage code="010202" key="SYSUSER_IS_NOT_FOUND" message="没有找到系统用户"/>
+    <resultMessage code="010203" key="LOGIN_ERROR" message="用户名或密码错误"/>
+    <resultMessage code="010204" key="SESSION_TIMEOUT" message="登陆超时"/>
+    <resultMessage code="010205" key="SYSUSER_IS_EXISTS" message="用户已经存在"/>
+    <resultMessage code="010214" key="MOBILE_IS_NULL" message="手机号已存在"/>
+    <resultMessage code="010206" key="UPDATE_SYSUSER_IS_FAILD" message="修改失败"/>
+    <resultMessage code="010207" key="DELETE_SYSUSER_IS_FAILD" message="删除失败"/>
+    <resultMessage code="010208" key="SYSUSER_ROLE_IS_NOT_EXISTS" message="用户角色不存在"/>
+    <resultMessage code="010209" key="SYSUSER_FACE_IS_EXISTS" message="用户在门店中已存在"/>
+    <resultMessage code="010210" key="INCORRECT_PASSWORD" message="原密码输入不正确"/>
+    <resultMessage code="010211" key="PLEASE_CHANGED_PASSWORD" message="请修改初始密码,不允许使用原始密码登陆"/>
+    <resultMessage code="010212" key="PASSWORD_HAVE_CHANGED" message="您的密码已经修改过"/>
+    <resultMessage code="010213" key="ADD_USER_FAILED" message="添加用户失败"/>
+
+    
+    
+	<!-- 系统角色 -->
+    <resultMessage code="010301" key="SYSROLE_IS_NULL" message="系统角色为空"/>
+    <resultMessage code="010302" key="SYSROLE_IS_NOT_FOUND" message="没有找到系统角色"/>
+   	<resultMessage code="010303" key="SYSROLE_IS_EXISTS" message="角色名称已经存在"/>
+   	<resultMessage code="010304" key="SYSROLE_MIDDLE_IS_EXISTS" message="中间表有数据,不可以删除"/>
+   	<resultMessage code="010305" key="DELETE_SYSROLE_IS_FAILD" message="删除角色失败"/>
+    <resultMessage code="010306" key="SYSROLE_ORVER_BD_ROLE_QUERY" message="跳过BD角色查询"/>
+   	
+    <!--系统管理-->
+    <resultMessage code="010401" key="SYSSYSTEM_IS_NULL" message="系统信息为空"/>
+    <resultMessage code="010402" key="SYSSYSTEM_IS_NOT_FOUND" message="没有找到系统信息"/>
+    <resultMessage code="010403" key="UPDATE_SYSSYSTEM_IS_FAILD" message="修改系统管理信息失败"/>
+    <resultMessage code="010404" key="DELETE_SYSSYSTEM_IS_FAILD" message="删除系统管理信息失败"/>
+    <resultMessage code="010405" key="SYSSYSTEM_IS_EXISTS" message="系统名称已经存在"/>
+    
+    <!--权限管理-->
+    <resultMessage code="010501" key="PERMISSION_IS_NULL" message="权限不存在"/>
+    <resultMessage code="010502" key="PERMISSION_HAS_CHILDREN" message="权限有子权限"/>
+    <resultMessage code="010505" key="PERMISSION_IS_NOT_NULL" message="权限已存在"/>
+    <resultMessage code="010506" key="PARENT_PERMISSION_IS_NULL" message="父权限不存在"/>
+
+
+    <!--web异常-->
+    <resultMessage code="010503" key="INF_EMPTY" message="信息不全"/>
+    <resultMessage code="010504" key="VALID_ERROR" message="验证错误"/>
+    <resultMessage code="010507" key="LOGIN_TIMEOUT" message="登陆超时"/>
+
+    
+    <!-- 通用信息 -->
+    <resultMessage code="010601" key="CAN_NOT_UPDATE_COLUMN" message="不允许修改"/>
+    <resultMessage code="010602" key="CAN_NOT_FIND_OBJECT" message="没有找到对象"/>
+    <resultMessage code="010603" key="TABLE_CACHE_KEY_FLUSH_EXCEPTION" message="缓存刷新错误"/>
+
+    <!--APP_VERSION-->
+    <resultMessage code="010801" key="SYSAPPVER_IS_NULL" message="版本为空"/>
+    <resultMessage code="010802" key="SYSAPPVER_IS_NOT_FOUND" message="没有找到版本号"/>
+    <resultMessage code="010803" key="SYSAPPVER_IS_EXISTS" message="版本已经存在"/>
+    <resultMessage code="010804" key="SYSAPPVER_MIDDLE_IS_EXISTS" message="中间表有数据,不可以删除"/>
+    <resultMessage code="010805" key="DELETE_SYSAPPVER_IS_FAILD" message="删除版本失败"/>
+    <resultMessage code="010806" key="UPDATE_SYSAPPVER_IS_FAILD" message="修改版本失败"/>
+    <resultMessage code="010807" key="DOWNADDRESS_IS_NOT_FOUND" message="下载地址不能为空"/>
+    <resultMessage code="010808" key="WORDS_IS_FULL" message="字数超限"/>
+ 	<!-- 获得登陆信息 -->
+    <resultMessage code="010701" key="REDIS_DATABASE_NULL" message="获得REDIS缓存信息为空"/>
+    <resultMessage code="010702" key="LOGIN_SESSION_NULL" message="登陆失效,请重新登陆"/>
+    <resultMessage code="010703" key="TURN_JSON_TO_USER_WRONG" message="格式化JSON数据失败"/>
+
+    <!-- 模板信息 -->
+    <resultMessage code="010901" key="MSG_TEMPLATE_IS_NULL" message="消息模板不存在"/>
+    <!--活动,商户合作信息录入-->
+    <resultMessage code="011001" key="MOBILE_TODAY_IS_SUBMIT" message="手机号今天已提交"/>
+    <resultMessage code="011002" key="IP_TODAY_IS_SUBMIT" message="IP今天已提交"/>
+
+    <!--HTTPCLIENT错误-->
+    <resultMessage code="011101" key="ORDER_REQUEST_EXCEPTION" message="请求order异常"/>
+    <resultMessage code="011102" key="SHOP_REQUEST_EXCEPTION" message="请求shop异常"/>
+    <resultMessage code="011103" key="SYSTEM_REQUEST_EXCEPTION" message="请求system出错"/>
+
+    <!--请求记录-->
+    <resultMessage code="011201" key="REQRECORD_IS_NOT_FOUND" message="没找到请求记录"/>
+    <resultMessage code="011202" key="REQRECORD_IS_NULL" message="请求记录为空"/>
+    <resultMessage code="011203" key="DELETE_REQRECORD_IS_FAILD" message="删除请求记录失败"/>
+    <resultMessage code="011204" key="UPDATE_REQRECORD_IS_FAILD" message="更新请求记录失败"/>
+
+    <!-- 配置管理 -->
+    <resultMessage code="011201" key="CFG_CREDITLINE_ALREADY_EXIST" message="已有相同的区间组合，请重新设置"/>
+    <resultMessage code="011202" key="CFG_CREDITLINE_NOT_EXIST" message="配置区间不存在"/>
+    <resultMessage code="011203" key="CFG_CREDITLINE_STATUS_ERROR" message="配置区间状态不正确"/>
+    <resultMessage code="011204" key="CFG_RULE_CHANGE_ERROR" message="提现管理修改失败"/>
+
+    <!--渠道管理-->
+    <resultMessage code="011301" key="CHANNEL_NO_IS_EXIST" message="渠道号已存在"/>
+    <resultMessage code="011302" key="CHANNEL_NAME_IS_EXIST" message="渠道名已存在"/>
+</resultMessages>

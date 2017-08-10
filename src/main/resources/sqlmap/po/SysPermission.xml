@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysPermission">
+	<sql id="baseColumnList">
+			u.id as id ,
+			u.disabled as disabled ,
+			u.uuid as uuid ,
+			u.create_user as createUser ,
+			u.create_time as createTime ,
+			u.update_user as updateUser ,
+			u.update_time as updateTime ,
+			u.remark as remark ,
+			u.order_by as orderBy ,
+			u.parent_id as parentId ,
+			u.permission_name as permissionName ,
+			u.permission_code as permissionCode ,
+			u.permission_url as permissionUrl ,
+			u.permission_type as permissionType ,
+			u.is_leaf as isLeaf ,
+			u.sys_id as sysId ,
+			u.status as status 
+	</sql>
+	<sql id="searchCriteria">
+		<if test="id != null">
+			and u.id = #{id,jdbcType=NUMERIC}
+		</if>
+		<if test="disabled != null">
+			and u.disabled = #{disabled,jdbcType=NUMERIC}
+		</if>
+		<if test="uuid != null">
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+		</if>
+		<if test="uuidLike != null">
+			and u.uuid like CONCAT('%',#{uuidLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="createUser != null">
+			and u.create_user = #{createUser,jdbcType=NUMERIC}
+		</if>
+		<if test="createTime != null">
+			and u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+			and u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="updateTime != null">
+			and u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="remark != null">
+			and u.remark = #{remark,jdbcType=VARCHAR}
+		</if>
+		<if test="remarkLike != null">
+			and u.remark like CONCAT('%',#{remarkLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="orderBy != null">
+			and u.order_by = #{orderBy,jdbcType=NUMERIC}
+		</if>
+		<if test="parentId != null">
+			and u.parent_id = #{parentId,jdbcType=NUMERIC}
+		</if>
+		<if test="permissionName != null">
+			and u.permission_name = #{permissionName,jdbcType=VARCHAR}
+		</if>
+		<if test="permissionNameLike != null">
+			and u.permission_name like CONCAT('%',#{permissionNameLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="permissionCode != null">
+			and u.permission_code = #{permissionCode,jdbcType=VARCHAR}
+		</if>
+		<if test="permissionCodeLike != null">
+			and u.permission_code like CONCAT('%',#{permissionCodeLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="permissionUrl != null">
+			and u.permission_url = #{permissionUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="permissionUrlLike != null">
+			and u.permission_url like CONCAT('%',#{permissionUrlLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="permissionType != null">
+			and u.permission_type = #{permissionType,jdbcType=NUMERIC}
+		</if>
+		<if test="isLeaf != null">
+			and u.is_leaf = #{isLeaf,jdbcType=NUMERIC}
+		</if>
+		<if test="sysId != null">
+			and u.sys_id = #{sysId,jdbcType=NUMERIC}
+		</if>
+		<if test="status != null">
+			and u.status = #{status,jdbcType=NUMERIC}
+		</if>
+	</sql>
+
+	<!-- 查询列表数据 -->
+	<select id="queryListResult" parameterType="map" resultType="SysPermission">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_PERMISSION u
+		where
+		    u.disabled = 0
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+			<include refid="Util.mysqlPage" />
+	</select>
+	<select id="queryListResultCount" parameterType="map" resultType="long">
+		select
+			count(u.id)
+		from
+			SYS_PERMISSION u
+		where
+		    u.disabled = 0
+		<include refid="searchCriteria" />
+	</select>
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="SysPermission">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_PERMISSION u
+		where
+		    u.disabled = 0 
+		    <if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	<select id="queryListResultCountByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="long">
+		select
+			count(u.id)
+		from
+			SYS_PERMISSION u
+		where
+		    u.disabled = 0 
+			<if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	
+	<!-- 查询一条数据 -->
+	<select id="querySingleResultById" parameterType="int" resultType="SysPermission">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_PERMISSION u
+		where
+		    u.disabled = 0
+			and u.ID = #{id,jdbcType=NUMERIC}
+	</select>
+	
+	<select id="querySingleResultByUUID" parameterType="String" resultType="SysPermission">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_PERMISSION u
+		where
+			    u.disabled = 0
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+	</select>
+	<select id="querySingleResultByParams" parameterType="map" resultType="SysPermission">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_PERMISSION u
+		where
+			u.disabled = 0
+			<include refid="searchCriteria" />
+	</select>
+
+	<insert id="save" parameterType="SysPermission" useGeneratedKeys="true" keyProperty="id">
+		insert into SYS_PERMISSION(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			order_by,
+			parent_id,
+			permission_name,
+			permission_code,
+			permission_url,
+			permission_type,
+			is_leaf,
+			sys_id,
+			status
+		)values(
+			#{disabled,jdbcType=NUMERIC},
+			#{uuid,jdbcType=VARCHAR},
+			#{createUser,jdbcType=NUMERIC},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateUser,jdbcType=NUMERIC},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{remark,jdbcType=VARCHAR},
+			#{orderBy,jdbcType=NUMERIC},
+			#{parentId,jdbcType=NUMERIC},
+			#{permissionName,jdbcType=VARCHAR},
+			#{permissionCode,jdbcType=VARCHAR},
+			#{permissionUrl,jdbcType=VARCHAR},
+			#{permissionType,jdbcType=NUMERIC},
+			#{isLeaf,jdbcType=NUMERIC},
+			#{sysId,jdbcType=NUMERIC},
+			#{status,jdbcType=NUMERIC}
+		)
+	</insert>
+	<insert id="saveBatch" parameterType="ArrayList">
+		insert into SYS_PERMISSION(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			order_by,
+			parent_id,
+			permission_name,
+			permission_code,
+			permission_url,
+			permission_type,
+			is_leaf,
+			sys_id,
+			status
+		)values
+		<foreach collection="list" item="obj" separator=",">
+		(
+			#{obj.disabled,jdbcType=NUMERIC},
+			#{obj.uuid,jdbcType=VARCHAR},
+			#{obj.createUser,jdbcType=NUMERIC},
+			#{obj.createTime,jdbcType=TIMESTAMP},
+			#{obj.updateUser,jdbcType=NUMERIC},
+			#{obj.updateTime,jdbcType=TIMESTAMP},
+			#{obj.remark,jdbcType=VARCHAR},
+			#{obj.orderBy,jdbcType=NUMERIC},
+			#{obj.parentId,jdbcType=NUMERIC},
+			#{obj.permissionName,jdbcType=VARCHAR},
+			#{obj.permissionCode,jdbcType=VARCHAR},
+			#{obj.permissionUrl,jdbcType=VARCHAR},
+			#{obj.permissionType,jdbcType=NUMERIC},
+			#{obj.isLeaf,jdbcType=NUMERIC},
+			#{obj.sysId,jdbcType=NUMERIC},
+			#{obj.status,jdbcType=NUMERIC}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="SysPermission">
+		update SYS_PERMISSION u
+		<set>
+			u.create_time = #{createTime,jdbcType=TIMESTAMP} 
+ 			<if test="disabled != null">
+				,u.disabled=#{disabled,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateUser != null">
+				,u.update_user=#{updateUser,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateTime != null">
+				,u.update_time=#{updateTime,jdbcType=TIMESTAMP} 
+			</if>
+ 			<if test="remark != null">
+				,u.remark=#{remark,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="orderBy != null">
+				,u.order_by=#{orderBy,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="parentId != null">
+				,u.parent_id=#{parentId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="permissionName != null">
+				,u.permission_name=#{permissionName,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="permissionCode != null">
+				,u.permission_code=#{permissionCode,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="permissionUrl != null">
+				,u.permission_url=#{permissionUrl,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="permissionType != null">
+				,u.permission_type=#{permissionType,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="isLeaf != null">
+				,u.is_leaf=#{isLeaf,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="sysId != null">
+				,u.sys_id=#{sysId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="status != null">
+				,u.status=#{status,jdbcType=NUMERIC} 
+			</if>
+		</set>
+		where
+            u.ID = #{id,jdbcType=NUMERIC}
+            
+	</update>
+	<!-- 自定义修改列以及修改条件 -->
+	<update id="updateCustomColumnByWhere" parameterType="map" statementType="STATEMENT">
+		UPDATE  SYS_PERMISSION  ${updateSqlStr}
+		where
+			${whereSqlStr}
+	</update>
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelete" parameterType="map">
+		update SYS_PERMISSION u set
+		u.DISABLED = 1
+		<if test="updateTime != null">
+		    ,u.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+            ,u.UPDATE_USER = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		where
+			<if test="id != null">
+				u.ID = #{id,jdbcType=NUMERIC}
+			</if>
+			<if test="id == null and uuid != null">
+				u.uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="id == null and uuid == null">
+				u.id = null
+			</if>
+	</update>
+	<!-- 自定义逻辑条件 -->
+	<update id="logicWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		update SYS_PERMISSION set DISABLED = 1
+		where
+			${whereSqlStr}
+	</update>
+	<!-- 物理删除 -->
+	<delete id="physicalDelete" parameterType="java.lang.Integer">
+		delete from SYS_PERMISSION where id=#{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 自定义物理条件 -->
+	<delete id="physicalWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		DELETE FROM SYS_PERMISSION WHERE ${whereSqlStr}
+	</delete>
+	
+	
+</mapper>
