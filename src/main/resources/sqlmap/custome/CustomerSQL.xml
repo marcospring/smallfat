@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CustomerSQL">
+
+
+
+
+    <!--获取精选文章评论数-->
+    <select id="getArticleCommentCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT
+		count(1) as
+		FROM
+		FAT_COMMENT t
+		WHERE
+		t.disabled = 0
+		AND
+		t.article_id = #{id,jdbcType=NUMERIC}
+
+	</select>
+	<!--获取精选文章收藏数量-->
+	<select id="getFavoriteCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT
+		count(1) as
+		FROM
+		FAT_FAVORITE t
+		WHERE
+		t.disabled = 0
+		AND
+		t.article_id = #{id,jdbcType=NUMERIC}
+		AND
+		t.favorite_type = #{favorite_type,jdbcType=NUMERIC}
+
+	</select>
+	<!-- 动态查询系统用户信息-->
+	<select id="paginationSysUser" parameterType="java.util.Map" resultType="SysUserVo" >
+		select distinct u.id as id , u.disabled as disabled , u.uuid as uuid , u.create_user as createUser , u.create_time as createTime , u.update_user as updateUser , u.update_time as updateTime , u.remark as remark , u.username as username , u.password as password , u.realname as realname , u.mobile as mobile , u.qq as qq , u.wechat as wechat , u.email as email,
+		u.status status
+		<if test="roleId != null">
+			from SYS_USER u left join  SYS_USER_ROLE ur on u.id=ur.user_id
+			where u.disabled = 0 and ur.disabled=0
+		</if>
+		<if test="roleId == null">
+			from SYS_USER u
+			where u.disabled = 0
+		</if>
+		<if test="username!=null">
+			and u.username =#{username,jdbcType=VARCHAR}
+		</if>
+		<if test="usernameLike != null">
+			and u.username like CONCAT('%',#{usernameLike,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="realname != null">
+			and u.realname =#{realname,jdbcType=VARCHAR}
+		</if>
+		<if test="realnameLike != null">
+			and u.realname like CONCAT('%',#{realnameLike,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="mobile != null">
+			and u.mobile =#{mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="mobileLike != null">
+			and u.mobile like CONCAT('%',#{mobileLike,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="roleId != null">
+			and ur.role_id=#{roleId,jdbcType=NUMERIC}
+		</if>
+		order by u.CREATE_TIME desc
+		<include refid="Util.mysqlPage"/>
+	</select>
+
+	<!--获取用户的权限-->
+	<select id="countOrdUserVos" parameterType="java.util.Map" resultType="java.lang.Integer" >
+		select count(*) from (
+		select distinct u.id
+		<if test="roleId != null">
+			from SYS_USER u left join  SYS_USER_ROLE ur on u.id=ur.user_id
+			where u.disabled = 0 and ur.disabled=0
+		</if>
+		<if test="roleId == null">
+			from SYS_USER u
+			where u.disabled = 0
+		</if>
+		<if test="username!=null">
+			and u.username =#{username,jdbcType=VARCHAR}
+		</if>
+		<if test="usernameLike != null">
+			and u.username like CONCAT('%',#{usernameLike,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="realname != null">
+			and u.realname =#{realname,jdbcType=VARCHAR}
+		</if>
+		<if test="realnameLike != null">
+			and u.realname like CONCAT('%',#{realnameLike,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="mobile != null">
+			and u.mobile =#{mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="mobileLike != null">
+			and u.mobile like CONCAT('%',#{mobileLike,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="roleId != null">
+			and ur.role_id=#{roleId,jdbcType=NUMERIC}
+		</if>
+		) a;
+	</select>
+
+	<!--根据用户id获取权限-->
+	<select id="getRolesByUserId" parameterType="java.util.Map" resultType="UserRoleVO" >
+		select r.id as id,r.role_name as roleName,ur.user_id as userId
+		from SYS_ROLE r
+		left join SYS_USER_ROLE ur on r.id=ur.role_id
+		where  ur.disabled=0 and r.status = 0 AND ur.user_id =#{userId,jdbcType=NUMERIC};
+	</select>
+
+	<select id="getAllSubjectCount" parameterType="java.util.Map" resultType="AllCountVO" >
+		select t.`subject` as code ,count(1) plantCount from FAT_ALL t  where disabled = 0 group by subject ;
+	</select>
+
+	<select id="getCategoriesBySubject" parameterType="java.util.Map" resultType="AllCountVO" >
+		select t.`category` as code ,count(1) plantCount from FAT_ALL t  where disabled = 0 and
+		subject=#{subject,jdbcType=VARCHAR} group
+		 by
+		category ;
+	</select>
+
+	
+</mapper>

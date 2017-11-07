@@ -23,12 +23,43 @@
     <!-- redis的单点连接池pool，不是必选项：timeout/password  -->
     <bean id = "jedisPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
-        <constructor-arg index="1" value="${redis.host}"/>
+        <constructor-arg index="1" value="${redis.host}" type="java.lang.String"/>
         <constructor-arg index="2" value="${redis.port}"/>
         <!--timeout-->
         <constructor-arg index="3" value="${redis.timeout}"/>
         <!--<constructor-arg index="4" value="${redis.password}"/>-->
         <!--<constructor-arg index="5" value="${redis.database}"/>-->
+    </bean>
+
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" destroy-method="destroy">
+        <property name="poolConfig" ref="jedisPoolConfig"></property>
+        <property name="hostName" value="${redis.host}"></property>
+        <property name="port" value="${redis.port}"></property>
+        <!--<property name="password" value="0123456"></property>-->
+        <property name="timeout" value="15000"></property>
+        <property name="usePool" value="true"></property>
+    </bean>
+
+    <bean id="topicMessageListener" class="com.smt.smallfat.utils.TopicMessageListener">
+        <property name="orderService" ref="orderServiceImpl"/>
+    </bean>
+
+    <bean id="topicContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer" destroy-method="destroy">
+        <property name="connectionFactory" ref="jedisConnectionFactory"/>
+        <property name="taskExecutor"><!-- 此处有个奇怪的问题，无法正确使用其他类型的Executor -->
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+                <property name="poolSize" value="3"></property>
+            </bean>
+        </property>
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="topicMessageListener">
+                    <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                        <constructor-arg value="__keyevent@0__:expired"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
     </bean>
     <!--redis哨兵集群模式连接池-->
     <!--<bean id="jedisPool" class="redis.clients.jedis.JedisSentinelPool">-->
@@ -47,7 +78,10 @@
     <bean id="redisFactory" class="com.csyy.redis.jedis.factory.JedisSimpleSessionFactory">
         <property name="pool" ref="jedisPool"/>
     </bean>
-
+    <!--分布式锁-->
+    <bean class="com.csyy.redis.utils.lock.DelegateDistributedLock">
+        <property name="factory" ref="redisFactory"/>
+    </bean>
 
     <!--codis配置-->
     <!--<bean name="cacheclinet" class="com.nonobank.architecture.cache.CacheClient">-->
@@ -69,5 +103,6 @@
     <!--<property name="pool" ref="jedisPool"/>-->
     <!--<property name="client" ref="cacheclinet"/>-->
     <!--</bean>-->
+
 </beans>
 

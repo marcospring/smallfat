@@ -10,8 +10,12 @@ import com.smt.smallfat.constant.ResultConstant;
 import com.smt.smallfat.po.SysRole;
 import com.smt.smallfat.po.SysRolePermission;
 import com.smt.smallfat.po.SysUserRole;
+import com.smt.smallfat.service.system.SysPermissionService;
 import com.smt.smallfat.service.system.SysRoleService;
+import com.smt.smallfat.vo.PermissionTreeVo;
+import com.smt.smallfat.vo.SysRolePermissionVo;
 import com.smt.smallfat.vo.SysRoleVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,8 @@ import java.util.*;
 @Service
 public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleService {
 
+    @Autowired
+    private SysPermissionService permissionService;
 
     @Override
     @Transactional
@@ -104,14 +110,20 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
     }
 
     @Override
-    public SysRoleVo getSysRoleById(int id) {
+    public Map<String,Object> getSysRoleById(int id) {
         SysRole sysRole;
         sysRole = factory.getCacheReadDataSession().querySingleResultById(SysRole.class, id);
         if (sysRole == null) {
             throw new CommonException(ResultConstant.SysRoleResult.SYSROLE_IS_NOT_FOUND);
         }
         SysRoleVo sysRoleVo = CommonBeanUtils.getBeanBySameProperty(SysRoleVo.class, sysRole);
-        return sysRoleVo;
+        Map<String,Object> param = new HashMap<>();
+        param.put(SysRolePermissionVo.FIELD_ROLE_ID,param.get(SysRoleVo.FIELD_ID));
+        List<PermissionTreeVo> tree = permissionService.getRolePermissionTree(sysRole.getId());
+        Map<String,Object> result = new HashMap<>(2);
+        result.put("sysRole",sysRoleVo);
+        result.put("permissionTreeVo",tree);
+        return result;
     }
 
     @Override

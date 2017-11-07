@@ -183,4 +183,5 @@ public class SysDicItemServiceImpl extends BaseServiceImpl implements SysDicItem
                 params);
         return CommonBeanUtils.getBeanBySameProperty(SysDicItemVo.class, itemByParam);
     }
+
 }

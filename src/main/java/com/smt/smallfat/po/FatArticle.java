@@ -1,6 +1,7 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
+
 /**
  * FatArticle实体
  * 
@@ -35,6 +36,26 @@ public class FatArticle extends BasePo {
 	private Integer  articleType = 0;
 	/**文章类型 对应的静态变量值*/
 	public static final String FIELD_ARTICLE_TYPE = "articleType";
+	/**是否展示到app*/
+	private Integer  isApp = 0;
+	/**是否展示到app 对应的静态变量值*/
+	public static final String FIELD_IS_APP = "isApp";
+	/**作者图片*/
+	private String  authorImg = "";
+	/**作者图片 对应的静态变量值*/
+	public static final String FIELD_AUTHOR_IMG = "authorImg";
+	/**展示类型*/
+	private Integer  showType = 0;
+	/**展示类型 对应的静态变量值*/
+	public static final String FIELD_SHOW_TYPE = "showType";
+	/**分享路径*/
+	private String  shareUrl = "";
+	/**分享路径 对应的静态变量值*/
+	public static final String FIELD_SHARE_URL = "shareUrl";
+	/**是否推送*/
+	private Integer  isPush = 0;
+	/**是否推送 对应的静态变量值*/
+	public static final String FIELD_IS_PUSH = "isPush";
 	
 	public String getTitle() {
 		return title;
@@ -71,5 +92,35 @@ public class FatArticle extends BasePo {
 	}
 	public void setArticleType(Integer articleType) {
 		this.articleType = articleType;
+	}
+	public Integer getIsApp() {
+		return isApp;
+	}
+	public void setIsApp(Integer isApp) {
+		this.isApp = isApp;
+	}
+	public String getAuthorImg() {
+		return authorImg;
+	}
+	public void setAuthorImg(String authorImg) {
+		this.authorImg = authorImg;
+	}
+	public Integer getShowType() {
+		return showType;
+	}
+	public void setShowType(Integer showType) {
+		this.showType = showType;
+	}
+	public String getShareUrl() {
+		return shareUrl;
+	}
+	public void setShareUrl(String shareUrl) {
+		this.shareUrl = shareUrl;
+	}
+	public Integer getIsPush() {
+		return isPush;
+	}
+	public void setIsPush(Integer isPush) {
+		this.isPush = isPush;
 	}
 }

@@ -2,11 +2,13 @@ package com.smt.smallfat.web.backend.dic;
 
 
 import com.csyy.common.StringDefaultValue;
+import com.smt.smallfat.po.SysDic;
 import com.smt.smallfat.service.system.SysDicService;
 import com.smt.smallfat.vo.DicTreeVo;
 import com.smt.smallfat.vo.SysDicVo;
 import com.smt.smallfat.web.common.BaseController;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/dic")
 public class DicController extends BaseController {
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SysDicService dicService;
@@ -36,8 +38,8 @@ public class DicController extends BaseController {
     @RequestMapping("/addDic")
     public void addDic(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = nullAbleValidation(request, SysDicVo.FIELD_DIC_CODE,SysDicVo.FIELD_DIC_NAME);
-        dicService.addDic(param);
-        printWriter(response, successResultJSON());
+        SysDic dic = dicService.addDic(param);
+        printWriter(response, successResultJSON(dic));
     }
 
     /**

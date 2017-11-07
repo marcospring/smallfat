@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Util">
+	<sql id="orderCriteria">
+		order by 
+		<if test="orderByColumn != null">
+			${orderByColumn}
+		</if>
+		<if test="orderByColumn == null">
+			u.CREATE_TIME
+		</if>
+		<if test="orderByType != null">
+			${orderByType}
+		</if>
+	</sql>
+	<sql id="mysqlPage">
+		<if test="pageNo != null and pageSize != null">
+				limit ${(pageNo - 1) * pageSize}, ${pageSize}
+		</if>
+	</sql>
+
+</mapper>

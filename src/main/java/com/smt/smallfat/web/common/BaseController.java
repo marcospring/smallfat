@@ -8,6 +8,7 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.apisupport.BaseResultSupport;
 import com.csyy.core.exception.BusinessException;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -67,13 +68,13 @@ public class BaseController extends BaseResultSupport {
         Map<String, Object> paramsMap = new HashMap();
         String pageNoStr = request.getParameter("pageNo");
         String pageSizeStr = request.getParameter("pageSize");
-        int pageNo = StringDefaultValue.intValue(pageNoStr);
+        int pageNo = StringDefaultValue.intValue(pageNoStr) == 0 ? 1 : StringDefaultValue.intValue(pageNoStr);
         int pageSize = StringDefaultValue.intValue(pageSizeStr) == 0 ? 10 : StringDefaultValue.intValue(pageSizeStr);
         paramsMap.put("pageNo", pageNo);
         paramsMap.put("pageSize", pageSize);
         Enumeration parameterNames = request.getParameterNames();
 
-        while(parameterNames.hasMoreElements()) {
+        while (parameterNames.hasMoreElements()) {
             String name = StringDefaultValue.StringValue(parameterNames.nextElement());
 
             try {
@@ -94,12 +95,12 @@ public class BaseController extends BaseResultSupport {
     @ExceptionHandler
     public void exception(HttpServletResponse response, Exception e) {
         if (!(e instanceof BusinessException)) {
-            ((Exception)e).printStackTrace();
-            ExceptionInfo.exceptionInfo((Exception)e, this.logger);
-            e = new BusinessException((Exception)e);
+            ((Exception) e).printStackTrace();
+            ExceptionInfo.exceptionInfo((Exception) e, this.logger);
+            e = new BusinessException((Exception) e);
         }
 
-        this.printWriter(response, this.resultJSON((BusinessException)e));
+        this.printWriter(response, this.resultJSON((BusinessException) e));
     }
 
     protected Map<String, Object> nullAbleValidation(HttpServletRequest request, String... args) {
@@ -109,7 +110,7 @@ public class BaseController extends BaseResultSupport {
             String[] var4 = args;
             int var5 = args.length;
 
-            for(int var6 = 0; var6 < var5; ++var6) {
+            for (int var6 = 0; var6 < var5; ++var6) {
                 String key = var4[var6];
                 if (StringUtils.isEmpty(params.get(key))) {
                     throw new InfoEmptyException();
@@ -129,7 +130,7 @@ public class BaseController extends BaseResultSupport {
         int var7 = notEmptyKeys.length;
 
         int var8;
-        for(var8 = 0; var8 < var7; ++var8) {
+        for (var8 = 0; var8 < var7; ++var8) {
             String key = var6[var8];
             notEmptyKeysList.add(key);
         }
@@ -138,14 +139,14 @@ public class BaseController extends BaseResultSupport {
         String[] var12 = optionalKeys;
         var8 = optionalKeys.length;
 
-        for(int var15 = 0; var15 < var8; ++var15) {
+        for (int var15 = 0; var15 < var8; ++var15) {
             String key = var12[var15];
             optionalKeysList.add(key);
         }
 
         Enumeration parameterNames = request.getParameterNames();
 
-        while(parameterNames.hasMoreElements()) {
+        while (parameterNames.hasMoreElements()) {
             String name = StringDefaultValue.StringValue(parameterNames.nextElement());
             if (notEmptyKeysList.contains(name)) {
                 this.putParams(request, params, name, true);
@@ -183,8 +184,8 @@ public class BaseController extends BaseResultSupport {
         Map<String, Object> map = new HashMap();
         Iterator var5 = param.entrySet().iterator();
 
-        while(var5.hasNext()) {
-            Entry<String, Object> entry = (Entry)var5.next();
+        while (var5.hasNext()) {
+            Entry<String, Object> entry = (Entry) var5.next();
             if (!"".equals(entry.getValue())) {
                 map.put(entry.getKey(), entry.getValue());
             }
@@ -197,7 +198,7 @@ public class BaseController extends BaseResultSupport {
     public Object getMapVal(Map<String, Object> map, String key) {
         Object object = map.get(key);
         if (object instanceof String) {
-            return object != null && !"".equals(object) ? ((String)object).trim() : "";
+            return object != null && !"".equals(object) ? ((String) object).trim() : "";
         } else {
             return object;
         }
@@ -207,7 +208,7 @@ public class BaseController extends BaseResultSupport {
         try {
             Object roles = sysLoginVO.get("roles");
             String s = JSONUtils.toJson(roles);
-            List<Integer> integers = (List)JSONUtils.fromJson(s, new TypeToken<List<Integer>>() {
+            List<Integer> integers = (List) JSONUtils.fromJson(s, new TypeToken<List<Integer>>() {
             });
             String unsensitive = properties.get("unsensitive");
             String[] split = unsensitive.split(",");
@@ -236,7 +237,7 @@ public class BaseController extends BaseResultSupport {
         }
 
         public String getValidSessionId(Map<String, Object> map) {
-            return (String)this.valid(map);
+            return (String) this.valid(map);
         }
     }
 
@@ -253,7 +254,7 @@ public class BaseController extends BaseResultSupport {
         }
 
         public String getValidUUID(Map<String, Object> map) {
-            return (String)this.valid(map);
+            return (String) this.valid(map);
         }
     }
 

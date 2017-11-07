@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="true">
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{400} - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <!-- 所有日志文件-->
+    <appender name="AllLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <file>all.log</file>
+            <fileNamePattern>/Users/zhangkui/logs/all/%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{400} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--异常日志文件-->
+    <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <file>error.log</file>
+            <fileNamePattern>/Users/zhangkui/logs/error/%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{400} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--信息(INFO)日志文件-->
+    <appender name="infoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <file>info.log</file>
+            <fileNamePattern>/Users/zhangkui/logs/info/%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{400} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--跑批日志-->
+    <!--<appender name="TaskLog" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--<fileNamePattern>log/abcchina/task/%d{yyyy-MM-dd}.log</fileNamePattern>-->
+    <!--<maxHistory>30</maxHistory>-->
+    <!--</rollingPolicy>-->
+    <!--<encoder>-->
+    <!--<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n</pattern>-->
+    <!--</encoder>-->
+    <!--</appender>-->
+    <!--<appender name="SendLog" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--<fileNamePattern>log/abcchina/send/%d{yyyy-MM-dd}.log</fileNamePattern>-->
+    <!--<maxHistory>30</maxHistory>-->
+    <!--</rollingPolicy>-->
+    <!--<encoder>-->
+    <!--<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n</pattern>-->
+    <!--</encoder>-->
+    <!--</appender>-->
+    <!-- 为某个包下的所有类指定Appender 这里也可以指定类名称例如：com.aa.bb.ClassName-->
+    <!--<logger name="com.aa.bb" >-->
+    <!--<appender-ref ref="TaskLog" />-->
+    <!--</logger>-->
+
+    <!--<logger name="com.aa.cc" >-->
+    <!--<appender-ref ref="SendLog" />-->
+    <!--</logger>-->
+    <root level="debug">
+        <appender-ref ref="AllLog"/>
+        <appender-ref ref="errorLog"/>
+        <appender-ref ref="infoLog"/>
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

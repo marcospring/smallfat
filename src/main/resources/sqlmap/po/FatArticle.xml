@@ -16,7 +16,12 @@
 			u.author as author ,
 			u.pic as pic ,
 			u.read_count as readCount ,
-			u.article_type as articleType 
+			u.article_type as articleType ,
+			u.is_app as isApp ,
+			u.author_img as authorImg ,
+			u.show_type as showType ,
+			u.share_url as shareUrl ,
+			u.is_push as isPush 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -81,6 +86,27 @@
 		</if>
 		<if test="articleType != null">
 			and u.article_type = #{articleType,jdbcType=NUMERIC}
+		</if>
+		<if test="isApp != null">
+			and u.is_app = #{isApp,jdbcType=NUMERIC}
+		</if>
+		<if test="authorImg != null">
+			and u.author_img = #{authorImg,jdbcType=VARCHAR}
+		</if>
+		<if test="authorImgLike != null">
+			and u.author_img like CONCAT('%',#{authorImgLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="showType != null">
+			and u.show_type = #{showType,jdbcType=NUMERIC}
+		</if>
+		<if test="shareUrl != null">
+			and u.share_url = #{shareUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="shareUrlLike != null">
+			and u.share_url like CONCAT('%',#{shareUrlLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="isPush != null">
+			and u.is_push = #{isPush,jdbcType=NUMERIC}
 		</if>
 	</sql>
 
@@ -174,7 +200,12 @@
 			author,
 			pic,
 			read_count,
-			article_type
+			article_type,
+			is_app,
+			author_img,
+			show_type,
+			share_url,
+			is_push
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -189,7 +220,12 @@
 			#{author,jdbcType=VARCHAR},
 			#{pic,jdbcType=VARCHAR},
 			#{readCount,jdbcType=NUMERIC},
-			#{articleType,jdbcType=NUMERIC}
+			#{articleType,jdbcType=NUMERIC},
+			#{isApp,jdbcType=NUMERIC},
+			#{authorImg,jdbcType=VARCHAR},
+			#{showType,jdbcType=NUMERIC},
+			#{shareUrl,jdbcType=VARCHAR},
+			#{isPush,jdbcType=NUMERIC}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -207,7 +243,12 @@
 			author,
 			pic,
 			read_count,
-			article_type
+			article_type,
+			is_app,
+			author_img,
+			show_type,
+			share_url,
+			is_push
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -224,7 +265,12 @@
 			#{obj.author,jdbcType=VARCHAR},
 			#{obj.pic,jdbcType=VARCHAR},
 			#{obj.readCount,jdbcType=NUMERIC},
-			#{obj.articleType,jdbcType=NUMERIC}
+			#{obj.articleType,jdbcType=NUMERIC},
+			#{obj.isApp,jdbcType=NUMERIC},
+			#{obj.authorImg,jdbcType=VARCHAR},
+			#{obj.showType,jdbcType=NUMERIC},
+			#{obj.shareUrl,jdbcType=VARCHAR},
+			#{obj.isPush,jdbcType=NUMERIC}
 		)
 		</foreach>
 	</insert>
@@ -266,6 +312,21 @@
 			</if>
  			<if test="articleType != null">
 				,u.article_type=#{articleType,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="isApp != null">
+				,u.is_app=#{isApp,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="authorImg != null">
+				,u.author_img=#{authorImg,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="showType != null">
+				,u.show_type=#{showType,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="shareUrl != null">
+				,u.share_url=#{shareUrl,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="isPush != null">
+				,u.is_push=#{isPush,jdbcType=NUMERIC} 
 			</if>
 		</set>
 		where

@@ -24,10 +24,16 @@
     <resultMessage code="010211" key="PLEASE_CHANGED_PASSWORD" message="请修改初始密码,不允许使用原始密码登陆"/>
     <resultMessage code="010212" key="PASSWORD_HAVE_CHANGED" message="您的密码已经修改过"/>
     <resultMessage code="010213" key="ADD_USER_FAILED" message="添加用户失败"/>
+    <resultMessage code="010214" key="USER_IS_CLOSED" message="该用户已被禁用"/>
+    <resultMessage code="010215" key="PASSWORD_IS_INVALID" message="新密码请务必设置为数字+字母的8~16位组合。"/>
+    <resultMessage code="010216" key="LOGOIN_BY_OTHER" message="您的账号已在其他位置登录，如有疑问请联系客服"/>
+    <resultMessage code="010217" key="LOGOIN_BY_OTHER" message="您的账号已在其他位置登录，如有疑问请联系客服"/>
 
-    
-    
-	<!-- 系统角色 -->
+    <resultMessage code="999" key="SESSION_LOST_ERROR" message="会话不存在或已过期"/>
+
+
+
+    <!-- 系统角色 -->
     <resultMessage code="010301" key="SYSROLE_IS_NULL" message="系统角色为空"/>
     <resultMessage code="010302" key="SYSROLE_IS_NOT_FOUND" message="没有找到系统角色"/>
    	<resultMessage code="010303" key="SYSROLE_IS_EXISTS" message="角色名称已经存在"/>
@@ -74,30 +80,68 @@
     <resultMessage code="010702" key="LOGIN_SESSION_NULL" message="登陆失效,请重新登陆"/>
     <resultMessage code="010703" key="TURN_JSON_TO_USER_WRONG" message="格式化JSON数据失败"/>
 
-    <!-- 模板信息 -->
-    <resultMessage code="010901" key="MSG_TEMPLATE_IS_NULL" message="消息模板不存在"/>
-    <!--活动,商户合作信息录入-->
-    <resultMessage code="011001" key="MOBILE_TODAY_IS_SUBMIT" message="手机号今天已提交"/>
-    <resultMessage code="011002" key="IP_TODAY_IS_SUBMIT" message="IP今天已提交"/>
+    <!-- 文章精选-->
+    <resultMessage code="010801" key="ARTICLE_IS_NOT_NULL" message="文章已经存在"/>
+    <resultMessage code="010802" key="ARTICLE_IS_NULL" message="文章不存在"/>
 
-    <!--HTTPCLIENT错误-->
-    <resultMessage code="011101" key="ORDER_REQUEST_EXCEPTION" message="请求order异常"/>
-    <resultMessage code="011102" key="SHOP_REQUEST_EXCEPTION" message="请求shop异常"/>
-    <resultMessage code="011103" key="SYSTEM_REQUEST_EXCEPTION" message="请求system出错"/>
+    <!-- 客户信息 -->
+    <resultMessage code="010901" key="CUSTOMER_IS_NOT_NULL" message="客户不存在"/>
+    <resultMessage code="010902" key="CUSTOMER_IS_NULL" message="客户已存在"/>
 
-    <!--请求记录-->
-    <resultMessage code="011201" key="REQRECORD_IS_NOT_FOUND" message="没找到请求记录"/>
-    <resultMessage code="011202" key="REQRECORD_IS_NULL" message="请求记录为空"/>
-    <resultMessage code="011203" key="DELETE_REQRECORD_IS_FAILD" message="删除请求记录失败"/>
-    <resultMessage code="011204" key="UPDATE_REQRECORD_IS_FAILD" message="更新请求记录失败"/>
+    <!--回复信息-->
+    <resultMessage code="011001" key="COMMENT_IS_NOT_NULL" message="回复已存在"/>
+    <resultMessage code="011002" key="COMMENT_IS_NULL" message="回复不存在"/>
+    <!-- 收藏信息 -->
+    <resultMessage code="011101" key="FAVORITE_IS_NOT_NULL" message="您已经收藏过了"/>
+    <resultMessage code="011102" key="FAVORITE_IS_NULL" message="收藏信息不存在"/>
 
-    <!-- 配置管理 -->
-    <resultMessage code="011201" key="CFG_CREDITLINE_ALREADY_EXIST" message="已有相同的区间组合，请重新设置"/>
-    <resultMessage code="011202" key="CFG_CREDITLINE_NOT_EXIST" message="配置区间不存在"/>
-    <resultMessage code="011203" key="CFG_CREDITLINE_STATUS_ERROR" message="配置区间状态不正确"/>
-    <resultMessage code="011204" key="CFG_RULE_CHANGE_ERROR" message="提现管理修改失败"/>
+    <!-- 大全-->
+    <resultMessage code="011201" key="ALL_IS_NOT_NULL" message="大全信息不存在"/>
+    <resultMessage code="011202" key="ALL_IS_NULL" message="大全信息已存在"/>
 
-    <!--渠道管理-->
-    <resultMessage code="011301" key="CHANNEL_NO_IS_EXIST" message="渠道号已存在"/>
-    <resultMessage code="011302" key="CHANNEL_NAME_IS_EXIST" message="渠道名已存在"/>
+    <!--商品-->
+    <resultMessage code="011201" key="GOODS_IS_NOT_NULL" message="商品信息不存在"/>
+    <resultMessage code="011202" key="GOODS_IS_NULL" message="商品信息已存在"/>
+    <resultMessage code="011203" key="GOODS_DETAIL_IS_NULL" message="商品内容不存在"/>
+    <resultMessage code="011204" key="GOODS_DETAIL_IS_NOT_NULL" message="商品内容已存在"/>
+    <resultMessage code="011205" key="GOODS_RESOURCE_IS_NULL" message="商品资源不存在"/>
+    <resultMessage code="011206" key="GOODS_RESOURCE_IS_NOT_NULL" message="商品资源已存在"/>
+    <!--商品详情-->
+    <resultMessage code="011301" key="GOODS_DETAIL_NOT_ENOUGH" message="大小为{0}的商品{1}，数量不足"/>
+    <resultMessage code="011302" key="GOODS_DETAIL_IS_LOCKED" message="亲，已有人拍下刺报备但还未付款，您还有机会哦"/>
+    <resultMessage code="011303" key="GOODS_DETAIL_UN_LOCK_FAILED" message="商品解锁失败"/>
+    <resultMessage code="011304" key="GOODS_STOCK_NOT_ENOUGH" message="商品库存不足"/>
+
+    <!--订单-->
+    <resultMessage code="011401" key="ORDER_UN_LOCK_FAILED" message="订单解锁失败"/>
+    <resultMessage code="011402" key="ORDER_IS_LOCKED" message="订单已经锁定"/>
+    <resultMessage code="011403" key="SHOPPING_CART_IS_NULL" message="购物车没有该数据"/>
+    <resultMessage code="011404" key="ORDER_IS_NULL" message="订单不存在"/>
+    <resultMessage code="011405" key="SHOPPING_CART_EMPTY" message="购物车未选择任何商品"/>
+    <resultMessage code="011406" key="PRE_PAY_FAILED" message="订单预支付失败"/>
+    <resultMessage code="011407" key="ORDER_ALREADY_SEND" message="订单已经发货，无法退款"/>
+    <resultMessage code="011408" key="ORDER_STATUS_INVALID" message="订单状态异常，请检查订单状态"/>
+    <resultMessage code="011409" key="REFUND_FAILED" message="退款失败"/>
+    <resultMessage code="011410" key="ALREADY_REFUND" message="退款在审核中了"/>
+    <resultMessage code="011411" key="ORDER_IS_ALREADY_PAY_FOR_BACK" message="订单已经申请了退款"/>
+    <resultMessage code="011412" key="GOODS_ALREADY_IN_SHOPPING_CART" message="商品在购物车已存在"/>
+    <resultMessage code="011413" key="ORDER_ALREADY_PAY" message="您的订单已支付，请勿重复支付"/>
+
+    <!--地址-->
+    <resultMessage code="011501" key="ADDRESS_IS_NULL" message="用户地址不存在"/>
+
+    <!--用户通知-->
+    <resultMessage code="011601" key="NOTIFICATION_IS_NULL" message="用户通知不存在"/>
+    <resultMessage code="011602" key="NOT_ALL_NOTIFICATION" message="用户通知不是全量通知"/>
+    <!--用户反馈-->
+    <resultMessage code="011701" key="SUGGEST_IS_NULL" message="客户反馈不存在"/>
+
+
+
+
+
+
+
+
+
 </resultMessages>

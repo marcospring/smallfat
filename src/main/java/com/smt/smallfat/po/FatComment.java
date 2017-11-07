@@ -1,6 +1,7 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
+
 /**
  * FatComment实体
  * 
@@ -27,6 +28,10 @@ public class FatComment extends BasePo {
 	private String  content = "";
 	/**评论内容 对应的静态变量值*/
 	public static final String FIELD_CONTENT = "content";
+	/***/
+	private Integer  isRead = 0;
+	/** 对应的静态变量值*/
+	public static final String FIELD_IS_READ = "isRead";
 	
 	public Integer getArticleId() {
 		return articleId;
@@ -51,5 +56,11 @@ public class FatComment extends BasePo {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public Integer getIsRead() {
+		return isRead;
+	}
+	public void setIsRead(Integer isRead) {
+		this.isRead = isRead;
 	}
 }

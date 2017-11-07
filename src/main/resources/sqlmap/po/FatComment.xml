@@ -14,7 +14,8 @@
 			u.article_id as articleId ,
 			u.from_userid as fromUserid ,
 			u.to_userid as toUserid ,
-			u.content as content 
+			u.content as content ,
+			u.is_read as isRead 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -64,6 +65,9 @@
 		</if>
 		<if test="contentLike != null">
 			and u.content like CONCAT('%',#{contentLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="isRead != null">
+			and u.is_read = #{isRead,jdbcType=NUMERIC}
 		</if>
 	</sql>
 
@@ -155,7 +159,8 @@
 			article_id,
 			from_userid,
 			to_userid,
-			content
+			content,
+			is_read
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -168,7 +173,8 @@
 			#{articleId,jdbcType=NUMERIC},
 			#{fromUserid,jdbcType=NUMERIC},
 			#{toUserid,jdbcType=NUMERIC},
-			#{content,jdbcType=VARCHAR}
+			#{content,jdbcType=VARCHAR},
+			#{isRead,jdbcType=NUMERIC}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -184,7 +190,8 @@
 			article_id,
 			from_userid,
 			to_userid,
-			content
+			content,
+			is_read
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -199,7 +206,8 @@
 			#{obj.articleId,jdbcType=NUMERIC},
 			#{obj.fromUserid,jdbcType=NUMERIC},
 			#{obj.toUserid,jdbcType=NUMERIC},
-			#{obj.content,jdbcType=VARCHAR}
+			#{obj.content,jdbcType=VARCHAR},
+			#{obj.isRead,jdbcType=NUMERIC}
 		)
 		</foreach>
 	</insert>
@@ -235,6 +243,9 @@
 			</if>
  			<if test="content != null">
 				,u.content=#{content,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="isRead != null">
+				,u.is_read=#{isRead,jdbcType=NUMERIC} 
 			</if>
 		</set>
 		where

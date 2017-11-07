@@ -1,18 +1,16 @@
 package com.smt.smallfat.web.backend.dic;
 
-import com.csyy.common.JSONUtils;
 import com.csyy.common.StringDefaultValue;
-import com.csyy.core.result.Result;
 import com.smt.smallfat.po.SysDicItem;
 import com.smt.smallfat.service.system.SysDicItemService;
 import com.smt.smallfat.vo.SysDicItemVo;
 import com.smt.smallfat.vo.SysDicVo;
 import com.smt.smallfat.web.common.BaseController;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/dicItem")
 public class DicItemController extends BaseController{
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SysDicItemService dicItemService;
@@ -100,7 +98,7 @@ public class DicItemController extends BaseController{
      * @param request
      * @param response
      */
-    @RequestMapping(value = "/getDicItemsByDicCode",method = RequestMethod.POST)
+    @RequestMapping(value = "/getDicItemsByDicCode")
     public void getDicItemsByDicCode(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = nullAbleValidation(request, SysDicVo.FIELD_DIC_CODE);
         String code = StringDefaultValue.StringValue(param.get(SysDicVo.FIELD_DIC_CODE));

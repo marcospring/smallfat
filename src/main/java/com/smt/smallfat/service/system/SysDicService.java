@@ -19,7 +19,7 @@ public interface SysDicService {
      * @param param
      * @return
      */
-    void addDic(Map<String, Object> param);
+    SysDic addDic(Map<String, Object> param);
 
     /**
      * 删除字典

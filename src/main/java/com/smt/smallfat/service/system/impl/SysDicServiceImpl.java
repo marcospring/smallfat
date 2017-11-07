@@ -26,7 +26,7 @@ import java.util.Map;
 public class SysDicServiceImpl extends BaseServiceImpl implements SysDicService {
 
     @Override
-    public void addDic(Map<String, Object> param) {
+    public SysDic addDic(Map<String, Object> param) {
         SysDic dic = CommonBeanUtils.transMap2BasePO(param,SysDic.class);
         if (dic.getParentId() != 0){
             if(dic == null)
@@ -36,7 +36,8 @@ public class SysDicServiceImpl extends BaseServiceImpl implements SysDicService 
                 throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
             }
         }
-        factory.getCacheWriteDataSession().save(SysDic.class,dic);
+        dic = factory.getCacheWriteDataSession().save(SysDic.class,dic);
+        return dic;
     }
 
     @Override

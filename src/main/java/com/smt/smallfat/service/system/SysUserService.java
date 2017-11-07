@@ -1,11 +1,14 @@
 package com.smt.smallfat.service.system;
 
 
+import com.csyy.core.datasource.param.Param;
 import com.csyy.core.result.Result;
+import com.smt.smallfat.vo.LoginVO;
 import com.smt.smallfat.vo.PaginationVo;
 import com.smt.smallfat.vo.SysUserRoleVo;
 import com.smt.smallfat.vo.SysUserVo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +49,7 @@ public interface SysUserService {
      */
     PaginationVo<SysUserVo> paginationSysUser(Map<String, Object> param);
 
-
+    Integer countOrdUserVos(Param param);
     /**
      * 根据用户id查询所有权限
      * @param userId
@@ -87,4 +90,17 @@ public interface SysUserService {
      * @return
      */
     List<SysUserVo> getSysUserByRoleId(Map<String, Object> param);
+
+    /**
+     * 根据用户名密码查询用户
+     * @param params
+     * @param request
+     * @return
+     */
+    LoginVO login(Map<String,Object> params, HttpServletRequest request);
+    /**
+     *
+     * @param sesionId
+     */
+    void logout(String sesionId);
 }

@@ -24,7 +24,7 @@ public interface SysRoleService {
      * @param id
      * @return
      */
-    SysRoleVo getSysRoleById(int id);
+    Map<String,Object> getSysRoleById(int id);
 //
 //    /**
 //     * 通过uuid获得系统角色.
