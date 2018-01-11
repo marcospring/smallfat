@@ -4,7 +4,7 @@ package com.smt.smallfat.web.backend.customer;
 import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.po.FatSuggest;
-import com.smt.smallfat.service.SuggestService;
+import com.smt.smallfat.service.base.SuggestService;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/suggest")
+@RequestMapping("/backend/suggest")
 public class SuggestController extends BaseController {
     @Autowired
     private SuggestService suggestService;

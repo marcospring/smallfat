@@ -95,17 +95,18 @@
     <resultMessage code="011101" key="FAVORITE_IS_NOT_NULL" message="您已经收藏过了"/>
     <resultMessage code="011102" key="FAVORITE_IS_NULL" message="收藏信息不存在"/>
 
-    <!-- 大全-->
-    <resultMessage code="011201" key="ALL_IS_NOT_NULL" message="大全信息不存在"/>
-    <resultMessage code="011202" key="ALL_IS_NULL" message="大全信息已存在"/>
+
 
     <!--商品-->
-    <resultMessage code="011201" key="GOODS_IS_NOT_NULL" message="商品信息不存在"/>
-    <resultMessage code="011202" key="GOODS_IS_NULL" message="商品信息已存在"/>
+    <resultMessage code="011201" key="GOODS_IS_NOT_NULL" message="商品信息已存在"/>
+    <resultMessage code="011202" key="GOODS_IS_NULL" message="商品信息不存在"/>
     <resultMessage code="011203" key="GOODS_DETAIL_IS_NULL" message="商品内容不存在"/>
     <resultMessage code="011204" key="GOODS_DETAIL_IS_NOT_NULL" message="商品内容已存在"/>
     <resultMessage code="011205" key="GOODS_RESOURCE_IS_NULL" message="商品资源不存在"/>
     <resultMessage code="011206" key="GOODS_RESOURCE_IS_NOT_NULL" message="商品资源已存在"/>
+    <resultMessage code="011207" key="FAVORITE_GOODS" message="商品已经被收藏"/>
+    <resultMessage code="011207" key="SHOPPING_CART_GOODS" message="购物车中有该商品"/>
+    <resultMessage code="011207" key="ORDER_GOODS" message="订单中有该商品"/>
     <!--商品详情-->
     <resultMessage code="011301" key="GOODS_DETAIL_NOT_ENOUGH" message="大小为{0}的商品{1}，数量不足"/>
     <resultMessage code="011302" key="GOODS_DETAIL_IS_LOCKED" message="亲，已有人拍下刺报备但还未付款，您还有机会哦"/>
@@ -121,7 +122,7 @@
     <resultMessage code="011406" key="PRE_PAY_FAILED" message="订单预支付失败"/>
     <resultMessage code="011407" key="ORDER_ALREADY_SEND" message="订单已经发货，无法退款"/>
     <resultMessage code="011408" key="ORDER_STATUS_INVALID" message="订单状态异常，请检查订单状态"/>
-    <resultMessage code="011409" key="REFUND_FAILED" message="退款失败"/>
+    <resultMessage code="011409" key="REFUND_FAILED" message="退款失败：{0}"/>
     <resultMessage code="011410" key="ALREADY_REFUND" message="退款在审核中了"/>
     <resultMessage code="011411" key="ORDER_IS_ALREADY_PAY_FOR_BACK" message="订单已经申请了退款"/>
     <resultMessage code="011412" key="GOODS_ALREADY_IN_SHOPPING_CART" message="商品在购物车已存在"/>
@@ -136,7 +137,13 @@
     <!--用户反馈-->
     <resultMessage code="011701" key="SUGGEST_IS_NULL" message="客户反馈不存在"/>
 
-
+    <!-- 大全-->
+    <resultMessage code="011801" key="ALL_IS_NOT_NULL" message="大全信息不存在"/>
+    <resultMessage code="011802" key="ALL_IS_NULL" message="大全信息已存在"/>
+    <!-- 爬虫 -->
+    <resultMessage code="011901" key="SPIDER_IS_NULL" message="爬虫文章不存在"/>
+    <!-- 花房-->
+    <resultMessage code="012001" key="CIRCLE_IS_NULL" message="花房项不存在"/>
 
 
 

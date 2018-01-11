@@ -4,7 +4,7 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatAll;
-import com.smt.smallfat.service.AllService;
+import com.smt.smallfat.service.base.AllService;
 import com.smt.smallfat.vo.AllCountVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +45,12 @@ public class AppAllController extends BaseController {
         printWriter(response, successResultJSON(all));
     }
 
+    @RequestMapping("/search")
+    public void search(HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> param = nullAbleValidation(request, FatAll.FIELD_ID);
+        String name  = StringDefaultValue.StringValue(param.get(FatAll.FIELD_LITTLE_TITLE));
+        List<FatAll> all = allService.search(name);
+        printWriter(response, successResultJSON(all));
+    }
 
 }

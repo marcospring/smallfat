@@ -4,7 +4,7 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatOrder;
-import com.smt.smallfat.service.OrderService;
+import com.smt.smallfat.service.base.OrderService;
 import com.smt.smallfat.service.pay.PayService;
 import com.smt.smallfat.vo.order.OrderVO;
 import com.smt.smallfat.web.common.BaseController;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/order")
+@RequestMapping("/backend/order")
 public class OrderController extends BaseController{
     @Autowired
     private PayService payService;
@@ -49,4 +49,12 @@ public class OrderController extends BaseController{
         orderService.sendGoods(orderNo,flexNo);
         printWriter(response,successResultJSON());
      }
+
+    @RequestMapping("/handOrderOverdue")
+    public void handOrderOverdue(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> params = nullAbleValidation(request,FatOrder.FIELD_ORDER_NO);
+        String orderNo = StringDefaultValue.StringValue(params.get(FatOrder.FIELD_ORDER_NO));
+        orderService.handOrderOverdue(orderNo);
+        printWriter(response,successResultJSON());
+    }
 }

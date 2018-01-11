@@ -1,6 +1,6 @@
 package com.smt.smallfat.utils;
 
-import com.smt.smallfat.service.OrderService;
+import com.smt.smallfat.service.base.OrderService;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 

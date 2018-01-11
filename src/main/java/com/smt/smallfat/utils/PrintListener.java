@@ -1,11 +1,6 @@
 package com.smt.smallfat.utils;
 
-import com.csyy.core.datasource.impl.cache.DefaultCacheReadAndWriteDataSessionFactory;
 import com.csyy.core.listener.BaseSpringContextRefreshListener;
-import com.csyy.redis.api.RedisSession;
-import com.csyy.redis.utils.mq.MsgHandler;
-import com.smt.smallfat.constant.Constant;
-import com.smt.smallfat.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;

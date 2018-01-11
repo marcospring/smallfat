@@ -3,7 +3,7 @@ package com.smt.smallfat.vo;
 import com.smt.smallfat.po.FatArticle;
 import com.smt.smallfat.po.FatFavorite;
 
-public class ArticleVO{
+public class ArticleVO {
     private String articleTypeName;
     private int isFavorite;
     private FatArticle article;
@@ -14,7 +14,7 @@ public class ArticleVO{
     public ArticleVO() {
     }
 
-    public ArticleVO(FatArticle article,String articleTypeName,long commentCount,long favoriteCount) {
+    public ArticleVO(FatArticle article, String articleTypeName, long commentCount, long favoriteCount) {
         this.articleTypeName = articleTypeName;
         this.article = article;
         this.commentCount = commentCount;

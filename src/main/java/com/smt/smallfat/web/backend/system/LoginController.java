@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping("/backend/auth")
 public class LoginController extends BaseController{
 
     @Autowired

@@ -44,20 +44,20 @@
         <property name="mapperLocations" value="classpath:sqlmap/*/*.xml" />
         <property name="configLocation" value="classpath:spring/mybatis-config.xml" />
     </bean>
-    <bean id="restTemple" class="org.springframework.web.client.RestTemplate">
-        <property name="messageConverters">
-            <list>
-                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                    <constructor-arg value="UTF-8"></constructor-arg>
-                </bean>
-                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
-                <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
-                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
-                <bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>
+    <!--<bean id="restTemple" class="org.springframework.web.client.RestTemplate">-->
+        <!--<property name="messageConverters">-->
+            <!--<list>-->
+                <!--<bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
+                    <!--<constructor-arg value="UTF-8"></constructor-arg>-->
+                <!--</bean>-->
+                <!--<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>-->
 
-            </list>
-        </property>
-    </bean>
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
     <bean id="readAndWriteDataSessionFactory"
           class="com.csyy.core.datasource.impl.cache.DefaultCacheReadAndWriteDataSessionFactory">
         <property name="support" ref="sqlSessionFactorySupport"/>
@@ -82,16 +82,18 @@
 
     <bean id="printerListener" class="com.smt.smallfat.utils.PrintListener"/>
     <!-- 线程池-->
-    <bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >
-        <property name ="corePoolSize" value ="20" />
-        <property name ="keepAliveSeconds" value ="90000" />
-        <property name ="maxPoolSize" value ="500" />
-        <property name ="queueCapacity" value ="100" />
-    </bean>
+    <!--<bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >-->
+        <!--<property name ="corePoolSize" value ="20" />-->
+        <!--<property name ="keepAliveSeconds" value ="90000" />-->
+        <!--<property name ="maxPoolSize" value ="500" />-->
+        <!--<property name ="queueCapacity" value ="100" />-->
+    <!--</bean>-->
     <!-- 极光推送对象-->
     <bean id="jPush" class="cn.jpush.api.JPushClient">
-        <constructor-arg name="appKey" value="${appKey}"/>
         <constructor-arg name="masterSecret" value="${masterSecret}"/>
+        <constructor-arg name="appKey" value="${appKey}"/>
+        <constructor-arg name="apnsProduction" value="true"/>
+        <constructor-arg name="timeToLive" value="86400"/>
     </bean>
 
 </beans>

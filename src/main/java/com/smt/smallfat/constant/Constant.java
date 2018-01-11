@@ -1,7 +1,8 @@
 package com.smt.smallfat.constant;
 
 
-import java.util.Properties;
+import com.csyy.core.result.Result;
+
 
 public class Constant extends com.csyy.constant.Constants {
 
@@ -42,13 +43,19 @@ public class Constant extends com.csyy.constant.Constants {
 
     public static final String REDIS_KEY_OVERDUE_CHANEL = "__keyevent@0__:expired";
 
-    public static final String ARTICLE_SHARE_URL = "http://share.test.huaxi0.com/activity/share/article.html?id=";
+    public static final String ARTICLE_SHARE_URL = "http://share.huaxi0.com/activity/share/article.html?id=";
 
-    public static final String GOODS_SHARE_URL = "http://share.test.huaxi0.com/activity/share/goods.html?id=";
+    public static final String GOODS_SHARE_URL = "http://share.huaxi0.com/activity/share/goods.html?id=";
 
-    public static final String ALL_SHARE_URL = "http://share.test.huaxi0.com/activity/share/wiki.html?id=";
+    public static final String ALL_SHARE_URL = "http://share.huaxi0.com/activity/share/wiki.html?id=";
 
     public static final String ORDER_PREFIX = "ORDER_";
+
+    public static Result SESSION_TIMEOUT = new Result(999,"会话不存在或已过期");
+
+    public interface Charset{
+        String UTF8="UTF-8";
+    }
 
     /**
      * 通用的常量
@@ -114,6 +121,7 @@ public class Constant extends com.csyy.constant.Constants {
         String DELIVER_GOODS = "2";
         String SYSTEM_NOTICE = "3";
         String COMMENT ="4";
+        String ALL = "5";
     }
 
     public interface  Lock{

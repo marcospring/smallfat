@@ -22,7 +22,7 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping("/dicItem")
+@RequestMapping("/backend/dicItem")
 public class DicItemController extends BaseController{
 
     private Logger logger = LoggerFactory.getLogger(getClass());

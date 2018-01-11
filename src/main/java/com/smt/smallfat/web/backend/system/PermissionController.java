@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by xindongwang on 17/3/12.
  */
 @Controller
-@RequestMapping("/permission")
+@RequestMapping("/backend/permission")
 public class PermissionController extends BaseController{
 
     @Autowired

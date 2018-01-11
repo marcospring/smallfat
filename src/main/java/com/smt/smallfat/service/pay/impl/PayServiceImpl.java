@@ -13,11 +13,13 @@ import com.smt.smallfat.po.FatCustomer;
 import com.smt.smallfat.po.FatNotification;
 import com.smt.smallfat.po.FatOrder;
 import com.smt.smallfat.po.FatOrderItem;
-import com.smt.smallfat.service.CustomerService;
-import com.smt.smallfat.service.GoodsService;
-import com.smt.smallfat.service.NotificationService;
-import com.smt.smallfat.service.OrderService;
+import com.smt.smallfat.service.base.CustomerService;
+import com.smt.smallfat.service.base.GoodsService;
+import com.smt.smallfat.service.base.NotificationService;
+import com.smt.smallfat.service.base.OrderService;
 import com.smt.smallfat.service.pay.*;
+import com.smt.smallfat.service.pay.obj.PayCallBackResponse;
+import com.smt.smallfat.service.pay.obj.PayResponse;
 import com.smt.smallfat.utils.OrderNoCreator;
 import com.smt.smallfat.utils.push.IPush;
 import com.smt.smallfat.utils.push.PushMessage;
@@ -45,7 +47,6 @@ import javax.net.ssl.SSLContext;
 import java.io.*;
 import java.math.BigDecimal;
 import java.security.KeyStore;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -99,9 +100,9 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
     public PayResponse payOrder(String orderNo, String spbillCreateIp) {
         //数据准备
         FatOrder order = orderService.getOrderByOrderNo(orderNo);
-        if(order.getState() != Constant.OrderStatus.ORDER_FOR_PAY)
+        if (order.getState() != Constant.OrderStatus.ORDER_FOR_PAY)
             throw new CommonException(ResultConstant.Order.ORDER_STATUS_INVALID);
-        if(order.getState() == Constant.OrderStatus.ALREADY_PAY)
+        if (order.getState() == Constant.OrderStatus.ALREADY_PAY)
             throw new CommonException(ResultConstant.Order.ORDER_ALREADY_PAY);
         //请求xml构建
         PayRequest request = new PayRequest();
@@ -113,7 +114,7 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
         request.setSpbill_create_ip(spbillCreateIp);
         RequestXMLCreator xmlCreator = RequestXMLCreator.getInstance();
         String requestXml = xmlCreator.buildXmlString(xmlCreator.getPayRequestMap(request), PayConstant.WECHAT_OPENID_PAY_APPSECRET);
-        logger.info("请求下单的xml为：{}", requestXml);
+        logger.debug("请求下单的xml为：{}", requestXml);
         try {
             return sendPaymentToWeChatServer(requestXml, order.getUuid());
         } catch (IOException e) {
@@ -154,7 +155,7 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RefundResponse refund(String orderNo) {
+    public void refund(String orderNo) {
         FatOrder order = orderService.getOrderByOrderNo(orderNo);
         String lockStr = order.getTransactionId() + Constant.Separator.UPDERLINE + "refund";
         try {
@@ -167,20 +168,21 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
             Map<String, String> parameters = buildRefundMap(order);
             String requestXml = RequestXMLCreator.getInstance().buildXmlString(parameters, PayConstant
                     .WECHAT_OPENID_PAY_APPSECRET);
-            logger.info("请求的xml为：{}", requestXml);
+            logger.debug("请求的xml为：{}", requestXml);
             try {
                 String response_xml = doRefund(PayConstant.WECHAT_PAY_BACK_URL, requestXml);
                 Map<String, String> resultMap = RequestXMLCreator.getInstance().getXmlMapResult(response_xml);
                 String return_code = StringDefaultValue.StringValue(resultMap.get("return_code"));
-                String return_msg = StringDefaultValue.StringValue(resultMap.get("return_msg"));
-                if (return_code.equalsIgnoreCase(PayConstant.PAY_SUCCESS) && (return_msg.equalsIgnoreCase(PayConstant
-                        .PAY_SUCCESS) || return_msg.equalsIgnoreCase(PayConstant.OK))) {
+                String result_code = StringDefaultValue.StringValue(resultMap.get("result_code"));
+                String err_code_des = StringDefaultValue.StringValue(resultMap.get("err_code_des"));
+                if (return_code.equalsIgnoreCase(PayConstant.PAY_SUCCESS) && result_code.equalsIgnoreCase(PayConstant
+                        .PAY_SUCCESS)) {
                     order.setState(Constant.OrderStatus.ALREADY_PAY_FOR_BACK);
                     order.setRefundNo(StringDefaultValue.StringValue(resultMap.get("out_refund_no")));
                     factory.getCacheWriteDataSession().update(FatOrder.class, order);
                     orderService.addOrderHistory(order);
-                }else{
-                    throw new CommonException(ResultConstant.Order.REFUND_FAILED);
+                } else {
+                    throw new CommonException(ResultConstant.Order.REFUND_FAILED, err_code_des);
                 }
                 logger.info("得到微信的返回结果是:{}", response_xml);
             } catch (Exception e) {
@@ -191,20 +193,20 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
             FatCustomer customer = customerService.getCustomerById(order.getCustomerId());
             FatNotification notification = FatNotification.getInstance(FatNotification.class);
             String content = "亲爱的，{0}，您订单编号为：{1}的货物已帮您退款。";
-            notification.setContent(PushMessage.buildMessage(content,customer.getNickName(),order.getOrderNo()));
+            notification.setContent(PushMessage.buildMessage(content, customer.getNickName(), order.getOrderNo()));
             notification.setNickName(customer.getNickName());
             notification.setTitle("退款成功");
             notification.setUserId(StringDefaultValue.StringValue(customer.getId()));
             notification = notificationService.addNotification(notification);
             PushMessage message = PushMessage.get().platform(PlatForm.IOS).addAlias(customer.getUuid()).addExtras
-                    (FatNotification.FIELD_ID,StringDefaultValue.StringValue(notification.getId())).addExtras
-                    (Constant.PUSH_TYPE,Constant.PushType.SYSTEM_NOTICE).title(notification.getContent()).content
+                    (FatNotification.FIELD_ID, StringDefaultValue.StringValue(notification.getId())).addExtras
+                    (Constant.PUSH_TYPE, Constant.PushType.SYSTEM_NOTICE).title(notification.getContent()).content
                     (notification.getContent());
             push.push(PushPayloadBuilder.newInstance().build(message));
             //退库存
             List<FatOrderItem> orderItems = orderService.getOrderItemListByOrderId(order.getId());
-            for(FatOrderItem item:orderItems){
-                goodsService.returnInventory(item.getGoodsDetailId(),item.getTotalCount());
+            for (FatOrderItem item : orderItems) {
+                goodsService.returnInventory(item.getGoodsDetailId(), item.getTotalCount());
             }
 
             ////////////
@@ -213,7 +215,6 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
         } catch (DistributedLockException e) {
             throw new CommonException(ResultConstant.Order.ORDER_IS_LOCKED);
         }
-        return null;
     }
 
     private Map<String, String> buildRefundMap(FatOrder order) {
@@ -227,9 +228,9 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
         parameters.put("out_refund_no", out_refund_no);
         BigDecimal totalFee = order.getTotalPrice().multiply(new BigDecimal(100));
         String totalFeeStr = totalFee.toString();
-        totalFeeStr = totalFeeStr.substring(0,totalFeeStr.indexOf(Constant.Separator.DOT));
+        totalFeeStr = totalFeeStr.substring(0, totalFeeStr.indexOf(Constant.Separator.DOT));
         parameters.put("total_fee", totalFeeStr);
-        parameters.put("refund_fee",totalFeeStr);
+        parameters.put("refund_fee", totalFeeStr);
         return parameters;
     }
 

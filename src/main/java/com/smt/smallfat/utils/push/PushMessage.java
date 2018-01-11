@@ -76,9 +76,9 @@ public class PushMessage {
     }
 
     public String [] getAlias() {
-        String [] aliasStringArr = new String[alias.size()];
-        logger.info("message:alias=======>{}",alias);
         if(alias != null){
+            String [] aliasStringArr = new String[alias.size()];
+            logger.info("message:alias=======>{}",alias);
             for(int i =0 ;i<alias.size();i++){
                 aliasStringArr[i] = alias.get(i);
             }

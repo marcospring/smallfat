@@ -7,7 +7,7 @@ import com.smt.smallfat.po.FatArticle;
 import com.smt.smallfat.po.FatGoods;
 import com.smt.smallfat.po.FatGoodsDetail;
 import com.smt.smallfat.po.FatGoodsResource;
-import com.smt.smallfat.service.GoodsService;
+import com.smt.smallfat.service.base.GoodsService;
 import com.smt.smallfat.utils.push.IPush;
 import com.smt.smallfat.utils.push.PushMessage;
 import com.smt.smallfat.utils.push.PushPayloadBuilder;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/goods")
+@RequestMapping("/backend/goods")
 public class GoodsController extends BaseController {
     @Autowired
     private GoodsService goodsService;
@@ -135,7 +135,8 @@ public class GoodsController extends BaseController {
         String title = StringDefaultValue.StringValue(param.get(FatGoods.FIELD_TITLE));
         String id = StringDefaultValue.StringValue(param.get(FatGoods.FIELD_ID));
         PushMessage message = PushMessage.get().content(title).platform(PlatForm.IOS).title(title).addExtras(Constant
-                .PUSH_TYPE, Constant.PushType.ARTICLE).addExtras(FatArticle.FIELD_TITLE, title).addExtras(FatArticle.FIELD_ID, id);
+                .PUSH_TYPE, Constant.PushType.GOODS).addExtras(FatArticle.FIELD_TITLE, title).addExtras(FatArticle
+                .FIELD_ID, id);
         push.push(PushPayloadBuilder.newInstance().build(message));
         printWriter(response, successResultJSON());
     }
@@ -146,5 +147,13 @@ public class GoodsController extends BaseController {
         int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
         goodsService.addToApp(id);
         printWriter(response,successResultJSON());
+    }
+
+    @RequestMapping("/orderGoods")
+    public void orderGoods(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID);
+        int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
+        goodsService.orderGoods(id);
+        printWriter(response, successResultJSON());
     }
 }

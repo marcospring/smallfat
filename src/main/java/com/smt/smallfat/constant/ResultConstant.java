@@ -85,6 +85,9 @@ public class ResultConstant {
         String GOODS_RESOURCE_IS_NOT_NULL="GOODS_RESOURCE_IS_NOT_NULL";
         String GOODS_DETAIL_IS_LOCKED = "GOODS_DETAIL_IS_LOCKED";
         String GOODS_DETAIL_UN_LOCK_FAILED = "GOODS_DETAIL_UN_LOCK_FAILED";
+        String FAVORITE_GOODS = "FAVORITE_GOODS";
+        String SHOPPING_CART_GOODS = "SHOPPING_CART_GOODS";
+        String ORDER_GOODS = "ORDER_GOODS";
     }
 
     public interface Order{
@@ -118,5 +121,12 @@ public class ResultConstant {
         String SUGGEST_IS_NULL = "SUGGEST_IS_NULL";
     }
 
+    public interface Spider{
+        String SPIDER_IS_NULL = "SPIDER_IS_NULL";
+    }
+
+    public interface Circle{
+        String CIRCLE_IS_NULL = "CIRCLE_IS_NULL";
+    }
 }
 

@@ -79,8 +79,8 @@
     <!--<logger name="com.aa.cc" >-->
     <!--<appender-ref ref="SendLog" />-->
     <!--</logger>-->
-    <root level="debug">
-        <appender-ref ref="AllLog"/>
+    <root level="info">
+        <!--<appender-ref ref="AllLog"/>-->
         <appender-ref ref="errorLog"/>
         <appender-ref ref="infoLog"/>
         <appender-ref ref="stdout"/>

@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by xindongwang on 17/3/13.
  */
 @Controller
-@RequestMapping("/sysUser")
+@RequestMapping("/backend/sysUser")
 public class SysUserController extends BaseController {
 
     @Autowired

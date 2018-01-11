@@ -21,7 +21,6 @@ public class XmlUtils {
             doc = DocumentHelper.parseText(xml);
             root = doc.getRootElement();
         } catch (DocumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

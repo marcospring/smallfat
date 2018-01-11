@@ -15,7 +15,8 @@
 			u.from_userid as fromUserid ,
 			u.to_userid as toUserid ,
 			u.content as content ,
-			u.is_read as isRead 
+			u.is_read as isRead ,
+			u.comment_type as commentType 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -68,6 +69,9 @@
 		</if>
 		<if test="isRead != null">
 			and u.is_read = #{isRead,jdbcType=NUMERIC}
+		</if>
+		<if test="commentType != null">
+			and u.comment_type = #{commentType,jdbcType=NUMERIC}
 		</if>
 	</sql>
 
@@ -160,7 +164,8 @@
 			from_userid,
 			to_userid,
 			content,
-			is_read
+			is_read,
+			comment_type
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -174,7 +179,8 @@
 			#{fromUserid,jdbcType=NUMERIC},
 			#{toUserid,jdbcType=NUMERIC},
 			#{content,jdbcType=VARCHAR},
-			#{isRead,jdbcType=NUMERIC}
+			#{isRead,jdbcType=NUMERIC},
+			#{commentType,jdbcType=NUMERIC}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -191,7 +197,8 @@
 			from_userid,
 			to_userid,
 			content,
-			is_read
+			is_read,
+			comment_type
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -207,7 +214,8 @@
 			#{obj.fromUserid,jdbcType=NUMERIC},
 			#{obj.toUserid,jdbcType=NUMERIC},
 			#{obj.content,jdbcType=VARCHAR},
-			#{obj.isRead,jdbcType=NUMERIC}
+			#{obj.isRead,jdbcType=NUMERIC},
+			#{obj.commentType,jdbcType=NUMERIC}
 		)
 		</foreach>
 	</insert>
@@ -246,6 +254,9 @@
 			</if>
  			<if test="isRead != null">
 				,u.is_read=#{isRead,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="commentType != null">
+				,u.comment_type=#{commentType,jdbcType=NUMERIC} 
 			</if>
 		</set>
 		where

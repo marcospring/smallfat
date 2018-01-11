@@ -4,8 +4,13 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.*;
-import com.smt.smallfat.service.*;
+import com.smt.smallfat.service.base.CustomerAddressService;
+import com.smt.smallfat.service.base.CustomerService;
+import com.smt.smallfat.service.base.FavoriteService;
+import com.smt.smallfat.service.base.SuggestService;
+import com.smt.smallfat.service.house.CircleService;
 import com.smt.smallfat.vo.FavoriteVO;
+import com.smt.smallfat.vo.UserVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +35,7 @@ public class AppCustomerController extends BaseController {
 
     @Autowired
     private SuggestService suggestService;
+
 
     @RequestMapping("/login")
     public void login(HttpServletRequest request, HttpServletResponse response) {
@@ -123,5 +129,13 @@ public class AppCustomerController extends BaseController {
                 .FIELD_NICK_NAME,FatSuggest.FIELD_USER_ID,FatSuggest.FIELD_MOBILE_TELEPHONE);
         FatSuggest suggest = suggestService.addSuggest(param);
         printWriter(response,successResultJSON(suggest));
+    }
+
+    @RequestMapping("/personCenter")
+    public void userInfo(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> param = nullAbleValidation(request,Constant.USER_ID);
+        int userId = StringDefaultValue.intValue(param.get(Constant.USER_ID));
+        UserVO user = customerService.getUserVO(userId);
+        printWriter(response,successResultJSON(user));
     }
 }

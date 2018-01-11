@@ -1,14 +1,12 @@
 package com.smt.smallfat.web.app;
 
-import com.csyy.common.MD5;
 import com.csyy.common.StringDefaultValue;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatOrder;
 import com.smt.smallfat.service.pay.*;
+import com.smt.smallfat.service.pay.obj.PayCallBackResponse;
+import com.smt.smallfat.service.pay.obj.PayResponse;
 import com.smt.smallfat.web.common.BaseController;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class PayCallBackController extends BaseController {
                 result.append(line);
             }
             params = result.toString();
-            logger.info("wechat request params:" + params);
+            logger.debug("wechat request params:" + params);
             PayCallBackResponse callBackResponse = RequestXMLCreator.getInstance().buildResponse(params);
             //如果返回结果为失败则直接返回
             if (!PayConstant.PAY_SUCCESS.equalsIgnoreCase(callBackResponse.getReturn_code()) ||
@@ -54,13 +52,13 @@ public class PayCallBackController extends BaseController {
 
             String sign = callBackResponse.getSign();
             String mySign = RequestXMLCreator.getInstance().createCallbackSign(callBackResponse.getDoc());
-            logger.info("回调签名：{}",sign);
-            logger.info("计算签名：{}",mySign);
+            logger.debug("回调签名：{}",sign);
+            logger.debug("计算签名：{}",mySign);
             if (!mySign.equals(sign)) {
                 out.print(RequestXMLCreator.getInstance().buildCallbackErrorResponse("签名验证失败"));
             }
 
-            logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>回调成功啦！！！！！！<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>回调成功啦！！！！！！<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
             String resultResponse = payService.executePayCallBack(callBackResponse);
             out.print(resultResponse);
         } catch (Exception e) {

@@ -4,7 +4,7 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatGoods;
-import com.smt.smallfat.service.GoodsService;
+import com.smt.smallfat.service.base.GoodsService;
 import com.smt.smallfat.vo.GoodsVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;

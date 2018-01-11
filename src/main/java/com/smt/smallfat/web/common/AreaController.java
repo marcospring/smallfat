@@ -1,9 +1,7 @@
 package com.smt.smallfat.web.common;
 
 import com.csyy.common.StringDefaultValue;
-import com.csyy.core.datasource.impl.cache.DefaultCacheReadAndWriteDataSessionFactory;
 import com.smt.smallfat.po.FatArea;
-import com.smt.smallfat.service.OrderService;
 import com.smt.smallfat.service.system.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -28,10 +28,14 @@ public class FatComment extends BasePo {
 	private String  content = "";
 	/**评论内容 对应的静态变量值*/
 	public static final String FIELD_CONTENT = "content";
-	/***/
+	/**是否已读*/
 	private Integer  isRead = 0;
-	/** 对应的静态变量值*/
+	/**是否已读 对应的静态变量值*/
 	public static final String FIELD_IS_READ = "isRead";
+	/**评论类型*/
+	private Integer  commentType = 0;
+	/**评论类型 对应的静态变量值*/
+	public static final String FIELD_COMMENT_TYPE = "commentType";
 	
 	public Integer getArticleId() {
 		return articleId;
@@ -62,5 +66,11 @@ public class FatComment extends BasePo {
 	}
 	public void setIsRead(Integer isRead) {
 		this.isRead = isRead;
+	}
+	public Integer getCommentType() {
+		return commentType;
+	}
+	public void setCommentType(Integer commentType) {
+		this.commentType = commentType;
 	}
 }

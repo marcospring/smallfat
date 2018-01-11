@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by xindongwang on 17/3/13.
  */
 @Controller
-@RequestMapping("/sysRole")
+@RequestMapping("/backend/sysRole")
 public class RoleController extends BaseController {
 
     @Autowired

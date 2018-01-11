@@ -5,7 +5,7 @@ import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatOrder;
 import com.smt.smallfat.po.FatShoppingCart;
-import com.smt.smallfat.service.OrderService;
+import com.smt.smallfat.service.base.OrderService;
 import com.smt.smallfat.vo.ShoppingCardVO;
 import com.smt.smallfat.vo.order.OrderVO;
 import com.smt.smallfat.web.common.BaseController;

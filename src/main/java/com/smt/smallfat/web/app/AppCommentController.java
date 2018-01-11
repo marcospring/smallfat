@@ -4,7 +4,7 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatComment;
-import com.smt.smallfat.service.CommentService;
+import com.smt.smallfat.service.base.CommentService;
 import com.smt.smallfat.vo.FatCommentVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;

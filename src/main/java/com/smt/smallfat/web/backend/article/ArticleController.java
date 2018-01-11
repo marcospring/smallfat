@@ -4,7 +4,7 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatArticle;
-import com.smt.smallfat.service.ArticleService;
+import com.smt.smallfat.service.base.ArticleService;
 import com.smt.smallfat.utils.push.IPush;
 import com.smt.smallfat.utils.push.PushMessage;
 import com.smt.smallfat.utils.push.PushPayloadBuilder;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/article")
+@RequestMapping("/backend/article")
 public class ArticleController extends BaseController {
 
     @Autowired

@@ -2,7 +2,7 @@ package com.smt.smallfat.web.backend.customer;
 
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.po.FatCustomerAddress;
-import com.smt.smallfat.service.CustomerAddressService;
+import com.smt.smallfat.service.base.CustomerAddressService;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/address")
+@RequestMapping("/backend/address")
 public class AddressController extends BaseController{
     @Autowired
     private CustomerAddressService addressService;

@@ -5,10 +5,10 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatArticle;
-import com.smt.smallfat.service.ArticleService;
-import com.smt.smallfat.service.FavoriteService;
+import com.smt.smallfat.service.base.ArticleService;
 import com.smt.smallfat.vo.AppTopArticleVO;
 import com.smt.smallfat.vo.ArticleVO;
+import com.smt.smallfat.vo.IndexVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +30,13 @@ public class AppArticleController extends BaseController {
     public void list(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = getRequestParams(request);
         Pagination<ArticleVO> page = articleService.appArticlePage(param);
+        printWriter(response, successResultJSON(page));
+    }
+
+    @RequestMapping("/index")
+    public void index(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = getRequestParams(request);
+        IndexVO page = articleService.index(param);
         printWriter(response, successResultJSON(page));
     }
 

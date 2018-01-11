@@ -2,6 +2,8 @@ package com.smt.smallfat.service.pay;
 
 import com.csyy.common.MD5;
 import com.csyy.common.StringDefaultValue;
+import com.smt.smallfat.service.pay.obj.PayCallBackResponse;
+import com.smt.smallfat.service.pay.obj.PayResponse;
 import com.smt.smallfat.utils.XmlUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -77,7 +79,7 @@ public class RequestXMLCreator {
         return paramsMap;
     }
 
-    public PayResponse getPayResponseMap(Map<String, String> param,String uuid) {
+    public PayResponse getPayResponseMap(Map<String, String> param, String uuid) {
         PayResponse response = new PayResponse();
         response.setAppid(param.get("appid"));
         response.setPartnerid(param.get("mch_id"));
