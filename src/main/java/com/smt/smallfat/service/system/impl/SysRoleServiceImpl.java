@@ -110,19 +110,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
     }
 
     @Override
-    public Map<String,Object> getSysRoleById(int id) {
+    public Map<String, Object> getSysRoleById(int id) {
         SysRole sysRole;
         sysRole = factory.getCacheReadDataSession().querySingleResultById(SysRole.class, id);
         if (sysRole == null) {
             throw new CommonException(ResultConstant.SysRoleResult.SYSROLE_IS_NOT_FOUND);
         }
         SysRoleVo sysRoleVo = CommonBeanUtils.getBeanBySameProperty(SysRoleVo.class, sysRole);
-        Map<String,Object> param = new HashMap<>();
-        param.put(SysRolePermissionVo.FIELD_ROLE_ID,param.get(SysRoleVo.FIELD_ID));
+        Map<String, Object> param = new HashMap<>();
+        param.put(SysRolePermissionVo.FIELD_ROLE_ID, param.get(SysRoleVo.FIELD_ID));
         List<PermissionTreeVo> tree = permissionService.getRolePermissionTree(sysRole.getId());
-        Map<String,Object> result = new HashMap<>(2);
-        result.put("sysRole",sysRoleVo);
-        result.put("permissionTreeVo",tree);
+        Map<String, Object> result = new HashMap<>(2);
+        result.put("sysRole", sysRoleVo);
+        result.put("permissionTreeVo", tree);
         return result;
     }
 

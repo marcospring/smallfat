@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static java.util.Collections.list;
 import static java.util.Collections.sort;
 
 
@@ -78,33 +79,33 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
                 (FavoriteService.GOODS).operator(ESQLOperator.AND).cloumn(FatFavorite.FIELD_ARTICLE_ID).operator
                 (ESQLOperator.EQ).v(id);
         long count = factory.getCacheReadDataSession().queryListResultCountByWhere(FatFavorite.class, where);
-        if(count != 0L)
+        if (count != 0L)
             throw new CommonException(ResultConstant.Goods.FAVORITE_GOODS);
 
         List<FatGoodsDetail> details = goodsVO.getDetails();
-        for(FatGoodsDetail detail: details){
+        for (FatGoodsDetail detail : details) {
             //判断用户购物车中是否包含
             where = SQLCreator.where().cloumn(FatShoppingCart.FIELD_GOODS_DETAIL_ID).operator
                     (ESQLOperator.EQ).v(detail.getId());
             long cartCount = factory.getCacheReadDataSession().queryListResultCountByWhere(FatShoppingCart.class,
                     where);
-            if(cartCount !=0)
+            if (cartCount != 0)
                 throw new CommonException(ResultConstant.Goods.SHOPPING_CART_GOODS);
             //判断用户订单中是否包含
             where = SQLCreator.where().cloumn(FatOrderItem.FIELD_GOODS_DETAIL_ID).operator
                     (ESQLOperator.EQ).v(detail.getId());
             long orderCount = factory.getCacheReadDataSession().queryListResultCountByWhere(FatOrderItem.class,
                     where);
-            if(orderCount !=0)
+            if (orderCount != 0)
                 throw new CommonException(ResultConstant.Goods.ORDER_GOODS);
         }
         factory.getCacheWriteDataSession().physicalDelete(FatGoods.class, id);
         //删除goodsdetail
         where = SQLCreator.where().cloumn(FatGoodsDetail.FIELD_GOODS_ID).operator(ESQLOperator.EQ).v(id);
-        factory.getCacheWriteDataSession().physicalWhereDelete(FatGoodsDetail.class,where);
+        factory.getCacheWriteDataSession().physicalWhereDelete(FatGoodsDetail.class, where);
         //删除goodsresource
         where = SQLCreator.where().cloumn(FatGoodsResource.FIELD_GOODS_ID).operator(ESQLOperator.EQ).v(id);
-        factory.getCacheWriteDataSession().physicalWhereDelete(FatGoodsResource.class,where);
+        factory.getCacheWriteDataSession().physicalWhereDelete(FatGoodsResource.class, where);
     }
 
     @Override
@@ -113,7 +114,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         int pageSize = StringDefaultValue.intValue(param.get(Constant.PAGE_SIZE));
         Param params = ParamBuilder.getInstance().getParam().add(param)
                 .add(ParamBuilder.nv(Constant.SQLConstants.ORDER_COLUMN, FatGoods.FIELD_UPDATE_TIME))
-                .add(ParamBuilder.nv(Constant.SQLConstants.ORDER_BY_TYPE,Constant.SQLConstants.DESC));
+                .add(ParamBuilder.nv(Constant.SQLConstants.ORDER_BY_TYPE, Constant.SQLConstants.DESC));
         return queryClassPagination(FatGoods.class, params, pageNo, pageSize);
     }
 
@@ -153,7 +154,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
 
     @Override
     public Pagination<GoodsVO> pageGoodsVO(Map<String, Object> param) {
-        param.put(FatGoods.FIELD_IS_APP,1);
+        param.put(FatGoods.FIELD_IS_APP, 1);
         Pagination<FatGoods> page = pageGoods(param);
         List<FatGoods> list = page.getData();
         List<GoodsVO> vOlist = new ArrayList<>(list.size());
@@ -327,7 +328,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     public void addToApp(int id) {
         FatGoods goods = getGoodsById(id);
         goods.setIsApp(1);
-        factory.getCacheWriteDataSession().update(FatGoods.class,goods);
+        factory.getCacheWriteDataSession().update(FatGoods.class, goods);
     }
 
     @Override
@@ -336,5 +337,21 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         goods.setOrderBy(goods.getOrderBy() + 1);
         goods.setUpdateTime(new Date());
         factory.getCacheWriteDataSession().update(FatGoods.class, goods);
+    }
+
+    @Override
+    public List<FatCustomer> shoppingCartUsers(int goodsId) {
+        List<FatCustomer> customers = new ArrayList<>();
+        List<FatGoodsDetail> details = getGoodsDetailsByGoodsId(goodsId);
+        for(FatGoodsDetail detail: details){
+            Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatShoppingCart
+                    .FIELD_GOODS_DETAIL_ID, detail.getId()));
+            List<FatShoppingCart> carts = factory.getCacheReadDataSession().queryListResult(FatShoppingCart.class, param);
+            for (FatShoppingCart cart : carts) {
+                customers.add(factory.getCacheReadDataSession().querySingleResultById(FatCustomer.class, cart.getUserId()));
+            }
+        }
+
+        return customers;
     }
 }

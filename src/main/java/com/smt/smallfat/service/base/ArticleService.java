@@ -47,9 +47,9 @@ public interface ArticleService {
 
     List<AppTopArticleVO> appTopArticleList();
 
-    Map<String,Object> getArticlePropertyCount(int userId,int articleId);
+    Map<String, Object> getArticlePropertyCount(int userId, int articleId);
 
-    Pagination<FavoriteVO> getFavoriteArticles(Map<String,Object> param);
+    Pagination<FavoriteVO> getFavoriteArticles(Map<String, Object> param);
 
     void addReadCount(int articleId);
 

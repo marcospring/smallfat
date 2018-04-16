@@ -63,15 +63,21 @@ public class NotificationServiceImpl extends BaseServiceImpl implements Notifica
 
     @Override
     public Pagination<FatNotification> userPageNotification(int userId, int pageNo, int pageSize) {
-        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatNotification.FIELD_USER_ID, userId)
-        ).add(ParamBuilder.nv(Constant.SQLConstants
-                .ORDER_COLUMN, FatNotification.FIELD_CREATE_TIME)).add(ParamBuilder.nv(Constant.SQLConstants
-                .ORDER_BY_TYPE, Constant.SQLConstants.DESC));
-        Pagination<FatNotification> page = queryClassPagination(FatNotification.class, param, pageNo, pageSize);
+        CustomSQL notificationWhere = SQLCreator.where().cloumn(FatNotification.FIELD_USER_ID).operator(ESQLOperator
+                .EQ).v(userId).operator(ESQLOperator.OR).operator(ESQLOperator.LBRACKET).cloumn(FatNotification
+                .FIELD_USER_ID).operator(ESQLOperator.EQ).v(0).operator(ESQLOperator.AND).cloumn(FatNotification
+                .FIELD_IS_ALL).operator(ESQLOperator.EQ).v(1).operator(ESQLOperator.AND).cloumn(FatNotification
+                .FIELD_IS_PUSH).operator(ESQLOperator.EQ).v(1).operator(ESQLOperator.RBRACKET).operator(ESQLOperator
+                .ORDER_BY).cloumn(FatNotification.FIELD_CREATE_TIME).operator(ESQLOperator.DESC);
+//        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatNotification.FIELD_USER_ID, userId)
+//        ).add(ParamBuilder.nv(Constant.SQLConstants
+//                .ORDER_COLUMN, FatNotification.FIELD_CREATE_TIME)).add(ParamBuilder.nv(Constant.SQLConstants
+//                .ORDER_BY_TYPE, Constant.SQLConstants.DESC));
+        Pagination<FatNotification> page = queryClassPagination(FatNotification.class, notificationWhere, pageNo, pageSize);
         CustomSQL where = SQLCreator.where().cloumn(FatNotification.FIELD_IS_READ).operator(ESQLOperator.EQ).v
                 (Constant.WrapperExtend.ZERO).operator(ESQLOperator.AND).cloumn(FatNotification.FIELD_USER_ID).operator
                 (ESQLOperator.EQ).v(userId);
-        param.clean();
+        Param param = ParamBuilder.getInstance().getParam();
         param.add(ParamBuilder.nv(FatNotification.FIELD_IS_READ, 1));
         factory.getCacheWriteDataSession().updateCustomColumnByWhere(FatNotification.class, param, where);
         return page;
@@ -103,12 +109,12 @@ public class NotificationServiceImpl extends BaseServiceImpl implements Notifica
         push.push(PushPayloadBuilder.newInstance().build(PushMessage.get()
                 .title(notification.getTitle())
                 .content(notification.getContent())
-                .platform(PlatForm.IOS)
+                .platform(PlatForm.ALL)
                 .addExtras(Constant.PUSH_TYPE, Constant.PushType.SYSTEM_NOTICE)
                 .addExtras(FatNotification.FIELD_TITLE, notification.getTitle())
                 .addExtras(FatNotification.FIELD_ID, StringDefaultValue.StringValue(notification.getId()))
                 .addExtras(FatNotification.FIELD_CONTENT, notification.getContent())));
         notification.setIsPush(1);
-        factory.getCacheWriteDataSession().update(FatNotification.class,notification);
+        factory.getCacheWriteDataSession().update(FatNotification.class, notification);
     }
 }

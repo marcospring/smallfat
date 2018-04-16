@@ -87,7 +87,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> param = nullAbleValidation(request, FatArticle.FIELD_ID, FatArticle.FIELD_TITLE);
         String title = StringDefaultValue.StringValue(param.get(FatArticle.FIELD_TITLE));
         String id = StringDefaultValue.StringValue(param.get(FatArticle.FIELD_ID));
-        PushMessage message = PushMessage.get().content(title).platform(PlatForm.IOS).title(title).addExtras(Constant
+        PushMessage message = PushMessage.get().content(title).platform(PlatForm.ALL).title(title).addExtras(Constant
                 .PUSH_TYPE, Constant.PushType.ARTICLE).addExtras(FatArticle.FIELD_TITLE, title).addExtras(FatArticle.FIELD_ID, id);
         push.push(PushPayloadBuilder.newInstance().build(message));
         printWriter(response, successResultJSON());

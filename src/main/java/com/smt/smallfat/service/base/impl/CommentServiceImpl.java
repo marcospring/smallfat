@@ -1,8 +1,6 @@
 package com.smt.smallfat.service.base.impl;
 
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleIfStatement;
 import com.csyy.common.StringDefaultValue;
-import com.csyy.constant.Constants;
 import com.csyy.core.apisupport.impl.BaseServiceImpl;
 import com.csyy.core.datasource.param.*;
 import com.csyy.core.exception.CommonException;
@@ -10,10 +8,7 @@ import com.csyy.core.obj.Pagination;
 import com.csyy.core.utils.CommonBeanUtils;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.constant.ResultConstant;
-import com.smt.smallfat.po.FatArticle;
-import com.smt.smallfat.po.FatComment;
-import com.smt.smallfat.po.FatCustomer;
-import com.smt.smallfat.po.FatSucculentCircle;
+import com.smt.smallfat.po.*;
 import com.smt.smallfat.service.base.ArticleService;
 import com.smt.smallfat.service.base.CommentService;
 import com.smt.smallfat.service.base.CustomerService;
@@ -23,6 +18,7 @@ import com.smt.smallfat.utils.push.PushMessage;
 import com.smt.smallfat.utils.push.PushPayloadBuilder;
 import com.smt.smallfat.utils.push.pushenum.PlatForm;
 import com.smt.smallfat.vo.FatCommentVO;
+import com.smt.smallfat.vo.house.CircleCommentVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,20 +45,43 @@ public class CommentServiceImpl extends BaseServiceImpl implements CommentServic
     public FatCommentVO addComment(Map<String, Object> param) {
         FatComment comment = CommonBeanUtils.transMap2BasePO(param, FatComment.class);
         comment = factory.getCacheWriteDataSession().save(FatComment.class, comment);
-        FatCommentVO customerVO = fillFatCommentVO(comment, comment.getCommentType());
+        FatCommentVO commentVO = fillFatCommentVO(comment, comment.getCommentType());
         //推送
-        if (customerVO.getToUser().getId() != 0) {
-            String title = "{0}在文章《{1}》中回复了你";
+        String title;
+        String titleOrContent;
+        FatCustomer toCustomer = null;
+        boolean pushFlag = false;
+        if (commentVO.getArticle() != null) {
+            title = "{0}在文章《{1}》中回复了你";
+            titleOrContent = PushMessage.buildMessage(title, commentVO.getFromUser().getNickName(), commentVO
+                    .getArticle().getTitle());
+            if (commentVO.getToUser().getId() != 0) {
+                toCustomer = commentVO.getToUser();
+                pushFlag = !pushFlag;
+            }
+        } else {
+            title = "{0}在{1}中回复了你";
+            titleOrContent = PushMessage.buildMessage(title, commentVO.getFromUser().getNickName(), "花房");
+            if (commentVO.getToUser().getId() != 0) {
+                toCustomer = commentVO.getToUser();
+            } else {
+                toCustomer = customerService.getCustomerById(commentVO.getCircle().getCircle().getUserId());
+                comment.setToUserid(toCustomer.getId());
+                factory.getCacheWriteDataSession().update(FatComment.class, comment);
+            }
+            pushFlag = !pushFlag;
+        }
+        if (pushFlag) {
             PushMessage message = PushMessage.get()
-                    .title(PushMessage.buildMessage(title, customerVO.getFromUser().getNickName(), customerVO.getArticle().getTitle()))
-                    .platform(PlatForm.IOS)
-                    .content(PushMessage.buildMessage(title, customerVO.getFromUser().getNickName(), customerVO.getArticle().getTitle()))
-                    .addAlias(customerVO.getToUser().getUuid())
+                    .title(titleOrContent)
+                    .platform(PlatForm.ALL)
+                    .content(titleOrContent)
+                    .addAlias(toCustomer.getUuid())
                     .addExtras(Constant.PUSH_TYPE, Constant.PushType.COMMENT);
-            logger.info("================>:{}", push);
+            logger.info("================>:{}<=============", titleOrContent);
             push.push(PushPayloadBuilder.newInstance().build(message));
         }
-        return customerVO;
+        return commentVO;
     }
 
     private FatCommentVO fillFatCommentVO(FatComment comment, int commentType) {
@@ -78,7 +97,10 @@ public class CommentServiceImpl extends BaseServiceImpl implements CommentServic
             return new FatCommentVO(comment, article, fromUser, toUser);
         } else {
             FatSucculentCircle circle = circleService.getCircleById(articleId);
-            return new FatCommentVO(comment, circle, fromUser, toUser);
+            List<FatSucculentImage> imageList = circleService.getCircleImages(articleId);
+            CircleCommentVO vo = new CircleCommentVO(circle, imageList.stream().filter(image -> image.getImgIndex() ==
+                    1).findFirst().get());
+            return new FatCommentVO(comment, vo, fromUser, toUser);
         }
 
     }
@@ -164,10 +186,10 @@ public class CommentServiceImpl extends BaseServiceImpl implements CommentServic
     @Override
     public Pagination<FatCommentVO> myComment(int userId, int pageNo, int pageSize) {
         CustomSQL where = SQLCreator.where().cloumn(FatComment.FIELD_DISABLED).operator(ESQLOperator.EQ).v
-                (Constant.WrapperExtend.ZERO).operator(ESQLOperator.AND).cloumn(FatComment.FIELD_FROM_USERID)
-                .operator(ESQLOperator.EQ).v(userId).operator(ESQLOperator.OR).cloumn(FatComment.FIELD_TO_USERID)
-                .operator(ESQLOperator.EQ).v(userId).operator(ESQLOperator.ORDER_BY).cloumn(FatComment
-                        .FIELD_UPDATE_TIME).operator(ESQLOperator.DESC);
+                (Constant.WrapperExtend.ZERO).operator(ESQLOperator.AND).cloumn(FatComment
+                .FIELD_FROM_USERID).operator(ESQLOperator.EQ).v(userId).operator(ESQLOperator.OR)
+                .cloumn(FatComment.FIELD_TO_USERID).operator(ESQLOperator.EQ).v(userId).operator(ESQLOperator.ORDER_BY)
+                .cloumn(FatComment.FIELD_UPDATE_TIME).operator(ESQLOperator.DESC);
         Pagination<FatComment> page = queryClassPagination(FatComment.class, where, pageNo, pageSize);
         Pagination<FatCommentVO> pageVO = fillCommentVO(page);
         return pageVO;
@@ -180,5 +202,14 @@ public class CommentServiceImpl extends BaseServiceImpl implements CommentServic
                 .operator(ESQLOperator.EQ).v(userId).operator(ESQLOperator.AND).cloumn(FatComment
                         .FIELD_IS_READ).operator(ESQLOperator.EQ).v(Constant.WrapperExtend.ZERO);
         return factory.getCacheReadDataSession().queryListResultCountByWhere(FatComment.class, where);
+    }
+
+    @Override
+    public void readAllUserComment(int userId) {
+        CustomSQL where = SQLCreator.where().cloumn(FatComment.FIELD_TO_USERID).operator(ESQLOperator.EQ).v(userId)
+                .operator(ESQLOperator.AND).cloumn(FatComment.FIELD_IS_READ).operator(ESQLOperator.EQ).v
+                        (Constant.WrapperExtend.ZERO);
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatComment.FIELD_IS_READ, READ));
+        factory.getCacheWriteDataSession().updateCustomColumnByWhere(FatComment.class, param, where);
     }
 }

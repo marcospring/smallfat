@@ -52,6 +52,10 @@ public class FatCustomer extends BasePo {
 	private String  openId = "";
 	/** 对应的静态变量值*/
 	public static final String FIELD_OPEN_ID = "openId";
+	/**vip种类*/
+	private Integer  vipType = 0;
+	/**vip种类 对应的静态变量值*/
+	public static final String FIELD_VIP_TYPE = "vipType";
 	
 	public String getUsername() {
 		return username;
@@ -112,5 +116,11 @@ public class FatCustomer extends BasePo {
 	}
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+	public Integer getVipType() {
+		return vipType;
+	}
+	public void setVipType(Integer vipType) {
+		this.vipType = vipType;
 	}
 }

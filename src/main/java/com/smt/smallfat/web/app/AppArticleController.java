@@ -6,6 +6,7 @@ import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatArticle;
 import com.smt.smallfat.service.base.ArticleService;
+import com.smt.smallfat.service.system.SysDicService;
 import com.smt.smallfat.vo.AppTopArticleVO;
 import com.smt.smallfat.vo.ArticleVO;
 import com.smt.smallfat.vo.IndexVO;
@@ -25,6 +26,8 @@ public class AppArticleController extends BaseController {
 
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private SysDicService dicService;
 
     @RequestMapping("/list")
     public void list(HttpServletRequest request, HttpServletResponse response) {
@@ -71,5 +74,10 @@ public class AppArticleController extends BaseController {
         ArticleVO vo = articleService.getArticleVOById(id);
         vo.setShareUrl(Constant.ARTICLE_SHARE_URL + id);
         printWriter(response, successResultJSON(vo));
+    }
+
+    @RequestMapping("/getArticgetArticleTypeleById")
+    public void getArticleType(HttpServletRequest request, HttpServletResponse response){
+
     }
 }

@@ -20,7 +20,8 @@
 			u.telephone as telephone ,
 			u.email as email ,
 			u.nick_name as nickName ,
-			u.open_id as openId 
+			u.open_id as openId ,
+			u.vip_type as vipType 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -106,6 +107,9 @@
 		</if>
 		<if test="openIdLike != null">
 			and u.open_id like CONCAT('%',#{openIdLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="vipType != null">
+			and u.vip_type = #{vipType,jdbcType=NUMERIC}
 		</if>
 	</sql>
 
@@ -203,7 +207,8 @@
 			telephone,
 			email,
 			nick_name,
-			open_id
+			open_id,
+			vip_type
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -222,7 +227,8 @@
 			#{telephone,jdbcType=VARCHAR},
 			#{email,jdbcType=VARCHAR},
 			#{nickName,jdbcType=VARCHAR},
-			#{openId,jdbcType=VARCHAR}
+			#{openId,jdbcType=VARCHAR},
+			#{vipType,jdbcType=NUMERIC}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -244,7 +250,8 @@
 			telephone,
 			email,
 			nick_name,
-			open_id
+			open_id,
+			vip_type
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -265,7 +272,8 @@
 			#{obj.telephone,jdbcType=VARCHAR},
 			#{obj.email,jdbcType=VARCHAR},
 			#{obj.nickName,jdbcType=VARCHAR},
-			#{obj.openId,jdbcType=VARCHAR}
+			#{obj.openId,jdbcType=VARCHAR},
+			#{obj.vipType,jdbcType=NUMERIC}
 		)
 		</foreach>
 	</insert>
@@ -319,6 +327,9 @@
 			</if>
  			<if test="openId != null">
 				,u.open_id=#{openId,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="vipType != null">
+				,u.vip_type=#{vipType,jdbcType=NUMERIC} 
 			</if>
 		</set>
 		where

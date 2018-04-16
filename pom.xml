@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>4.0.4.RELEASE</spring.version>
+        <spring.version>4.3.2.RELEASE</spring.version>
         <downloadSources>true</downloadSources>
     </properties>
 
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.csyy</groupId>
             <artifactId>core</artifactId>
-            <version>1.2.6-RELEASE</version>
+            <version>1.2.5-master-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -66,6 +66,40 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+        <!--压缩-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
+        <!--swagger-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+
     </dependencies>
     <build>
         <pluginManagement>

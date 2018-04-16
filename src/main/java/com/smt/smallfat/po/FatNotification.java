@@ -1,7 +1,6 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
-
 /**
  * FatNotification实体
  * 
@@ -13,7 +12,7 @@ public class FatNotification extends BasePo {
 	/**表名*/
 	public static final String tableName = "FAT_NOTIFICATION";
 	/**用户id*/
-	private String  userId = "";
+	private Integer  userId = 0;
 	/**用户id 对应的静态变量值*/
 	public static final String FIELD_USER_ID = "userId";
 	/**用户id*/
@@ -41,10 +40,10 @@ public class FatNotification extends BasePo {
 	/**是否全部推送 对应的静态变量值*/
 	public static final String FIELD_IS_ALL = "isAll";
 	
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	public String getTitle() {

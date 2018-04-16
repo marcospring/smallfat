@@ -31,8 +31,8 @@ public class PayConstant {
     public static String WECHAT_OPENID_TRADE_TYPE = properties.getProperty("pay.trade_type");
     public static String WECHAT_OPENID_PAY_APPSECRET = properties.getProperty("pay.app_secret");
     public static String WECHAT_PAY_URL = properties.getProperty("pay.pay_url");
-    public static String WECHAT_PAY_BACK_URL =properties.getProperty("pay.pay_back_url");
-    public static String WECHAT_REFUND_KEY_PATH=properties.getProperty("pay.wechat_refund_key_path");
+    public static String WECHAT_PAY_BACK_URL = properties.getProperty("pay.pay_back_url");
+    public static String WECHAT_REFUND_KEY_PATH = properties.getProperty("pay.wechat_refund_key_path");
     public static final String PACKAGE = "Sign=WXPay";
     public static final String PAY_SUCCESS = "SUCCESS";
     public static final String OK = "OK";

@@ -9,11 +9,13 @@ import com.csyy.core.utils.CommonBeanUtils;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.constant.ResultConstant;
 import com.smt.smallfat.po.FatCustomerAddress;
+import com.smt.smallfat.po.FatOrder;
 import com.smt.smallfat.service.base.CustomerAddressService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 @Service
 public class CustomerAddressServiceImpl extends BaseServiceImpl implements CustomerAddressService {
     @Override
@@ -39,7 +41,9 @@ public class CustomerAddressServiceImpl extends BaseServiceImpl implements Custo
     @Override
     public void deleteAddress(String ids) {
         String[] idArray = ids.split(Constant.Separator.COMMA);
+        Param param = ParamBuilder.getInstance().getParam();
         for (String idStr : idArray) {
+            param.clean();
             int id = StringDefaultValue.intValue(idStr);
             factory.getCacheWriteDataSession().physicalDelete(FatCustomerAddress.class, id);
         }
@@ -61,8 +65,8 @@ public class CustomerAddressServiceImpl extends BaseServiceImpl implements Custo
     @Override
     public FatCustomerAddress getAddressById(int id) {
         FatCustomerAddress address = factory.getCacheReadDataSession().querySingleResultById(FatCustomerAddress
-                .class,id);
-        if(address == null)
+                .class, id);
+        if (address == null)
             throw new CommonException(ResultConstant.CustomerAddress.ADDRESS_IS_NULL);
         return address;
     }
@@ -70,8 +74,8 @@ public class CustomerAddressServiceImpl extends BaseServiceImpl implements Custo
     @Override
     public FatCustomerAddress getAddressByUUID(String uuid) {
         FatCustomerAddress address = factory.getCacheReadDataSession().querySingleResultByUUID(FatCustomerAddress
-                .class,uuid);
-        if(address == null)
+                .class, uuid);
+        if (address == null)
             throw new CommonException(ResultConstant.CustomerAddress.ADDRESS_IS_NULL);
         return address;
     }
@@ -90,7 +94,7 @@ public class CustomerAddressServiceImpl extends BaseServiceImpl implements Custo
         FatCustomerAddress address = getAddressById(id);
         updateAddressNonDefault(address.getUserId());
         address.setIsDefault(DEFAULT);
-        factory.getCacheWriteDataSession().update(FatCustomerAddress.class,address);
+        factory.getCacheWriteDataSession().update(FatCustomerAddress.class, address);
         return address;
     }
 
@@ -100,7 +104,7 @@ public class CustomerAddressServiceImpl extends BaseServiceImpl implements Custo
         int pageNo = StringDefaultValue.intValue(param.get(Constant.PAGE_NO));
         Param params = ParamBuilder.getInstance().getParam().add(param);
         Pagination<FatCustomerAddress> page = queryClassPagination(FatCustomerAddress.class
-                ,params,pageNo,pageSize);
+                , params, pageNo, pageSize);
         return page;
     }
 }

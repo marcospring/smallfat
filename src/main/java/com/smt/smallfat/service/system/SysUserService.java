@@ -19,6 +19,7 @@ public interface SysUserService {
 
     /**
      * 添加系统用户.
+     *
      * @param param
      * @return
      */
@@ -26,6 +27,7 @@ public interface SysUserService {
 
     /**
      * 通过id获得系统用户
+     *
      * @param id
      * @return
      */
@@ -34,6 +36,7 @@ public interface SysUserService {
 
     /**
      * 修改系统用户.
+     *
      * @param param
      * @return
      */
@@ -42,6 +45,7 @@ public interface SysUserService {
 
     /**
      * 分页获得系统用户.
+     *
      * @param param
      * @param
      * @param
@@ -50,8 +54,10 @@ public interface SysUserService {
     PaginationVo<SysUserVo> paginationSysUser(Map<String, Object> param);
 
     Integer countOrdUserVos(Param param);
+
     /**
      * 根据用户id查询所有权限
+     *
      * @param userId
      * @return
      */
@@ -60,6 +66,7 @@ public interface SysUserService {
 
     /**
      * 修改密码
+     *
      * @param map
      * @return
      */
@@ -72,6 +79,7 @@ public interface SysUserService {
 
     /**
      * 动态根据条件查询用户
+     *
      * @param map
      * @return
      */
@@ -79,6 +87,7 @@ public interface SysUserService {
 
     /**
      * 更新系统用户
+     *
      * @param map
      * @return
      */
@@ -86,6 +95,7 @@ public interface SysUserService {
 
     /**
      * 根据角色获取用户
+     *
      * @param param
      * @return
      */
@@ -93,13 +103,14 @@ public interface SysUserService {
 
     /**
      * 根据用户名密码查询用户
+     *
      * @param params
      * @param request
      * @return
      */
-    LoginVO login(Map<String,Object> params, HttpServletRequest request);
+    LoginVO login(Map<String, Object> params, HttpServletRequest request);
+
     /**
-     *
      * @param sesionId
      */
     void logout(String sesionId);

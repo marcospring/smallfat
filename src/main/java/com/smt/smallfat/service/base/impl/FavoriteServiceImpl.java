@@ -1,6 +1,7 @@
 package com.smt.smallfat.service.base.impl;
 
 import com.csyy.common.StringDefaultValue;
+import com.csyy.constant.Constants;
 import com.csyy.core.apisupport.impl.BaseServiceImpl;
 import com.csyy.core.datasource.param.Param;
 import com.csyy.core.datasource.param.ParamBuilder;
@@ -14,7 +15,9 @@ import com.smt.smallfat.service.base.AllService;
 import com.smt.smallfat.service.base.ArticleService;
 import com.smt.smallfat.service.base.FavoriteService;
 import com.smt.smallfat.service.base.GoodsService;
+import com.smt.smallfat.service.system.SysDicItemService;
 import com.smt.smallfat.vo.FavoriteVO;
+import com.smt.smallfat.vo.SysDicItemVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,8 @@ public class FavoriteServiceImpl extends BaseServiceImpl implements FavoriteServ
     private AllService allService;
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private SysDicItemService itemService;
 
     @Override
     public FavoriteVO addFavorite(Map<String, Object> param) {
@@ -55,7 +60,12 @@ public class FavoriteServiceImpl extends BaseServiceImpl implements FavoriteServ
         switch (favorite.getFavoriteType()) {
             case ARTICLE:
                 FatArticle article = articleService.getArticleById(articleId);
-                return new FavoriteVO(favorite, article);
+                SysDicItemVo item = itemService.getDicItemById(article.getArticleType());
+                Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatComment.FIELD_ARTICLE_ID,
+                        article.getId())).add(ParamBuilder.nv(FatComment.FIELD_COMMENT_TYPE, Constant.WrapperExtend
+                        .ZERO));
+                long commentCount = factory.getCacheReadDataSession().queryListResultCount(FatComment.class, param);
+                return new FavoriteVO(favorite, article, commentCount, item.getDicItemName());
             case ALL:
                 FatAll all = allService.getAllById(articleId);
                 return new FavoriteVO(favorite, all);

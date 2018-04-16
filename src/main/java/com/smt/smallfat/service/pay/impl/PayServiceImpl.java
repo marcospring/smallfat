@@ -196,9 +196,9 @@ public class PayServiceImpl extends BaseServiceImpl implements PayService {
             notification.setContent(PushMessage.buildMessage(content, customer.getNickName(), order.getOrderNo()));
             notification.setNickName(customer.getNickName());
             notification.setTitle("退款成功");
-            notification.setUserId(StringDefaultValue.StringValue(customer.getId()));
+            notification.setUserId(customer.getId());
             notification = notificationService.addNotification(notification);
-            PushMessage message = PushMessage.get().platform(PlatForm.IOS).addAlias(customer.getUuid()).addExtras
+            PushMessage message = PushMessage.get().platform(PlatForm.ALL).addAlias(customer.getUuid()).addExtras
                     (FatNotification.FIELD_ID, StringDefaultValue.StringValue(notification.getId())).addExtras
                     (Constant.PUSH_TYPE, Constant.PushType.SYSTEM_NOTICE).title(notification.getContent()).content
                     (notification.getContent());

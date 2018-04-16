@@ -6,6 +6,12 @@ import com.csyy.core.result.Result;
 
 public class Constant extends com.csyy.constant.Constants {
 
+    public static int ANDROID = 1;
+    public static int IOS = 2;
+    public static int SHI = 1;
+    public static int FOU = 2;
+    public static int NOT_FORCE = 1;
+    public static int FORCE = 2;
 
     public static final String PAGE_NO = "pageNo";
     public static String DEFULT_PASSWORD = "123456Ab";//系统默认密码
@@ -49,7 +55,11 @@ public class Constant extends com.csyy.constant.Constants {
 
     public static final String ALL_SHARE_URL = "http://share.huaxi0.com/activity/share/wiki.html?id=";
 
+    public static final String CIRCLE_SHARE_URL = "http://share.huaxi0.com/activity/share/huafang.html?id=";
+
     public static final String ORDER_PREFIX = "ORDER_";
+
+    public static final String HOUSE_IMAGE_PREFIX = "IMAGE_TEMP_";
 
     public static Result SESSION_TIMEOUT = new Result(999,"会话不存在或已过期");
 
@@ -122,11 +132,24 @@ public class Constant extends com.csyy.constant.Constants {
         String SYSTEM_NOTICE = "3";
         String COMMENT ="4";
         String ALL = "5";
+        /**
+         * 点赞
+         */
+        String PRAISE = "6";
+        /**
+         * 关注
+         */
+        String FOLLOW = "7";
     }
 
     public interface  Lock{
         String ORDER_LOCK = "ORDER_LOCK";
         String DETAIL_LOCK = "DETAIL_LOCK";
         String REFUND_LOCK ="REFUND_LOCK";
+    }
+
+    public interface CommentType{
+        int ARTICLE = 0;
+        int CIRCLE = 1;
     }
 }

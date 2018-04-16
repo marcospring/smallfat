@@ -38,7 +38,7 @@ public class ShareServiceImpl extends BaseServiceImpl implements ShareService {
             return token;
         String xml = HttpXmlClient.get("https://api.weixin.qq" +
                 ".com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + SECRET);
-        logger.info("获取token的xml：{}",xml);
+        logger.info("获取token的xml：{}", xml);
         JSONObject jsonMap = JSONObject.fromObject(xml);
         Map<String, String> map = new HashMap();
         Iterator<String> it = jsonMap.keys();
@@ -57,7 +57,7 @@ public class ShareServiceImpl extends BaseServiceImpl implements ShareService {
         if (!StringDefaultValue.isEmpty(ticket))
             return ticket;
         String xml = HttpXmlClient.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + token + "&type=jsapi");
-        logger.info("获取ticket的xml：{}",xml);
+        logger.info("获取ticket的xml：{}", xml);
         JSONObject jsonMap = JSONObject.fromObject(xml);
         Map<String, String> map = new HashMap();
         Iterator<String> it = jsonMap.keys();
@@ -86,7 +86,7 @@ public class ShareServiceImpl extends BaseServiceImpl implements ShareService {
                 "&noncestr=" + nonceStr +
                 "&timestamp=" + timestamp +
                 "&url=" + url;
-        logger.info("str={}",str);
+        logger.info("str={}", str);
         //sha1加密
         return PassSecret.SHA1(str);
     }

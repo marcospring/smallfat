@@ -85,8 +85,8 @@
     <resultMessage code="010802" key="ARTICLE_IS_NULL" message="文章不存在"/>
 
     <!-- 客户信息 -->
-    <resultMessage code="010901" key="CUSTOMER_IS_NOT_NULL" message="客户不存在"/>
-    <resultMessage code="010902" key="CUSTOMER_IS_NULL" message="客户已存在"/>
+    <resultMessage code="010901" key="CUSTOMER_IS_NOT_NULL" message="客户已存在"/>
+    <resultMessage code="010902" key="CUSTOMER_IS_NULL" message="客户不存在"/>
 
     <!--回复信息-->
     <resultMessage code="011001" key="COMMENT_IS_NOT_NULL" message="回复已存在"/>
@@ -144,7 +144,25 @@
     <resultMessage code="011901" key="SPIDER_IS_NULL" message="爬虫文章不存在"/>
     <!-- 花房-->
     <resultMessage code="012001" key="CIRCLE_IS_NULL" message="花房项不存在"/>
-
+    <resultMessage code="012002" key="IMAGE_UPLOAD_FAILED" message="图片上传失败"/>
+    <resultMessage code="012003" key="IMAGE_OVERDUE" message="图片过期"/>
+    <resultMessage code="012004" key="ILLEGAL" message="图片非法"/>
+    <resultMessage code="012005" key="CIRCLE_ADD_FILE" message="添加失败"/>
+    <resultMessage code="012006" key="CIRCLE_ADD_TIMEOUT" message="图片过期，请重新添加图片"/>
+    <resultMessage code="012007" key="PRAISE_IS_NULL" message="用户已取消点赞"/>
+    <resultMessage code="012008" key="FOLLOW_IS_NULL" message="用户已取消关注"/>
+    <resultMessage code="012009" key="DELETE_INVALID" message="删除无效"/>
+    <resultMessage code="012010" key="CIRCLE_REPORT_IS_NULL" message="举报内容不存在"/>
+    <resultMessage code="012011" key="TOO_MANY_CIRCLE_IMAGE" message="最多上传6张图片"/>
+    <!--APP_VERSION-->
+    <resultMessage code="012101" key="SYSAPPVER_IS_NULL" message="APP_VERSION为空"/>
+    <resultMessage code="012102" key="SYSAPPVER_IS_NOT_FOUND" message="没有找到APP_VERSION"/>
+    <resultMessage code="012103" key="SYSAPPVER_IS_EXISTS" message="APP_VERSION已经存在"/>
+    <resultMessage code="012104" key="SYSAPPVER_MIDDLE_IS_EXISTS" message="中间表有数据,不可以删除"/>
+    <resultMessage code="012105" key="DELETE_SYSAPPVER_IS_FAILD" message="删除APP_VERSION失败"/>
+    <resultMessage code="012106" key="UPDATE_SYSAPPVER_IS_FAILD" message="修改APP_VERSION失败"/>
+    <resultMessage code="012107" key="DOWNADDRESS_IS_NOT_FOUND" message="下载地址不能为空"/>
+    <resultMessage code="012108" key="WORDS_IS_FULL" message="字数超限"/>
 
 
 

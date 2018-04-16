@@ -14,6 +14,7 @@ public interface IFileInfoService extends BaseService {
 
     /**
      * 将流中的所有文件持久化
+     *
      * @param multiRequest
      * @return
      */
@@ -22,6 +23,7 @@ public interface IFileInfoService extends BaseService {
 
     /**
      * 根据id,或uuid 修改
+     *
      * @param map
      */
     int editFileInfo(Map<String, Object> map);
@@ -29,6 +31,7 @@ public interface IFileInfoService extends BaseService {
 
     /**
      * 存储base64图片
+     *
      * @param fileData
      * @param params
      * @return

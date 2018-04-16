@@ -1,9 +1,6 @@
 package com.smt.smallfat.service.system;
 
 
-
-
-import com.csyy.core.result.Result;
 import com.smt.smallfat.vo.PermissionTreeVo;
 import com.smt.smallfat.vo.SysPermissionVo;
 
@@ -16,14 +13,12 @@ import java.util.Map;
 public interface SysPermissionService {
 
     /**
-     *
      * @param param
      * @return
      */
     SysPermissionVo addPermission(Map<String, Object> param);
 
     /**
-     *
      * @param id
      */
     void deletePermission(int id);
@@ -35,14 +30,12 @@ public interface SysPermissionService {
     SysPermissionVo updatePermission(Map<String, Object> param);
 
     /**
-     *
      * @param id
      * @return
      */
     SysPermissionVo getPermissionById(int id);
 
     /**
-     *
      * @param uuid
      * @return
      */
@@ -50,6 +43,7 @@ public interface SysPermissionService {
 
     /**
      * 根据用户获取用回权限
+     *
      * @param userId
      * @return
      */
@@ -57,6 +51,7 @@ public interface SysPermissionService {
 
     /**
      * 获取全部菜单的树形结构
+     *
      * @return
      */
     List<PermissionTreeVo> getPermissionTree();
@@ -64,6 +59,7 @@ public interface SysPermissionService {
 
     /**
      * 获取role获取权限列表
+     *
      * @param roleId
      * @return
      */

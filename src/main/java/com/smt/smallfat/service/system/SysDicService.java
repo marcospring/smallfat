@@ -16,6 +16,7 @@ public interface SysDicService {
 
     /**
      * 添加字典
+     *
      * @param param
      * @return
      */
@@ -28,6 +29,7 @@ public interface SysDicService {
 
     /**
      * 更新字典
+     *
      * @param param
      * @param param
      * @return
@@ -36,6 +38,7 @@ public interface SysDicService {
 
     /**
      * 根据UUID查询字典
+     *
      * @param uuid
      * @return
      */
@@ -43,6 +46,7 @@ public interface SysDicService {
 
     /**
      * 根据ID查询字典
+     *
      * @param id
      * @return
      */
@@ -50,6 +54,7 @@ public interface SysDicService {
 
     /**
      * 根据CODE获取字典数据
+     *
      * @param code
      * @return
      * @throws BusinessException
@@ -58,12 +63,14 @@ public interface SysDicService {
 
     /**
      * 获取dic的tree
+     *
      * @return
      */
     DicTreeVo getDicTree(Map<String, Object> param);
 
     /**
      * 根据爷爷获取父类集合
+     *
      * @param code
      */
     List<SysDicVo> getDicListByParentId(String code);

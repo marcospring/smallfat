@@ -290,10 +290,11 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             FatShoppingCart cartItem = factory.getReadDataSession().querySingleResultByParams(FatShoppingCart.class,
                     params);
             //如果操作为提交购物车数据，则要验证数库存，并设置数据是否被选中为生成订单的数据
-            if(cartItem != null){
+            if (cartItem != null) {
                 if (isCheck == CHECK) {
-                    //然后验证商品数量是否足够
-                    isGoodsEnough(detailId, count);
+                    if(isSelect == 1)
+                        //然后验证商品数量是否足够
+                        isGoodsEnough(detailId, count);
                     //最后根据传入参数设置数据是否被选中
                     cartItem.setIsSelected(isSelect);
                 }
@@ -444,7 +445,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                     order.getFlexNo());
             FatNotification notification = FatNotification.getInstance(FatNotification.class);
             notification.setIsRead(0);
-            notification.setUserId(StringDefaultValue.StringValue(customer.getId()));
+            notification.setUserId(customer.getId());
             notification.setTitle("发货通知");
             notification.setContent(messageContent);
             notification.setNickName(customer.getNickName());

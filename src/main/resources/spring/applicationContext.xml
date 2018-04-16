@@ -95,5 +95,5 @@
         <constructor-arg name="apnsProduction" value="true"/>
         <constructor-arg name="timeToLive" value="86400"/>
     </bean>
-
+    <bean class="com.smt.smallfat.utils.SwaggerConfig" id="swagger2Config"/>
 </beans>

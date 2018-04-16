@@ -36,9 +36,11 @@ public class PushPayloadBuilder {
             return builder.build();
         switch (message.getPlatForm()) {
             case ALL:
-                builder.setPlatform(Platform.all());
+                builder.setPlatform(Platform.android_ios());
+//                builder.setMessage(Message.newBuilder().setMsgContent(message.getContent()).setTitle(message.getTitle()).addExtras
+//                        (message.getExtras()).build()).setMessage(Message.content(message.getContent()));
+                builder = androidMessage(builder, message);
                 iosMessage(builder, message);
-                androidMessage(builder, message);
                 break;
             case IOS:
                 builder.setPlatform(Platform.ios());
@@ -52,19 +54,20 @@ public class PushPayloadBuilder {
                 builder.setPlatform(Platform.winphone());
                 break;
         }
-        if (message.getAlias() != null){
+        if (message.getAlias() != null) {
             builder.setAudience(Audience.alias(message.getAlias()));
-        }else{
+        } else {
             builder.setAudience(Audience.all());
         }
-        builder.setMessage(Message.content(message.getContent()));
+         builder.setMessage(Message.content(message.getContent()));
         builder.setOptions(Options.newBuilder().setApnsProduction(false).build());
         return builder.build();
     }
 
-    private void androidMessage(PushPayload.Builder builder, PushMessage message) {
+    private PushPayload.Builder androidMessage(PushPayload.Builder builder, PushMessage message) {
         builder.setNotification(Notification.newBuilder().addPlatformNotification(AndroidNotification.newBuilder
                 ().setAlert(message.getTitle()).addExtras(message.getExtras()).build()).build());
+        return builder;
     }
 
     private void iosMessage(PushPayload.Builder builder, PushMessage message) {

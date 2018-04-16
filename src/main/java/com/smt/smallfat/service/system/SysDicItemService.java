@@ -15,6 +15,7 @@ import java.util.Map;
 public interface SysDicItemService {
     /**
      * 添加字典项
+     *
      * @param param
      * @return
      */
@@ -22,12 +23,14 @@ public interface SysDicItemService {
 
     /**
      * 删除字典项
+     *
      * @param id
      */
     void deleteSysDicItem(int id);
 
     /**
      * 更新字典项
+     *
      * @param param
      * @return
      */
@@ -35,6 +38,7 @@ public interface SysDicItemService {
 
     /**
      * 根据字典编码获取字典项列表
+     *
      * @param code
      * @return
      */
@@ -42,6 +46,7 @@ public interface SysDicItemService {
 
     /**
      * 根据ID获取字典项
+     *
      * @param id
      * @return
      */
@@ -49,6 +54,7 @@ public interface SysDicItemService {
 
     /**
      * 根据UUID获取字典项
+     *
      * @param uuid
      * @return
      */
@@ -56,6 +62,7 @@ public interface SysDicItemService {
 
     /**
      * 根据字典ID获取字典项列表
+     *
      * @param id
      * @return
      */
@@ -63,6 +70,7 @@ public interface SysDicItemService {
 
     /**
      * 根据字典UUID获取字典项列表
+     *
      * @param uuid
      * @return
      */
@@ -70,6 +78,7 @@ public interface SysDicItemService {
 
     /**
      * 根据字典父类code添加该父类的子类
+     *
      * @param param
      * @return
      */
@@ -79,6 +88,7 @@ public interface SysDicItemService {
      * 根据父字典code和子字典id获取子字典
      * dicCode
      * id
+     *
      * @param param
      * @return
      */
@@ -86,6 +96,7 @@ public interface SysDicItemService {
 
     /**
      * 根据父字典code和dic_item_value获取子字典
+     *
      * @param dicCode
      * @param dicItemValue
      * @return

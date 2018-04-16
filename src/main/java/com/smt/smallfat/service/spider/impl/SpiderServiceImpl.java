@@ -25,16 +25,17 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SpiderServiceImpl extends BaseServiceImpl implements SpiderService{
+public class SpiderServiceImpl extends BaseServiceImpl implements SpiderService {
 
     private SpiderTool tool = new SpiderTool();
     @Autowired
     private ArticleService articleService;
     Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public FatSpider findById(int id) {
-        FatSpider spider = factory.getCacheReadDataSession().querySingleResultById(FatSpider.class,id);
-        if(spider == null)
+        FatSpider spider = factory.getCacheReadDataSession().querySingleResultById(FatSpider.class, id);
+        if (spider == null)
             throw new CommonException(ResultConstant.Spider.SPIDER_IS_NULL);
         return spider;
     }
@@ -53,7 +54,7 @@ public class SpiderServiceImpl extends BaseServiceImpl implements SpiderService{
 
     @Override
     public void addOne(FatSpider spider) {
-        factory.getCacheWriteDataSession().save(FatSpider.class,spider);
+        factory.getCacheWriteDataSession().save(FatSpider.class, spider);
     }
 
     @Override
@@ -65,20 +66,20 @@ public class SpiderServiceImpl extends BaseServiceImpl implements SpiderService{
     public void updateOne(Map<String, Object> param) {
         int id = StringDefaultValue.intValue(param.get(FatSpider.FIELD_ID));
         FatSpider spider = findById(id);
-        spider = CommonBeanUtils.transMap2BasePO(param,spider);
-        factory.getCacheWriteDataSession().update(FatSpider.class,spider);
+        spider = CommonBeanUtils.transMap2BasePO(param, spider);
+        factory.getCacheWriteDataSession().update(FatSpider.class, spider);
 
     }
 
     @Override
     public void deleteById(int pk) {
-        factory.getCacheWriteDataSession().physicalDelete(FatSpider.class,pk);
+        factory.getCacheWriteDataSession().physicalDelete(FatSpider.class, pk);
     }
 
     @Override
     public void catchSpiderBest(InputStream inputStream) {
         List<FatSpider> list = tool.fromJsonToList(tool.fileReader(inputStream));
-        for (FatSpider spider:list){
+        for (FatSpider spider : list) {
             addOne(spider);
         }
     }

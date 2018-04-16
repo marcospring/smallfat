@@ -238,9 +238,9 @@ public class ArticleServiceImpl extends BaseServiceImpl implements ArticleServic
     public IndexVO index(Map<String, Object> param) {
         Pagination<ArticleVO> pageVO = appArticlePage(param);
         int pageNo = StringDefaultValue.intValue(param.get(Constant.PAGE_NO));
-        int pageSize = StringDefaultValue.intValue(param.get(Constant.PAGE_SIZE));
+//        int pageSize = StringDefaultValue.intValue(param.get(Constant.PAGE_SIZE));
         int userId = StringDefaultValue.intValue(param.get(Constant.USER_ID));
-        Pagination<FlowerHouseItemVO> page = circleService.indexCircleList(userId, pageNo, pageSize);
+        Pagination<FlowerHouseItemVO> page = circleService.indexCircleList(userId, pageNo, 5);
         IndexVO vo = new IndexVO(pageVO, page);
         return vo;
     }

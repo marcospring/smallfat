@@ -3,6 +3,7 @@ package com.smt.smallfat.service.base;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.exception.GetGoodsDetailLockException;
 import com.smt.smallfat.exception.UnLockGoodsDetailException;
+import com.smt.smallfat.po.FatCustomer;
 import com.smt.smallfat.po.FatGoods;
 import com.smt.smallfat.po.FatGoodsDetail;
 import com.smt.smallfat.po.FatGoodsResource;
@@ -14,7 +15,7 @@ import java.util.Map;
 public interface GoodsService {
 
     String FLEX_COMPANY = "FLEX_COMPANY";
-    String GOODS_FLAG ="GOODS_FLAG";
+    String GOODS_FLAG = "GOODS_FLAG";
 
 
     FatGoods addGoods(Map<String, Object> param);
@@ -69,25 +70,29 @@ public interface GoodsService {
      * 添加商品详情锁定
      *
      * @param goodsDetailId 锁定的商品详情id
-     * @param customerUUID 获得所的用户uuid
+     * @param customerUUID  获得所的用户uuid
      */
     void addGoodsDetailLock(int goodsDetailId, String customerUUID) throws GetGoodsDetailLockException;
 
     /**
      * 解锁商品详情
-     * @param customerUUID 获得所的用户uuid
+     *
+     * @param customerUUID  获得所的用户uuid
      * @param goodsDetailId 锁定的商品详情id
      */
     void cancelGoodsDetailLock(int goodsDetailId, String customerUUID) throws UnLockGoodsDetailException;
 
     /**
      * 退库存
+     *
      * @param goodsDetailId
      * @param returnCount
      */
-    void returnInventory(int goodsDetailId,int returnCount);
+    void returnInventory(int goodsDetailId, int returnCount);
 
     void addToApp(int id);
 
     void orderGoods(int id);
+
+    List<FatCustomer> shoppingCartUsers(int goodsId);
 }

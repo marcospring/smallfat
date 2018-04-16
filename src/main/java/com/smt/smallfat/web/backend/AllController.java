@@ -4,6 +4,8 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.po.FatAll;
 import com.smt.smallfat.service.base.AllService;
+import com.smt.smallfat.vo.AllVO;
+import com.smt.smallfat.vo.FavoriteUsersVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,7 @@ public class AllController extends BaseController{
     @RequestMapping("/list")
     public void list(HttpServletRequest request, HttpServletResponse response){
         Map<String,Object> param = getRequestParams(request);
-        Pagination<FatAll> all = allService.pageAll(param);
+        Pagination<AllVO> all = allService.pageAll(param);
         printWriter(response,successResultJSON(all));
     }
 
@@ -59,6 +61,13 @@ public class AllController extends BaseController{
                 .FIELD_CATEGORY);
         FatAll all = allService.updateAll(param);
         printWriter(response,successResultJSON(all));
+    }
+    @RequestMapping("/favoriteUsers")
+    public void favoriteUsers(HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> param = nullAbleValidation(request, FatAll.FIELD_ID);
+        int id = StringDefaultValue.intValue(param.get(FatAll.FIELD_ID));
+        FavoriteUsersVO vo = allService.favoriteUsers(id);
+        printWriter(response, successResultJSON(vo));
     }
 
 }

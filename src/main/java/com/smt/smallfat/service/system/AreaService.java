@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface AreaService {
     List<FatArea> getAreaListByParentId(int parentId);
+
     List<FatArea> getAreaListByFirstLetter(String letter);
 }

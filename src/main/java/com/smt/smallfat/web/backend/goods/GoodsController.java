@@ -3,10 +3,7 @@ package com.smt.smallfat.web.backend.goods;
 import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
-import com.smt.smallfat.po.FatArticle;
-import com.smt.smallfat.po.FatGoods;
-import com.smt.smallfat.po.FatGoodsDetail;
-import com.smt.smallfat.po.FatGoodsResource;
+import com.smt.smallfat.po.*;
 import com.smt.smallfat.service.base.GoodsService;
 import com.smt.smallfat.utils.push.IPush;
 import com.smt.smallfat.utils.push.PushMessage;
@@ -134,7 +131,7 @@ public class GoodsController extends BaseController {
         Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID, FatGoods.FIELD_TITLE);
         String title = StringDefaultValue.StringValue(param.get(FatGoods.FIELD_TITLE));
         String id = StringDefaultValue.StringValue(param.get(FatGoods.FIELD_ID));
-        PushMessage message = PushMessage.get().content(title).platform(PlatForm.IOS).title(title).addExtras(Constant
+        PushMessage message = PushMessage.get().content(title).platform(PlatForm.ALL).title(title).addExtras(Constant
                 .PUSH_TYPE, Constant.PushType.GOODS).addExtras(FatArticle.FIELD_TITLE, title).addExtras(FatArticle
                 .FIELD_ID, id);
         push.push(PushPayloadBuilder.newInstance().build(message));
@@ -155,5 +152,13 @@ public class GoodsController extends BaseController {
         int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
         goodsService.orderGoods(id);
         printWriter(response, successResultJSON());
+    }
+
+    @RequestMapping("/shoppingCartUsers")
+    public void shoppingCartUsers(HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID);
+        int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
+        List<FatCustomer> customers = goodsService.shoppingCartUsers(id);
+        printWriter(response, successResultJSON(customers));
     }
 }

@@ -45,10 +45,18 @@ public class AppCommentController extends BaseController {
         printWriter(response, successResultJSON());
     }
 
+    @RequestMapping("/readAllUserComment")
+    public void readAllUserComment(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = nullAbleValidation(request, Constant.USER_ID);
+        int userId = StringDefaultValue.intValue(map.get(Constant.USER_ID));
+        commentService.readAllUserComment(userId);
+        printWriter(response, successResultJSON());
+    }
+
     @RequestMapping("/myComment")
     public void myComment(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> map = nullAbleValidation(request, "userId");
-        int userId = StringDefaultValue.intValue(map.get("userId"));
+        Map<String, Object> map = nullAbleValidation(request, Constant.USER_ID);
+        int userId = StringDefaultValue.intValue(map.get(Constant.USER_ID));
         int pageNo = StringDefaultValue.intValue(map.get(Constant.PAGE_NO));
         int pageSize = StringDefaultValue.intValue(map.get(Constant.PAGE_SIZE));
         Pagination<FatCommentVO> page = commentService.myComment(userId, pageNo, pageSize);

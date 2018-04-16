@@ -14,6 +14,7 @@ public interface SysRoleService {
 
     /**
      * 添加系统角色.
+     *
      * @param param
      * @return
      */
@@ -21,10 +22,11 @@ public interface SysRoleService {
 
     /**
      * 通过id获得系统角色.
+     *
      * @param id
      * @return
      */
-    Map<String,Object> getSysRoleById(int id);
+    Map<String, Object> getSysRoleById(int id);
 //
 //    /**
 //     * 通过uuid获得系统角色.
@@ -35,6 +37,7 @@ public interface SysRoleService {
 
     /**
      * 修改系统角色.
+     *
      * @param param
      * @return
      */
@@ -44,6 +47,7 @@ public interface SysRoleService {
     /**
      * 获得一个list集合系统角色.
      * param
+     *
      * @return
      */
     List<SysRoleVo> getSysRoles(Map<String, Object> param);
@@ -59,6 +63,7 @@ public interface SysRoleService {
 
     /**
      * 根据用户ID获取用户所有角色ID
+     *
      * @param userId
      * @return
      */

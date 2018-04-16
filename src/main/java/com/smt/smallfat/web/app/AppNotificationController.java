@@ -6,6 +6,7 @@ import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.FatNotification;
 import com.smt.smallfat.service.base.CommentService;
 import com.smt.smallfat.service.base.NotificationService;
+import com.smt.smallfat.service.house.CircleService;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,8 @@ public class AppNotificationController extends BaseController{
     private NotificationService notificationService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private CircleService circleService;
 
     @RequestMapping("/read")
     public void read(HttpServletRequest request, HttpServletResponse response){
@@ -48,6 +51,8 @@ public class AppNotificationController extends BaseController{
         long count = commentService.nonReadCommentCount(userId);
         Map<String,Object> result = notificationService.haveNonReadNotification(userId);
         result.put("unReadCommentCount",count);
+        result.put("unReadCirclePraise",circleService.notReadPraise(userId));
+        result.put("unReadCircleFollow",circleService.notReadFollow(userId));
         printWriter(response,successResultJSON(result));
     }
 }

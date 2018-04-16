@@ -10,12 +10,14 @@ import com.csyy.core.utils.SQLUtil;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.constant.ResultConstant;
 import com.smt.smallfat.po.FatAll;
+import com.smt.smallfat.po.FatCustomer;
+import com.smt.smallfat.po.FatFavorite;
 import com.smt.smallfat.service.base.AllService;
+import com.smt.smallfat.service.base.CustomerService;
+import com.smt.smallfat.service.base.FavoriteService;
 import com.smt.smallfat.service.system.SysDicItemService;
 import com.smt.smallfat.service.system.SysDicService;
-import com.smt.smallfat.vo.AllCountVO;
-import com.smt.smallfat.vo.SysDicItemVo;
-import com.smt.smallfat.vo.SysDicVo;
+import com.smt.smallfat.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ public class AllServiceImpl extends BaseServiceImpl implements AllService {
     private SysDicService dicService;
     @Autowired
     private SysDicItemService dicItemService;
+    @Autowired
+    private FavoriteService favoriteService;
 
     @Override
     public FatAll addAll(Map<String, Object> param) {
@@ -71,6 +75,20 @@ public class AllServiceImpl extends BaseServiceImpl implements AllService {
     }
 
     @Override
+    public AllVO getAllVOById(int id,int userId) {
+        StringBuilder builder = new StringBuilder(Constant.ALL_SHARE_URL);
+        FatAll all = getAllById(id);
+        FatFavorite favorite = favoriteService.getIsFavorite(userId, all.getId(), FavoriteService.ALL);
+        int isLove = userId == 0 ? FavoriteService.NOT_FAVORITE : favorite == null ? FavoriteService
+                .NOT_FAVORITE : FavoriteService.IS_FAVORITE;
+        AllVO vo = new AllVO(all.getId(), all.getUuid(), all.getLittleImg(), all.getLittleTitle(), isLove, all
+                .getSubject(), all.getCategory(), all.getBigImg(), all.getLatinName(), all.getSubjectDesc(), all
+                .getDescription(), all.getClickCount(), builder.append(all.getId()).toString(), all.getOrderCombin());
+        vo.setFavoriteCount(favoriteService.getFavoriteCount(all.getId(),FavoriteService.ALL));
+        return vo;
+    }
+
+    @Override
     public FatAll getAllByUUID(String uuid) {
         FatAll all = factory.getReadDataSession().querySingleResultByUUID(FatAll.class, uuid);
         if (all == null)
@@ -79,12 +97,30 @@ public class AllServiceImpl extends BaseServiceImpl implements AllService {
     }
 
     @Override
-    public Pagination<FatAll> pageAll(Map<String, Object> param) {
+    public Pagination<AllVO> pageAll(Map<String, Object> param) {
         int pageNo = StringDefaultValue.intValue(param.get(Constant.PAGE_NO));
         int pageSize = StringDefaultValue.intValue(param.get(Constant.PAGE_SIZE));
+        int userId = StringDefaultValue.intValue(param.get(Constant.USER_ID));
         Param params = ParamBuilder.getInstance().getParam().add(param);
         Pagination<FatAll> page = queryClassPagination(FatAll.class, params, pageNo, pageSize);
-        return page;
+
+        List<FatAll> data = page.getData();
+        List<AllVO> dataVo = new ArrayList<>(data.size());
+        StringBuilder builder = new StringBuilder(Constant.ALL_SHARE_URL);
+        for (FatAll all : data) {
+            builder.replace(0, builder.toString().length(), Constant.ALL_SHARE_URL);
+            FatFavorite favorite = favoriteService.getIsFavorite(userId, all.getId(), FavoriteService.ALL);
+            int isLove = userId == 0 ? FavoriteService.NOT_FAVORITE : favorite == null ? FavoriteService
+                    .NOT_FAVORITE : FavoriteService.IS_FAVORITE;
+            AllVO vo = new AllVO(all.getId(), all.getUuid(), all.getLittleImg(), all.getLittleTitle(), isLove, all
+                    .getSubject(), all.getCategory(), all.getBigImg(), all.getLatinName(), all.getSubjectDesc(), all
+                    .getDescription(), all.getClickCount(), builder.append(all.getId()).toString(), all.getOrderCombin());
+            dataVo.add(vo);
+        }
+        Pagination<AllVO> pageVO = new Pagination<>(dataVo, page.getPageNo(), page.getPageSize());
+        pageVO.setRecordsTotal(page.getRecordsTotal());
+
+        return pageVO;
     }
 
     @Override
@@ -100,7 +136,7 @@ public class AllServiceImpl extends BaseServiceImpl implements AllService {
                 vo.setName(dic.getDicName());
                 vo.setType(AllCountVO.SUBJECT);
                 List<AllCountVO> categoryVOList = getCategoriesBySubject(code);
-                if(categoryVOList == null)
+                if (categoryVOList == null)
                     categoryVOList = temp;
                 vo.setSons(categoryVOList);
             } catch (CommonException e) {
@@ -133,11 +169,26 @@ public class AllServiceImpl extends BaseServiceImpl implements AllService {
     }
 
     @Override
-    public List<FatAll> search(String littleTitle) {
+    public Pagination<FatAll> search(String littleTitle, int pageNo, int pageSize) {
         CustomSQL where = SQLCreator.where();
-        where.cloumn(FatAll.FIELD_LITTLE_TITLE).operator(ESQLOperator.LIKE).v(SQLUtil.likeValue(littleTitle,SQLUtil
+        where.cloumn(FatAll.FIELD_LITTLE_TITLE).operator(ESQLOperator.LIKE).v(SQLUtil.likeValue(littleTitle, SQLUtil
                 .ALL));
-        List<FatAll> list = factory.getCacheReadDataSession().queryListResultByWhere(FatAll.class,where);
+        Pagination<FatAll> list = queryClassPagination(FatAll.class, where, pageNo, pageSize);
         return list;
+    }
+
+    @Override
+    public FavoriteUsersVO favoriteUsers(int id) {
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatFavorite.FIELD_FAVORITE_TYPE,
+                FavoriteService.ALL)).add(ParamBuilder.nv(FatFavorite.FIELD_ARTICLE_ID, id));
+        List<FatFavorite> list = factory.getCacheReadDataSession().queryListResult(FatFavorite.class, param);
+        List<FatCustomer> users = new ArrayList<>(list.size());
+        for (FatFavorite favorite : list) {
+            users.add(factory.getCacheReadDataSession().querySingleResultById(FatCustomer.class, favorite.getUserId()));
+        }
+        FavoriteUsersVO vo = new FavoriteUsersVO();
+        vo.setFavoriteCount(list.size());
+        vo.setUsers(users);
+        return vo;
     }
 }

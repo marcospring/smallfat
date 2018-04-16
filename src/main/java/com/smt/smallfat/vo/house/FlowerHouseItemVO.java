@@ -20,7 +20,15 @@ public class FlowerHouseItemVO {
     private Pagination<FatCommentVO> commentPagination;
     private int imageCount;
     private int isPraise;
+    private String shareUrl;
 
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
 
     public FatCustomer getAuthor() {
         return author;

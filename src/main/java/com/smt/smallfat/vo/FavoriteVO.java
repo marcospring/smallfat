@@ -5,29 +5,43 @@ import com.smt.smallfat.po.FatArticle;
 import com.smt.smallfat.po.FatFavorite;
 import com.smt.smallfat.po.FatGoods;
 
-public class FavoriteVO extends FatFavorite{
+public class FavoriteVO extends FatFavorite {
     private FatArticle article;
+    private String articleTypeName;
     private FatAll all;
     private FatGoods goods;
+    private long commentCount;
 
     public FavoriteVO() {
     }
 
-    public FavoriteVO(FatFavorite favorite,FatArticle article) {
+    public FavoriteVO(FatFavorite favorite, FatArticle article, long commentCount,String articleTypeName) {
         this.article = article;
         this.setArticleId(favorite.getArticleId());
         this.setUserId(favorite.getUserId());
         this.setCreateTime(favorite.getCreateTime());
         this.setFavoriteType(favorite.getFavoriteType());
+        this.commentCount = commentCount;
+        this.articleTypeName = articleTypeName;
     }
-    public FavoriteVO(FatFavorite favorite,FatAll all) {
+
+//    public FavoriteVO(FatFavorite favorite, FatArticle article) {
+//        this.article = article;
+//        this.setArticleId(favorite.getArticleId());
+//        this.setUserId(favorite.getUserId());
+//        this.setCreateTime(favorite.getCreateTime());
+//        this.setFavoriteType(favorite.getFavoriteType());
+//    }
+
+    public FavoriteVO(FatFavorite favorite, FatAll all) {
         this.all = all;
         this.setArticleId(favorite.getArticleId());
         this.setUserId(favorite.getUserId());
         this.setCreateTime(favorite.getCreateTime());
         this.setFavoriteType(favorite.getFavoriteType());
     }
-    public FavoriteVO(FatFavorite favorite,FatGoods goods) {
+
+    public FavoriteVO(FatFavorite favorite, FatGoods goods) {
         this.goods = goods;
         this.setArticleId(favorite.getArticleId());
         this.setUserId(favorite.getUserId());
@@ -49,5 +63,21 @@ public class FavoriteVO extends FatFavorite{
 
     public void setAll(FatAll all) {
         this.all = all;
+    }
+
+    public FatGoods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(FatGoods goods) {
+        this.goods = goods;
+    }
+
+    public long getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
     }
 }

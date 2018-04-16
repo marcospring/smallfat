@@ -76,8 +76,6 @@ public class FileUtils {
      */
     public static String getFilePath(String name,String contentType,String baseUrl){
 
-        String webRootPath = System.getProperty("web.root");
-
         String path1 = getFilePath(name);
 
         String path2 = getFilePath(UUIDProvider.uuid());
@@ -89,6 +87,14 @@ public class FileUtils {
             result = result + ".jpeg";
         }
 
+        return result.replace("//","/");
+    }
+
+    public static String getRandomPath(String name,String baseUrl){
+        String path1 = getFilePath(name);
+        String path2 = getFilePath(UUIDProvider.uuid());
+        String result = baseUrl + File.separator
+                + path1 + path2 + File.separator;
         return result.replace("//","/");
     }
 
@@ -148,4 +154,62 @@ public class FileUtils {
             return null;
         }
     }
+
+//    public static String getFileType(String contentType){
+//        return
+//    }
+//
+//    private enum ImageContentType{
+//        BMP("bmp","image/bmp"),
+//        IEF("ief","image/ief"),
+//        JPG("jpg","image/jpg"),
+//        PNG("png","image/png"),
+//        TIF("tif","image/tif"),
+//        DJV("djv","image/vnd.djvu"),
+//        RAS("ras","image/x-cmu-raster"),
+//        PBM("pbm","image/x-portable-bitmap"),
+//        PPM("ppm","image/x-portable-pixmap"),
+//        XBM("xbm","image/x-xbitmap"),
+//        XWD("xwd","image/x-xwindowdump"),
+//        GIF("gif","image/gif"),
+//        JPEG("jpeg","image/jpeg"),
+//        JPE("jpe","image/jpe"),
+//        TIFF("tiff","image/tiff"),
+//        DJVU("djvu","image/vnd.djvu"),
+//        WBMP("wbmp","image/vnd.wap.wbmp"),
+//        PNM("pnm","image/x-portable-anymap"),
+//        PGM("pgm","image/x-portable-graymap"),
+//        RGB("rgb","image/x-rgb"),
+//        XPM("xpm","image/x-xpixmap");
+//        private String type;
+//        private String contentType;
+//         ImageContentType(String type,String contentType){
+//            this.type = type;
+//            this.contentType = contentType;
+//        }
+//        public String getType(String contentType){
+//            for (ImageContentType c : ImageContentType.values()) {
+//                if (c.getContentType().equals(contentType)) {
+//                    return c.getType();
+//                }
+//            }
+//            return null;
+//        }
+//
+//        public String getType() {
+//            return type;
+//        }
+//
+//        public void setType(String type) {
+//            this.type = type;
+//        }
+//
+//        public String getContentType() {
+//            return contentType;
+//        }
+//
+//        public void setContentType(String contentType) {
+//            this.contentType = contentType;
+//        }
+//    }
 }

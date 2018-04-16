@@ -15,7 +15,7 @@ public interface FavoriteService {
     /**
      * 资源已经收藏
      */
-    int IS_FAVORITE =1;
+    int IS_FAVORITE = 1;
 
     /**
      * 收藏
@@ -34,11 +34,11 @@ public interface FavoriteService {
     /**
      * 大全
      */
-    int ALL=1;
+    int ALL = 1;
     /**
      * 商品，推荐
      */
-    int GOODS=3;
+    int GOODS = 3;
 
 
     FavoriteVO addFavorite(Map<String, Object> param);
@@ -57,9 +57,9 @@ public interface FavoriteService {
 
     List<FavoriteVO> getFavoritesByParams(Map<String, Object> param);
 
-    FatFavorite getIsFavorite(int userId,int articleId,int favoriteType);
+    FatFavorite getIsFavorite(int userId, int articleId, int favoriteType);
 
-    long getFavoriteCount(int articleId,int favoriteType);
+    long getFavoriteCount(int articleId, int favoriteType);
 
     void operateFavorite(Map<String, Object> param);
 }

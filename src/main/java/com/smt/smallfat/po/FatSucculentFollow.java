@@ -1,7 +1,6 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
-
 /**
  * FatSucculentFollow实体
  * 
@@ -20,6 +19,10 @@ public class FatSucculentFollow extends BasePo {
 	private Integer  beFollowUserId = 0;
 	/**被关注用户ID 对应的静态变量值*/
 	public static final String FIELD_BE_FOLLOW_USER_ID = "beFollowUserId";
+	/**是否已读*/
+	private Integer  isRead = 0;
+	/**是否已读 对应的静态变量值*/
+	public static final String FIELD_IS_READ = "isRead";
 	
 	public Integer getFollowUserId() {
 		return followUserId;
@@ -32,5 +35,11 @@ public class FatSucculentFollow extends BasePo {
 	}
 	public void setBeFollowUserId(Integer beFollowUserId) {
 		this.beFollowUserId = beFollowUserId;
+	}
+	public Integer getIsRead() {
+		return isRead;
+	}
+	public void setIsRead(Integer isRead) {
+		this.isRead = isRead;
 	}
 }

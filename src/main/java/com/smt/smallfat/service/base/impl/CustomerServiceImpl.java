@@ -84,7 +84,7 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
             customer = factory.getCacheWriteDataSession().save(FatCustomer.class, customer);
         } else {
             customer = CommonBeanUtils.transMap2BasePO(param, customer);
-            factory.getCacheWriteDataSession().update(FatCustomer.class,customer);
+            factory.getCacheWriteDataSession().update(FatCustomer.class, customer);
         }
 
         return customer;

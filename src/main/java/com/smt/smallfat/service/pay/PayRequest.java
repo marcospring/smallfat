@@ -1,10 +1,6 @@
 package com.smt.smallfat.service.pay;
 
 
-import com.csyy.common.StringDefaultValue;
-import com.smt.smallfat.constant.Constant;
-
-import java.util.Map;
 
 public class PayRequest {
     private String appid;

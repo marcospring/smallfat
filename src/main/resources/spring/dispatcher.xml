@@ -18,6 +18,11 @@
     <mvc:annotation-driven />
     <!-- 使用默认的Servlet来响应静态文件 -->
     <mvc:default-servlet-handler />
+
+    <!--<mvc:resources mapping="/swagger/**" location="/api/" cache-period="31556926" />-->
+    <!--<mvc:resources location="/api/**" mapping="/api/*.html"/>-->
+    <!--<mvc:resources location="/api/" mapping="/api/**"/>-->
+    <!--<mvc:resources mapping="/swagger/**" location="/api/" cache-period="31556926" />-->
     <!-- 视图解释类 -->
     <bean
             class="org.springframework.web.servlet.view.InternalResourceViewResolver">

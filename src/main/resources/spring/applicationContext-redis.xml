@@ -35,14 +35,16 @@
         <property name="poolConfig" ref="jedisPoolConfig"></property>
         <property name="hostName" value="${redis.host}"></property>
         <property name="port" value="${redis.port}"></property>
-        <!--<property name="password" value="0123456"></property>-->
+        <!--<property name="password" value="${redis.password}"></property>-->
         <property name="timeout" value="15000"></property>
         <property name="usePool" value="true"></property>
     </bean>
 
     <bean id="topicMessageListener" class="com.smt.smallfat.utils.TopicMessageListener">
         <property name="orderService" ref="orderServiceImpl"/>
+        <property name="circleService" ref="circleServiceImpl"/>
     </bean>
+
 
     <bean id="topicContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer" destroy-method="destroy">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>

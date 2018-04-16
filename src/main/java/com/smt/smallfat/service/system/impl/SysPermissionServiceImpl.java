@@ -31,7 +31,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
         //根据名称验证权限是否存在
         Param params = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysPermission
                 .FIELD_PERMISSION_NAME, StringDefaultValue.StringValue(param.get(SysPermission.FIELD_PERMISSION_NAME))));
-        SysPermission permission =  factory.getCacheReadDataSession().querySingleResultByParams(SysPermission
+        SysPermission permission = factory.getCacheReadDataSession().querySingleResultByParams(SysPermission
                 .class, params);
         if (permission != null)
             throw new CommonException(ResultConstant.SysPermission.PERMISSION_IS_NOT_NULL);
@@ -47,7 +47,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
         if (parentId != 0) {
             SysPermission parentPermission = factory.getCacheReadDataSession().querySingleResultById
                     (SysPermission.class, parentId);
-            if(parentPermission == null)
+            if (parentPermission == null)
                 throw new CommonException(ResultConstant.SysPermission.PARENT_PERMISSION_IS_NULL);
         }
         permission.setParentId(parentId);
@@ -106,23 +106,23 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
     }
 
     @Override
-    public List<PermissionTreeVo>  getPermissionTreeByUserId(int userId) {
+    public List<PermissionTreeVo> getPermissionTreeByUserId(int userId) {
         List<PermissionTreeVo> result = new ArrayList<>();
         //根据用户查询用户所有的角色
         List<Integer> list = new ArrayList<>();
-        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysUserRole.FIELD_USER_ID,userId));
-        List<SysUserRole> usrRoleList = factory.getCacheReadDataSession().queryListResult(SysUserRole.class,param);
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysUserRole.FIELD_USER_ID, userId));
+        List<SysUserRole> usrRoleList = factory.getCacheReadDataSession().queryListResult(SysUserRole.class, param);
         list.addAll(usrRoleList.stream().map(SysUserRole::getRoleId).collect(Collectors.toList()));
 
         //去除禁用角色
         List<Integer> enabled = new ArrayList<>();
-        for (Integer id: list) {
+        for (Integer id : list) {
             SysRole sysRole;
             sysRole = factory.getCacheReadDataSession().querySingleResultById(SysRole.class, id);
             if (sysRole == null) {
                 throw new CommonException(ResultConstant.SysRoleResult.SYSROLE_IS_NOT_FOUND);
             }
-            if (sysRole.getStatus() == Constant.CommonConstant.STATUS_DISABLE){
+            if (sysRole.getStatus() == Constant.CommonConstant.STATUS_DISABLE) {
                 enabled.add(id);
             }
         }
@@ -141,13 +141,13 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
                 topMenus.addAll(permissionList.stream().filter(sysPermission -> sysPermission.getParentId() == 0).distinct().collect(Collectors.toList()));
                 permissionList.removeAll(topMenus);
                 for (SysPermission permission : topMenus) {
-                    PermissionTreeVo top = new PermissionTreeVo(permission.getId(), permission.getPermissionName(), permission.getPermissionUrl(), permission.getPermissionType(),permission.getRemark(), permission.getPermissionCode());
+                    PermissionTreeVo top = new PermissionTreeVo(permission.getId(), permission.getPermissionName(), permission.getPermissionUrl(), permission.getPermissionType(), permission.getRemark(), permission.getPermissionCode());
                     for (SysPermission childPermission : permissionList) {
                         if (childPermission.getParentId() == permission.getId()) {
-                            PermissionTreeVo child = new PermissionTreeVo(childPermission.getId(), childPermission.getPermissionName(), childPermission.getPermissionUrl(), childPermission.getPermissionType(),childPermission.getRemark(), childPermission.getPermissionCode());
+                            PermissionTreeVo child = new PermissionTreeVo(childPermission.getId(), childPermission.getPermissionName(), childPermission.getPermissionUrl(), childPermission.getPermissionType(), childPermission.getRemark(), childPermission.getPermissionCode());
                             for (SysPermission grandsonPermission : permissionList) {
                                 if (grandsonPermission.getParentId() == child.getId()) {
-                                    child.getChildren().add(new PermissionTreeVo(grandsonPermission.getId(), grandsonPermission.getPermissionName(), grandsonPermission.getPermissionUrl(), grandsonPermission.getPermissionType(),grandsonPermission.getRemark(), grandsonPermission.getPermissionCode()));
+                                    child.getChildren().add(new PermissionTreeVo(grandsonPermission.getId(), grandsonPermission.getPermissionName(), grandsonPermission.getPermissionUrl(), grandsonPermission.getPermissionType(), grandsonPermission.getRemark(), grandsonPermission.getPermissionCode()));
                                 }
                             }
                             top.getChildren().add(child);
@@ -166,7 +166,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
         param.add(ParamBuilder.nv(SysPermission.FIELD_PARENT_ID, Constants.WrapperExtend.ZERO));
         List<SysPermission> top = factory.getCacheReadDataSession().queryListResult(SysPermission.class, param);
         List<PermissionTreeVo> result = new ArrayList<>(top.size());
-        result.addAll(top.stream().map(permission -> build(new PermissionTreeVo(permission.getId(), permission.getPermissionName(), permission.getPermissionUrl(),permission.getPermissionType(), permission.getRemark(),permission.getPermissionCode()))).collect(Collectors.toList()));
+        result.addAll(top.stream().map(permission -> build(new PermissionTreeVo(permission.getId(), permission.getPermissionName(), permission.getPermissionUrl(), permission.getPermissionType(), permission.getRemark(), permission.getPermissionCode()))).collect(Collectors.toList()));
         return result;
     }
 
@@ -201,6 +201,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
         }
         return result;
     }
+
     private PermissionTreeVo build(PermissionTreeVo vo) {
         Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysPermission.FIELD_PARENT_ID, vo
                 .getId()));
@@ -209,7 +210,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements SysPerm
             List<PermissionTreeVo> tree = new ArrayList<>();
             for (SysPermission permission : permissionList) {
                 PermissionTreeVo treeVO = new PermissionTreeVo(permission.getId(), permission
-                        .getPermissionName(), permission.getPermissionUrl(),  permission.getPermissionType(),permission.getRemark(),permission.getPermissionCode());
+                        .getPermissionName(), permission.getPermissionUrl(), permission.getPermissionType(), permission.getRemark(), permission.getPermissionCode());
                 treeVO = build(treeVO);
                 treeVO.setCheckbox(Boolean.TRUE.toString());
                 tree.add(treeVO);

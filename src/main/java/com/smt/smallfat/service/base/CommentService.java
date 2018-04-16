@@ -7,7 +7,7 @@ import com.smt.smallfat.vo.FatCommentVO;
 import java.util.Map;
 
 public interface CommentService {
-    int READ=1;
+    int READ = 1;
 
     FatCommentVO addComment(Map<String, Object> param);
 
@@ -27,7 +27,9 @@ public interface CommentService {
 
     void readComment(String ids);
 
-    Pagination<FatCommentVO> myComment(int userId,int pageNo,int pageSize);
+    Pagination<FatCommentVO> myComment(int userId, int pageNo, int pageSize);
 
     long nonReadCommentCount(int userId);
+
+    void readAllUserComment(int userId);
 }

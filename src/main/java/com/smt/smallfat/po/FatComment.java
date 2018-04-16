@@ -1,7 +1,6 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
-
 /**
  * FatComment实体
  * 
@@ -36,6 +35,10 @@ public class FatComment extends BasePo {
 	private Integer  commentType = 0;
 	/**评论类型 对应的静态变量值*/
 	public static final String FIELD_COMMENT_TYPE = "commentType";
+	/**评论目标：0文章；1回复*/
+	private Integer  commentTarget = 0;
+	/**评论目标：0文章；1回复 对应的静态变量值*/
+	public static final String FIELD_COMMENT_TARGET = "commentTarget";
 	
 	public Integer getArticleId() {
 		return articleId;
@@ -72,5 +75,11 @@ public class FatComment extends BasePo {
 	}
 	public void setCommentType(Integer commentType) {
 		this.commentType = commentType;
+	}
+	public Integer getCommentTarget() {
+		return commentTarget;
+	}
+	public void setCommentTarget(Integer commentTarget) {
+		this.commentTarget = commentTarget;
 	}
 }

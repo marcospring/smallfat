@@ -27,57 +27,58 @@ public class SysDicServiceImpl extends BaseServiceImpl implements SysDicService 
 
     @Override
     public SysDic addDic(Map<String, Object> param) {
-        SysDic dic = CommonBeanUtils.transMap2BasePO(param,SysDic.class);
-        if (dic.getParentId() != 0){
-            if(dic == null)
+        SysDic dic = CommonBeanUtils.transMap2BasePO(param, SysDic.class);
+        if (dic.getParentId() != 0) {
+            if (dic == null)
                 throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
-            SysDic sysDic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class,dic.getParentId());
+            SysDic sysDic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class, dic.getParentId());
             if (StringDefaultValue.isEmpty(sysDic)) {
                 throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
             }
         }
-        dic = factory.getCacheWriteDataSession().save(SysDic.class,dic);
+        dic = factory.getCacheWriteDataSession().save(SysDic.class, dic);
         return dic;
     }
 
     @Override
     public void deleteDic(int id) {
         Param params = ParamBuilder.getInstance().getParam();
-        params.add(ParamBuilder.nv(SysDicItem.FIELD_DIC_ID,id));
-        List<SysDicItem> list = factory.getCacheReadDataSession().queryListResult(SysDicItem.class, params);;
-        if(list !=null&& list.size()>0)
+        params.add(ParamBuilder.nv(SysDicItem.FIELD_DIC_ID, id));
+        List<SysDicItem> list = factory.getCacheReadDataSession().queryListResult(SysDicItem.class, params);
+        ;
+        if (list != null && list.size() > 0)
             throw new CommonException(ResultConstant.SysDicResult.SYSDIC_HAS_ITEMS);
         params.clean();
-        params = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysDic.FIELD_ID,id));
-        factory.getCacheWriteDataSession().logicDelete(SysDic.class,params);
+        params = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysDic.FIELD_ID, id));
+        factory.getCacheWriteDataSession().logicDelete(SysDic.class, params);
     }
 
     @Override
     public SysDicVo updateDic(Map<String, Object> param) {
         int dicId = StringDefaultValue.intValue(param.get(SysDic.FIELD_ID));
-        SysDic dic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class,dicId);
-        if(dic == null)
+        SysDic dic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class, dicId);
+        if (dic == null)
             throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
-        dic = CommonBeanUtils.transMap2BasePO(param,dic);
-        factory.getCacheWriteDataSession().update(SysDic.class,dic);
-        return CommonBeanUtils.getBeanBySameProperty(SysDicVo.class,dic);
+        dic = CommonBeanUtils.transMap2BasePO(param, dic);
+        factory.getCacheWriteDataSession().update(SysDic.class, dic);
+        return CommonBeanUtils.getBeanBySameProperty(SysDicVo.class, dic);
     }
 
     @Override
-    public SysDicVo getDicByUUID(String uuid)  {
-        SysDic sysDic = factory.getCacheReadDataSession().querySingleResultByUUID(SysDic.class,uuid);
-        if(sysDic == null)
+    public SysDicVo getDicByUUID(String uuid) {
+        SysDic sysDic = factory.getCacheReadDataSession().querySingleResultByUUID(SysDic.class, uuid);
+        if (sysDic == null)
             throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
-        SysDicVo sysDicVo = CommonBeanUtils.getBeanBySameProperty(SysDicVo.class,sysDic);
+        SysDicVo sysDicVo = CommonBeanUtils.getBeanBySameProperty(SysDicVo.class, sysDic);
         return sysDicVo;
     }
 
     @Override
     public SysDicVo getDicById(int id) {
-        SysDic sysDic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class,id);
-        if(sysDic == null)
+        SysDic sysDic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class, id);
+        if (sysDic == null)
             throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
-        SysDicVo sysDicVo = CommonBeanUtils.getBeanBySameProperty(SysDicVo.class,sysDic);
+        SysDicVo sysDicVo = CommonBeanUtils.getBeanBySameProperty(SysDicVo.class, sysDic);
         return sysDicVo;
     }
 
@@ -89,7 +90,7 @@ public class SysDicServiceImpl extends BaseServiceImpl implements SysDicService 
         if (dic == null)
             throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
 
-        SysDicVo sysDicVo = CommonBeanUtils.getBeanBySameProperty(SysDicVo.class,dic);
+        SysDicVo sysDicVo = CommonBeanUtils.getBeanBySameProperty(SysDicVo.class, dic);
         return sysDicVo;
     }
 
@@ -97,14 +98,14 @@ public class SysDicServiceImpl extends BaseServiceImpl implements SysDicService 
     public DicTreeVo getDicTree(Map<String, Object> param) {
         int id;
         DicTreeVo dicTreeVo;
-        if (StringDefaultValue.isEmpty(param.get(SysDic.FIELD_ID))){
+        if (StringDefaultValue.isEmpty(param.get(SysDic.FIELD_ID))) {
             dicTreeVo = new DicTreeVo(0);
-        }else {
+        } else {
             id = StringDefaultValue.intValue(param.get(SysDic.FIELD_ID));
-            SysDic sysDic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class,id);
-            if(sysDic == null)
+            SysDic sysDic = factory.getCacheReadDataSession().querySingleResultById(SysDic.class, id);
+            if (sysDic == null)
                 throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
-            dicTreeVo = new DicTreeVo(sysDic.getId(),sysDic.getDicCode(),sysDic.getDicName());
+            dicTreeVo = new DicTreeVo(sysDic.getId(), sysDic.getDicCode(), sysDic.getDicName());
         }
         DicTreeVo dicTree = getDicTree(dicTreeVo);
         return dicTree;
@@ -130,17 +131,18 @@ public class SysDicServiceImpl extends BaseServiceImpl implements SysDicService 
 
     @Override
     public List<SysDicVo> getDicListByParentId(String code) {
-            Param param = ParamBuilder.getInstance().getParam();
-            param.add(ParamBuilder.nv(SysDic.FIELD_DIC_CODE, code));
-            SysDic dic = factory.getCacheReadDataSession().querySingleResultByParams(SysDic.class, param);
-            if (dic == null)
-                throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
-            List<SysDic> dicListByParentId = getDicListByParentId(dic.getId());
-            List<SysDicVo> sysDicVoList = TransUtil.transPoListToVoList(dicListByParentId, SysDicVo.class);
-            return sysDicVoList;
+        Param param = ParamBuilder.getInstance().getParam();
+        param.add(ParamBuilder.nv(SysDic.FIELD_DIC_CODE, code));
+        SysDic dic = factory.getCacheReadDataSession().querySingleResultByParams(SysDic.class, param);
+        if (dic == null)
+            throw new CommonException(ResultConstant.SysDicResult.SYSDIC_IS_NULL);
+        List<SysDic> dicListByParentId = getDicListByParentId(dic.getId());
+        List<SysDicVo> sysDicVoList = TransUtil.transPoListToVoList(dicListByParentId, SysDicVo.class);
+        return sysDicVoList;
     }
+
     private List<SysDic> getDicListByParentId(int parentId) {
-        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysDic.FIELD_PARENT_ID,parentId));
-        return factory.getCacheReadDataSession().queryListResult(SysDic.class,param);
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysDic.FIELD_PARENT_ID, parentId));
+        return factory.getCacheReadDataSession().queryListResult(SysDic.class, param);
     }
 }

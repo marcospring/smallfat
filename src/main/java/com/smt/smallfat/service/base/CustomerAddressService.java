@@ -13,13 +13,19 @@ public interface CustomerAddressService {
     int DEFAULT = 1;
     int UN_DEFAULT = 0;
 
-    FatCustomerAddress addAddress(Map<String,Object> param);
+    FatCustomerAddress addAddress(Map<String, Object> param);
+
     void deleteAddress(String ids);
-    FatCustomerAddress updateAddress(Map<String,Object> param);
+
+    FatCustomerAddress updateAddress(Map<String, Object> param);
+
     FatCustomerAddress getAddressById(int id);
+
     FatCustomerAddress getAddressByUUID(String uuid);
+
     List<FatCustomerAddress> getAllAddress(int userId);
+
     FatCustomerAddress setDefaultAddress(int id);
 
-  Pagination<FatCustomerAddress> pageAddress(Map<String,Object> param);
+    Pagination<FatCustomerAddress> pageAddress(Map<String, Object> param);
 }

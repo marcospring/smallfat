@@ -18,6 +18,7 @@ public class RequestXMLCreator {
     private XmlUtils requestMoudle;
     private static RequestXMLCreator instance;
     Logger logger = LoggerFactory.getLogger(getClass());
+
     private RequestXMLCreator() {
     }
 
@@ -45,7 +46,7 @@ public class RequestXMLCreator {
             content.append(str).append("=").append(value.get(str)).append("&");
         }
         content.append("key=").append(appkey);
-        logger.info("======>:{}",content.toString());
+        logger.info("======>:{}", content.toString());
         String mySign = MD5.md5(content.toString()).toUpperCase();
         return mySign;
     }
@@ -86,7 +87,7 @@ public class RequestXMLCreator {
         response.setPrepayid(param.get("prepay_id"));
         response.setPackageValue(PayConstant.PACKAGE);
         response.setNoncestr(uuid);
-        response.setTimestamp(String.valueOf(System.currentTimeMillis()/1000));
+        response.setTimestamp(String.valueOf(System.currentTimeMillis() / 1000));
 
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("appid", response.getAppid());
@@ -147,7 +148,7 @@ public class RequestXMLCreator {
         return MD5.md5(content.append("key=" + PayConstant.WECHAT_OPENID_PAY_APPSECRET).toString()).toUpperCase();
     }
 
-    public String buildCallbackErrorResponse(String msg){
+    public String buildCallbackErrorResponse(String msg) {
         StringBuilder builder = new StringBuilder(PayConstant.PAY_CALL_BACK_FAIL_RESPONSE_FRONT);
         builder.append(msg).append(PayConstant.PAY_CALL_BACK_FAIL_RESPONSE_END);
         return builder.toString();
