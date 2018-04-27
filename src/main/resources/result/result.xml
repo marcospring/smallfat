@@ -105,8 +105,9 @@
     <resultMessage code="011205" key="GOODS_RESOURCE_IS_NULL" message="商品资源不存在"/>
     <resultMessage code="011206" key="GOODS_RESOURCE_IS_NOT_NULL" message="商品资源已存在"/>
     <resultMessage code="011207" key="FAVORITE_GOODS" message="商品已经被收藏"/>
-    <resultMessage code="011207" key="SHOPPING_CART_GOODS" message="购物车中有该商品"/>
-    <resultMessage code="011207" key="ORDER_GOODS" message="订单中有该商品"/>
+    <resultMessage code="011208" key="SHOPPING_CART_GOODS" message="购物车中有该商品"/>
+    <resultMessage code="011209" key="ORDER_GOODS" message="订单中有该商品"/>
+    <resultMessage code="011210" key="GOODS_COUNT_MUST_UP_ZERO" message="商品数量必须大于0"/>
     <!--商品详情-->
     <resultMessage code="011301" key="GOODS_DETAIL_NOT_ENOUGH" message="大小为{0}的商品{1}，数量不足"/>
     <resultMessage code="011302" key="GOODS_DETAIL_IS_LOCKED" message="亲，已有人拍下刺报备但还未付款，您还有机会哦"/>
@@ -153,7 +154,7 @@
     <resultMessage code="012008" key="FOLLOW_IS_NULL" message="用户已取消关注"/>
     <resultMessage code="012009" key="DELETE_INVALID" message="删除无效"/>
     <resultMessage code="012010" key="CIRCLE_REPORT_IS_NULL" message="举报内容不存在"/>
-    <resultMessage code="012011" key="TOO_MANY_CIRCLE_IMAGE" message="最多上传6张图片"/>
+    <resultMessage code="012011" key="TOO_MANY_CIRCLE_IMAGE" message="最多上传9张图片"/>
     <!--APP_VERSION-->
     <resultMessage code="012101" key="SYSAPPVER_IS_NULL" message="APP_VERSION为空"/>
     <resultMessage code="012102" key="SYSAPPVER_IS_NOT_FOUND" message="没有找到APP_VERSION"/>

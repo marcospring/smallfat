@@ -58,6 +58,9 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         int goodsCount = StringDefaultValue.intValue(param.get(FatShoppingCart.FIELD_GOODS_COUNT));
         int userId = StringDefaultValue.intValue(param.get(FatShoppingCart.FIELD_USER_ID));
 
+        if (goodsCount <= 0)
+            throw new CommonException(ResultConstant.Goods.GOODS_COUNT_MUST_UP_ZERO);
+
         Param params = ParamBuilder.getInstance().getParam();
         params.add(ParamBuilder.nv(FatShoppingCart.FIELD_USER_ID, userId));
         params.add(ParamBuilder.nv(FatShoppingCart.FIELD_GOODS_DETAIL_ID, goodsDetailId));
@@ -112,6 +115,8 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         FatGoodsDetail detail = goodsService.getGoodsDetailById(goodsDetailId);
         FatGoods goods = goodsService.getGoodsById(detail.getGoodsId());
         int count = detail.getStock();
+        if (goodsCount <= 0)
+            throw new CommonException(ResultConstant.Goods.GOODS_COUNT_MUST_UP_ZERO);
         if (count <= 0 || count - goodsCount < 0)
             throw new CommonException(ResultConstant.Order.GOODS_DETAIL_NOT_ENOUGH, detail.getModelSize(), goods.getTitle());
         return count;
@@ -292,7 +297,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             //如果操作为提交购物车数据，则要验证数库存，并设置数据是否被选中为生成订单的数据
             if (cartItem != null) {
                 if (isCheck == CHECK) {
-                    if(isSelect == 1)
+                    if (isSelect == 1)
                         //然后验证商品数量是否足够
                         isGoodsEnough(detailId, count);
                     //最后根据传入参数设置数据是否被选中

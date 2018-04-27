@@ -8,20 +8,13 @@ import com.smt.smallfat.constant.ResultConstant;
 import com.smt.smallfat.exception.InfoEmptyException;
 import com.smt.smallfat.po.*;
 import com.smt.smallfat.service.house.CircleService;
-import com.smt.smallfat.utils.push.IPush;
-import com.smt.smallfat.utils.push.PushMessage;
-import com.smt.smallfat.utils.push.PushPayloadBuilder;
-import com.smt.smallfat.utils.push.pushenum.PlatForm;
 import com.smt.smallfat.vo.house.*;
-import com.smt.smallfat.vo.upload.UploadInfo;
 import com.smt.smallfat.web.common.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.FastTreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +33,6 @@ public class AppSucculentCircleController extends BaseController {
 
     @Autowired
     private CircleService service;
-    @Autowired
-    private IPush push;
 
     @ApiOperation(value = "花房首页接口(已经调用aritcle/index接口)", notes = "花房首页接口(已经调用aritcle/index接口)")
     @ApiImplicitParams({

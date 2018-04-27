@@ -113,7 +113,7 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
             PushMessage message = PushMessage.get()
                     .title(PushMessage.buildMessage(title, fromCustomer.getNickName()))
                     //.platform(PlatForm.IOS)
-                    .platform(PlatForm.ANDROID)
+                    .platform(PlatForm.ALL)
                     .content(PushMessage.buildMessage(title, fromCustomer.getNickName()))
                     .addAlias(toCustomer.getUuid())
                     .addExtras(Constant.PUSH_TYPE, Constant.PushType.FOLLOW);
@@ -353,7 +353,7 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
         String userTempPath = baseTempUrl + File.separator + uuid;
         File userTempPathFile = new File(userTempPath);
         //判断用户只能上传6张图片，用户缓存文件如果存在且小于六张图片的时候才可以上传
-        if (userTempPathFile.exists() && userTempPathFile.listFiles().length < 6) {
+//        if (userTempPathFile.exists() && userTempPathFile.listFiles().length < 21) {
             while (iterator.hasNext()) {
                 image = new ImageUploadInfo();
                 //取得上传文件
@@ -393,11 +393,11 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
                 //将缓存数据存入redis，过期后删除
                 String redisData = uuid + Constant.Separator.UPDERLINE + imgTempPath;
                 factory.getRedisSessionFactory().getSession().setData(Constant.HOUSE_IMAGE_PREFIX + imgRelativePath,
-                        redisData, 60 * 1);
+                        redisData, 60 * 30);
             }
-        }else{
-            throw new CommonException(ResultConstant.Circle.TOO_MANY_CIRCLE_IMAGE);
-        }
+//        }else{
+//
+//        }
 
 
         return image;
@@ -416,6 +416,8 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
     @Transactional(rollbackFor = Exception.class)
     public FlowerHouseItemVO addCircleItem(Map<String, Object> param) {
         String[] images = StringDefaultValue.StringValue(param.get("imageUrls")).split(Constant.Separator.COMMA);
+        if(images.length > 9)
+            throw new CommonException(ResultConstant.Circle.TOO_MANY_CIRCLE_IMAGE);
         int userId = StringDefaultValue.intValue(param.get(FatSucculentCircle.FIELD_USER_ID));
         String content = StringDefaultValue.StringValue(param.get(FatSucculentCircle.FIELD_CONTENT));
         int articleType = StringDefaultValue.intValue(param.get(FatSucculentCircle.FIELD_ARTICLE_TYPE));
@@ -719,7 +721,7 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
                 .addExtras(Constant.PUSH_TYPE, Constant.PushType.COMMENT);
         push.push(PushPayloadBuilder.newInstance().build(message));
         //删除花房数据
-        deleteCircle(id, -2);
+        deleteCircle(report.getArticleId(), -2);
     }
 
     @Override

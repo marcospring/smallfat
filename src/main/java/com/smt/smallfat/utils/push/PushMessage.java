@@ -106,10 +106,4 @@ public class PushMessage {
         return MessageFormat.format(result, args);
     }
 
-    public static void main(String[] args) {
-        PushMessage m = PushMessage.get();
-        m.addAlias("asdfasdfasdf");
-        System.out.println(m.getAlias()[0]);
-        System.out.println(m.getAlias()[0]);
-    }
 }

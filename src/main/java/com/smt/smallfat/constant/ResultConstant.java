@@ -88,6 +88,7 @@ public class ResultConstant {
         String FAVORITE_GOODS = "FAVORITE_GOODS";
         String SHOPPING_CART_GOODS = "SHOPPING_CART_GOODS";
         String ORDER_GOODS = "ORDER_GOODS";
+        String GOODS_COUNT_MUST_UP_ZERO = "GOODS_COUNT_MUST_UP_ZERO";
     }
 
     public interface Order{
