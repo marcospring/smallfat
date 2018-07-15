@@ -4,11 +4,13 @@ import com.csyy.common.StringDefaultValue;
 import com.csyy.core.obj.Pagination;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.po.*;
+import com.smt.smallfat.service.base.CategoryService;
 import com.smt.smallfat.service.base.GoodsService;
 import com.smt.smallfat.utils.push.IPush;
 import com.smt.smallfat.utils.push.PushMessage;
 import com.smt.smallfat.utils.push.PushPayloadBuilder;
 import com.smt.smallfat.utils.push.pushenum.PlatForm;
+import com.smt.smallfat.vo.BackendGoodsVO;
 import com.smt.smallfat.vo.GoodsVO;
 import com.smt.smallfat.web.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,37 +95,37 @@ public class GoodsController extends BaseController {
     public void updateGoods(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID);
         FatGoods goods = goodsService.updateGoods(param);
-        printWriter(response,successResultJSON(goods));
+        printWriter(response, successResultJSON(goods));
     }
 
     @RequestMapping("/updateGoodsResource")
     public void updateGoodsResource(HttpServletRequest request, HttpServletResponse response) {
-        Map<String,Object> param = nullAbleValidation(request,FatGoodsResource.FIELD_ID);
+        Map<String, Object> param = nullAbleValidation(request, FatGoodsResource.FIELD_ID);
         FatGoodsResource resource = goodsService.updateGoodsResource(param);
-        printWriter(response,successResultJSON(resource));
+        printWriter(response, successResultJSON(resource));
     }
 
     @RequestMapping("/updateGoodsDetail")
     public void updateGoodsDetail(HttpServletRequest request, HttpServletResponse response) {
-        Map<String,Object> param = nullAbleValidation(request,FatGoodsDetail.FIELD_ID);
+        Map<String, Object> param = nullAbleValidation(request, FatGoodsDetail.FIELD_ID);
         FatGoodsDetail detail = goodsService.updateGoodsDetail(param);
-        printWriter(response,successResultJSON(detail));
+        printWriter(response, successResultJSON(detail));
     }
 
     @RequestMapping("/getGoodsResourceByGoodsId")
-    public void getGoodsResourceByGoodsId(HttpServletRequest request, HttpServletResponse response){
-        Map<String,Object> param = nullAbleValidation(request,FatGoodsResource.FIELD_GOODS_ID);
+    public void getGoodsResourceByGoodsId(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = nullAbleValidation(request, FatGoodsResource.FIELD_GOODS_ID);
         int goodsId = StringDefaultValue.intValue(param.get(FatGoodsResource.FIELD_GOODS_ID));
         List<FatGoodsResource> resources = goodsService.getGoodsResourceByGoodsId(goodsId);
-        printWriter(response,successResultJSON(resources));
+        printWriter(response, successResultJSON(resources));
     }
 
     @RequestMapping("/getGoodsDetailsByGoodsId")
-    public void getGoodsDetailsByGoodsId(HttpServletRequest request, HttpServletResponse response){
-        Map<String,Object> param = nullAbleValidation(request,FatGoodsDetail.FIELD_GOODS_ID);
+    public void getGoodsDetailsByGoodsId(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = nullAbleValidation(request, FatGoodsDetail.FIELD_GOODS_ID);
         int goodsId = StringDefaultValue.intValue(param.get(FatGoodsDetail.FIELD_GOODS_ID));
         List<FatGoodsDetail> details = goodsService.getGoodsDetailsByGoodsId(goodsId);
-        printWriter(response,successResultJSON(details));
+        printWriter(response, successResultJSON(details));
     }
 
     @RequestMapping("/pushGoods")
@@ -139,11 +141,11 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping("/addToApp")
-    public void addToApp(HttpServletRequest request, HttpServletResponse response){
-        Map<String,Object> param = nullAbleValidation(request,FatGoods.FIELD_ID);
+    public void addToApp(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID);
         int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
         goodsService.addToApp(id);
-        printWriter(response,successResultJSON());
+        printWriter(response, successResultJSON());
     }
 
     @RequestMapping("/orderGoods")
@@ -155,10 +157,11 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping("/shoppingCartUsers")
-    public void shoppingCartUsers(HttpServletRequest request, HttpServletResponse response){
+    public void shoppingCartUsers(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID);
         int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
         List<FatCustomer> customers = goodsService.shoppingCartUsers(id);
         printWriter(response, successResultJSON(customers));
     }
+
 }

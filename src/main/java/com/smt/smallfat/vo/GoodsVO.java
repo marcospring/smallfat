@@ -4,6 +4,7 @@ import com.smt.smallfat.po.FatGoods;
 import com.smt.smallfat.po.FatGoodsDetail;
 import com.smt.smallfat.po.FatGoodsResource;
 
+import java.util.Date;
 import java.util.List;
 
 public class GoodsVO {
@@ -14,10 +15,13 @@ public class GoodsVO {
     private String expCompany;
     private String flag;
     private String flagKeys;
+    private int categoryId;
     private List<FatGoodsResource> resource;
     private List<FatGoodsDetail> details;
     private String priceArea;
     private String shareUrl;
+    private String themeIdList;
+    private Date publishTime;
 
     public GoodsVO() {
     }
@@ -30,6 +34,7 @@ public class GoodsVO {
         this.flag = goods.getFlag();
         this.resource = resource;
         this.details = details;
+        this.categoryId = goods.getCategoryId();
     }
 
 
@@ -120,5 +125,29 @@ public class GoodsVO {
 
     public void setShareUrl(String shareUrl) {
         this.shareUrl = shareUrl;
+    }
+
+    public String getThemeIdList() {
+        return themeIdList;
+    }
+
+    public void setThemeIdList(String themeIdList) {
+        this.themeIdList = themeIdList;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Date getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
     }
 }

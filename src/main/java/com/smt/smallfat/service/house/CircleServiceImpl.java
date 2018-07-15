@@ -627,6 +627,13 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
     }
 
     public void reportCircle(Map<String, Object> param) {
+        int articleId = StringDefaultValue.intValue(param.get(FatSucculentReport.FIELD_ARTICLE_ID));
+        Param params = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatSucculentReport.FIELD_ARTICLE_ID,
+                articleId));
+        List<FatSucculentReport> reportList = factory.getWriteDataSession().queryListResult(FatSucculentReport.class
+                ,params);
+        if(reportList.size() > 0)
+            return;
         FatSucculentReport report = CommonBeanUtils.transMap2BasePO(param, FatSucculentReport.class);
         report.setReportStatus(0);
         factory.getCacheWriteDataSession().save(FatSucculentReport.class, report);
@@ -730,4 +737,5 @@ public class CircleServiceImpl extends BaseServiceImpl implements CircleService 
         report.setReportStatus(2);
         factory.getCacheWriteDataSession().update(FatSucculentReport.class, report);
     }
+
 }

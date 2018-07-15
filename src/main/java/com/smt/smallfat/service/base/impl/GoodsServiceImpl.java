@@ -1,5 +1,6 @@
 package com.smt.smallfat.service.base.impl;
 
+import com.csyy.common.DateUtils;
 import com.csyy.common.JSONUtils;
 import com.csyy.common.StringDefaultValue;
 import com.csyy.core.apisupport.impl.BaseServiceImpl;
@@ -7,6 +8,7 @@ import com.csyy.core.datasource.param.*;
 import com.csyy.core.exception.CommonException;
 import com.csyy.core.obj.Pagination;
 import com.csyy.core.utils.CommonBeanUtils;
+import com.csyy.core.utils.SQLUtil;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.constant.ResultConstant;
 import com.smt.smallfat.exception.GetGoodsDetailLockException;
@@ -15,8 +17,10 @@ import com.smt.smallfat.po.*;
 import com.smt.smallfat.service.base.FavoriteService;
 import com.smt.smallfat.service.base.GoodsService;
 import com.smt.smallfat.service.system.SysDicItemService;
+import com.smt.smallfat.vo.GoodsCategoryVO;
 import com.smt.smallfat.vo.GoodsVO;
 import com.smt.smallfat.vo.SysDicItemVo;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.util.Collections.list;
 import static java.util.Collections.sort;
 
 
@@ -41,6 +45,8 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     @Override
     public FatGoods addGoods(Map<String, Object> param) {
         String title = StringDefaultValue.StringValue(param.get(FatGoods.FIELD_TITLE));
+        String themeIds = StringDefaultValue.StringValue(param.get("themeIds"));
+        String[] themeIdArr = StringDefaultValue.isEmpty(themeIds) ? new String[0] : themeIds.split(",");
         //重复性验证，如果存在标题相同且库存不为0的情况则提示已存在产品
         CustomSQL where = SQLCreator.where().cloumn(FatGoods.FIELD_DISABLED).operator(ESQLOperator.EQ).v(Constant
                 .WrapperExtend.ZERO).operator(ESQLOperator.AND).cloumn(FatGoods.FIELD_TITLE).operator(ESQLOperator
@@ -50,6 +56,13 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
             throw new CommonException(ResultConstant.Goods.GOODS_IS_NOT_NULL);
         FatGoods goods = CommonBeanUtils.transMap2BasePO(param, FatGoods.class);
         goods = factory.getCacheWriteDataSession().save(FatGoods.class, goods);
+        for (String id : themeIdArr) {
+            FatGoodsThemeRelation relation = FatGoodsThemeRelation.getInstance(FatGoodsThemeRelation.class);
+            relation.setGoodsId(goods.getId());
+            relation.setThemeId(StringDefaultValue.intValue(id));
+            factory.getCacheWriteDataSession().save(FatGoodsThemeRelation.class, relation);
+        }
+
         return goods;
     }
 
@@ -141,7 +154,12 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         FatGoods goods = getGoodsById(id);
         List<FatGoodsResource> list = getGoodsResourceByGoodsId(id);
         List<FatGoodsDetail> details = getGoodsDetailsByGoodsId(id);
-        return fillGoodsVO(goods, list, details);
+        GoodsVO vo = fillGoodsVO(goods, list, details);
+        List<FatGoodsThemeRelation> relations = goodsThemeIds(vo.getId());
+        List<Integer> themeIdList = new ArrayList<>(relations.size());
+        themeIdList.addAll(relations.stream().map(FatGoodsThemeRelation::getThemeId).collect(Collectors.toList()));
+        vo.setThemeIdList(StringUtils.join(themeIdList, ","));
+        return vo;
     }
 
     @Override
@@ -156,16 +174,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     public Pagination<GoodsVO> pageGoodsVO(Map<String, Object> param) {
         param.put(FatGoods.FIELD_IS_APP, 1);
         Pagination<FatGoods> page = pageGoods(param);
-        List<FatGoods> list = page.getData();
-        List<GoodsVO> vOlist = new ArrayList<>(list.size());
-        for (FatGoods goods : list) {
-            List<FatGoodsResource> resources = getGoodsResourceByGoodsId(goods.getId());
-            List<FatGoodsDetail> details = getGoodsDetailsByGoodsId(goods.getId());
-            GoodsVO vo = fillGoodsVO(goods, resources, details);
-            vOlist.add(vo);
-        }
-        Pagination<GoodsVO> pageVO = new Pagination<>(vOlist, page.getPageNo(), page.getPageSize());
-        pageVO.setRecordsTotal(page.getRecordsTotal());
+        Pagination<GoodsVO> pageVO = fillGoodsVOPagination(page);
         return pageVO;
     }
 
@@ -200,9 +209,27 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     @Override
     public FatGoods updateGoods(Map<String, Object> param) {
         int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
+        String themeIds = StringDefaultValue.StringValue(param.get("themeIds"));
+        String[] themeIdArr = StringDefaultValue.isEmpty(themeIds) ? new String[0] : themeIds.split(",");
+
+
         FatGoods goods = getGoodsById(id);
         goods = CommonBeanUtils.transMap2BasePO(param, goods);
+        if (goods.getIsApp() == 1)
+            goods.setPublishTime(new Date());
         factory.getCacheWriteDataSession().update(FatGoods.class, goods);
+        //操作主题
+        CustomSQL where = SQLCreator.where().cloumn(FatGoodsThemeRelation.FIELD_GOODS_ID).operator(ESQLOperator.EQ).v
+                (id);
+        //删除商品所有主题
+        factory.getCacheWriteDataSession().physicalWhereDelete(FatGoodsThemeRelation.class, where);
+        //更新用户主题
+        for (String themeId : themeIdArr) {
+            FatGoodsThemeRelation relation = FatGoodsThemeRelation.getInstance(FatGoodsThemeRelation.class);
+            relation.setGoodsId(id);
+            relation.setThemeId(StringDefaultValue.intValue(themeId));
+            factory.getCacheWriteDataSession().save(FatGoodsThemeRelation.class, relation);
+        }
         return goods;
     }
 
@@ -289,6 +316,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         }
         goodsVO.setFlag(flagBuilder.deleteCharAt(flagBuilder.lastIndexOf(Constant.Separator.COMMA)).toString());
         goodsVO.setPriceArea(buildPriceArea(details));
+        goodsVO.setPublishTime(goods.getPublishTime());
         return goodsVO;
     }
 
@@ -328,6 +356,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     public void addToApp(int id) {
         FatGoods goods = getGoodsById(id);
         goods.setIsApp(1);
+        goods.setPublishTime(new Date());
         factory.getCacheWriteDataSession().update(FatGoods.class, goods);
     }
 
@@ -343,7 +372,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     public List<FatCustomer> shoppingCartUsers(int goodsId) {
         List<FatCustomer> customers = new ArrayList<>();
         List<FatGoodsDetail> details = getGoodsDetailsByGoodsId(goodsId);
-        for(FatGoodsDetail detail: details){
+        for (FatGoodsDetail detail : details) {
             Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatShoppingCart
                     .FIELD_GOODS_DETAIL_ID, detail.getId()));
             List<FatShoppingCart> carts = factory.getCacheReadDataSession().queryListResult(FatShoppingCart.class, param);
@@ -353,5 +382,114 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         }
 
         return customers;
+    }
+
+    @Override
+    public Pagination<GoodsVO> search(String title, int pageNo, int pageSize) {
+        CustomSQL where = SQLCreator.where();
+        where.cloumn(FatGoods.FIELD_IS_APP).operator(ESQLOperator.EQ).v(1).operator(ESQLOperator.AND)
+                .cloumn(FatGoods.FIELD_TITLE).operator(ESQLOperator.LIKE).v(SQLUtil.likeValue(title, SQLUtil.ALL))
+                .operator(ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_UPDATE_TIME).operator(ESQLOperator.DESC);
+        Pagination<FatGoods> page = queryClassPagination(FatGoods.class, where, pageNo, pageSize);
+        Pagination<GoodsVO> pageVO = fillGoodsVOPagination(page);
+        return pageVO;
+    }
+
+    private Pagination<GoodsVO> fillGoodsVOPagination(Pagination<FatGoods> page) {
+        List<FatGoods> list = page.getData();
+        List<GoodsVO> voList = fillGoodsVOList(list);
+        Pagination<GoodsVO> pageVO = new Pagination<>(voList, page.getPageNo(), page.getPageSize());
+        pageVO.setRecordsTotal(page.getRecordsTotal());
+        return pageVO;
+    }
+
+    private List<GoodsVO> fillGoodsVOList(List<FatGoods> list) {
+        List<GoodsVO> voList = new ArrayList<>(list.size());
+        for (FatGoods goods : list) {
+            List<FatGoodsResource> resources = getGoodsResourceByGoodsId(goods.getId());
+            List<FatGoodsDetail> details = getGoodsDetailsByGoodsId(goods.getId());
+            GoodsVO vo = fillGoodsVO(goods, resources, details);
+            voList.add(vo);
+        }
+        return voList;
+    }
+
+    @Override
+    public GoodsCategoryVO listGoodsCategory() {
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatGoodsCategory.FIELD_CATEGORY_STATUS, CATEGORY_ENABLE));
+        List<FatGoodsCategory> categories = factory.getCacheReadDataSession().queryListResult(FatGoodsCategory.class,
+                param);
+        param.clean();
+        param.add(ParamBuilder.nv(FatGoodsTheme.FIELD_PUBLISH_STATUS, CATEGORY_ENABLE));
+        List<FatGoodsTheme> themes = factory.getCacheReadDataSession().queryListResult(FatGoodsTheme.class, param);
+        return new GoodsCategoryVO(categories, themes);
+    }
+
+    @Override
+    public List<GoodsVO> goodsThemeList(int themeId) {
+        List<Integer> ids = getThemeIdArray(themeId);
+        if (ids.size() == 0)
+            return new ArrayList<>(0);
+        CustomSQL where = SQLCreator.where().cloumn(FatGoods.FIELD_ID).operator(ESQLOperator.IN).v(ids);
+        List<FatGoods> goods = factory.getCacheReadDataSession().queryListResultByWhere(FatGoods.class, where);
+        return fillGoodsVOList(goods);
+    }
+
+    private List<Integer> getThemeIdArray(int themeId) {
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatGoodsThemeRelation.FIELD_THEME_ID,
+                themeId));
+        List<FatGoodsThemeRelation> relations = factory.getCacheReadDataSession().queryListResult
+                (FatGoodsThemeRelation.class, param);
+        List<Integer> ids = new ArrayList<>(relations.size());
+        ids.addAll(relations.stream().map(FatGoodsThemeRelation::getGoodsId).collect(Collectors.toList()));
+        return ids;
+    }
+
+    @Override
+    public List<GoodsVO> nearestGoodsList() {
+        CustomSQL where = SQLCreator.where().cloumn(FatGoods.FIELD_IS_APP).operator(ESQLOperator.EQ).v(1).operator
+                (ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.DESC).operator
+                (ESQLOperator.LIMIT).v(1);
+        List<FatGoods> goods = factory.getCacheReadDataSession().queryListResultByWhere(FatGoods.class, where);
+        Date begin = DateUtils.getCurrentDayBegin();
+        Date end = DateUtils.getCurrentDayEnd();
+        if (goods != null && goods.size() > 0) {
+            begin = DateUtils.getDayBegin(goods.get(0).getPublishTime());
+            end = DateUtils.getDayEnd(goods.get(0).getPublishTime());
+        }
+        where.clean();
+        where.cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.BETWEEN).v(begin).operator(ESQLOperator.AND)
+                .v(end).operator(ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.DESC);
+        goods = factory.getCacheReadDataSession().queryListResultByWhere(FatGoods.class, where);
+        return fillGoodsVOList(goods);
+    }
+
+    private List<FatGoodsThemeRelation> goodsThemeIds(int goodsId) {
+        Param params = ParamBuilder.getInstance().getParam();
+        params.add(ParamBuilder.nv(FatGoodsThemeRelation.FIELD_GOODS_ID, goodsId));
+        return factory.getCacheReadDataSession().queryListResult
+                (FatGoodsThemeRelation.class, params);
+
+    }
+    @Override
+    public Pagination<GoodsVO> otherGoodsList(Map<String, Object> param) {
+        CustomSQL where = SQLCreator.where().cloumn(FatGoods.FIELD_IS_APP).operator(ESQLOperator.EQ).v(1).operator
+                (ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.DESC).operator
+                (ESQLOperator.LIMIT).v(1);
+        List<FatGoods> goods = factory.getCacheReadDataSession().queryListResultByWhere(FatGoods.class, where);
+        Date begin = DateUtils.getCurrentDayBegin();
+        Date end = DateUtils.getCurrentDayEnd();
+        if (goods != null && goods.size() > 0) {
+            begin = DateUtils.getDayBegin(goods.get(0).getPublishTime());
+            end = DateUtils.getDayEnd(goods.get(0).getPublishTime());
+        }
+        int pageNo = StringDefaultValue.intValue(param.get(Constant.PAGE_NO));
+        int pageSize = StringDefaultValue.intValue(param.get(Constant.PAGE_SIZE));
+        where.clean();
+        where.cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.LT).v(begin).operator(ESQLOperator.ORDER_BY).cloumn
+                (FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.DESC);
+        Pagination<FatGoods> page = queryClassPagination(FatGoods.class, where, pageNo, pageSize);
+        Pagination<GoodsVO> pageVO = fillGoodsVOPagination(page);
+        return pageVO;
     }
 }

@@ -34,13 +34,32 @@ public class OrderNoCreator {
         builder.append(machine).append(dateFormat).append(timeFormat).append(IDCreator.create());
         return builder.toString();
     }
+
+    public static void main(String[] args) {
+        Thread a = new Thread(new Idtest());
+        Thread b = new Thread(new Idtest());
+        Thread c = new Thread(new Idtest());
+        a.start();
+        b.start();
+        c.start();
+
+
+    }
+
+    private static class Idtest implements Runnable {
+        @Override
+        public void run() {
+            for (int i=0;i<10;i++)
+                System.out.println(OrderNoCreator.createOrderNo());
+        }
+    }
 }
 
 class IDCreator {
     private static Long second = 0L;
     private static Integer seed = 0;
 
-    private synchronized static String getId() {
+    private static String getId() {
         if (second == 0)
             second = System.currentTimeMillis();
         if (second != System.currentTimeMillis()) {

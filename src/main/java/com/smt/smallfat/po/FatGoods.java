@@ -1,7 +1,7 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
-
+import  java.util.Date;
 /**
  * FatGoods实体
  * 
@@ -40,6 +40,14 @@ public class FatGoods extends BasePo {
 	private Integer  isApp = 0;
 	/**是否为推送至app 对应的静态变量值*/
 	public static final String FIELD_IS_APP = "isApp";
+	/**商品种类ID*/
+	private Integer  categoryId = 0;
+	/**商品种类ID 对应的静态变量值*/
+	public static final String FIELD_CATEGORY_ID = "categoryId";
+	/**发布时间*/
+	private Date  publishTime = new Date();
+	/**发布时间 对应的静态变量值*/
+	public static final String FIELD_PUBLISH_TIME = "publishTime";
 	
 	public String getTitle() {
 		return title;
@@ -82,5 +90,17 @@ public class FatGoods extends BasePo {
 	}
 	public void setIsApp(Integer isApp) {
 		this.isApp = isApp;
+	}
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+	public Date getPublishTime() {
+		return publishTime;
+	}
+	public void setPublishTime(Date publishTime) {
+		this.publishTime = publishTime;
 	}
 }

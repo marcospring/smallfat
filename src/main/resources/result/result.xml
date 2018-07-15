@@ -56,15 +56,15 @@
 
 
     <!--web异常-->
-    <resultMessage code="010503" key="INF_EMPTY" message="信息不全"/>
-    <resultMessage code="010504" key="VALID_ERROR" message="验证错误"/>
-    <resultMessage code="010507" key="LOGIN_TIMEOUT" message="登陆超时"/>
+    <resultMessage code="010601" key="INF_EMPTY" message="信息不全"/>
+    <resultMessage code="010602" key="VALID_ERROR" message="验证错误"/>
+    <resultMessage code="010603" key="LOGIN_TIMEOUT" message="登陆超时"/>
 
     
     <!-- 通用信息 -->
-    <resultMessage code="010601" key="CAN_NOT_UPDATE_COLUMN" message="不允许修改"/>
-    <resultMessage code="010602" key="CAN_NOT_FIND_OBJECT" message="没有找到对象"/>
-    <resultMessage code="010603" key="TABLE_CACHE_KEY_FLUSH_EXCEPTION" message="缓存刷新错误"/>
+    <resultMessage code="010701" key="CAN_NOT_UPDATE_COLUMN" message="不允许修改"/>
+    <resultMessage code="010702" key="CAN_NOT_FIND_OBJECT" message="没有找到对象"/>
+    <resultMessage code="010703" key="TABLE_CACHE_KEY_FLUSH_EXCEPTION" message="缓存刷新错误"/>
 
     <!--APP_VERSION-->
     <resultMessage code="010801" key="SYSAPPVER_IS_NULL" message="版本为空"/>
@@ -76,96 +76,100 @@
     <resultMessage code="010807" key="DOWNADDRESS_IS_NOT_FOUND" message="下载地址不能为空"/>
     <resultMessage code="010808" key="WORDS_IS_FULL" message="字数超限"/>
  	<!-- 获得登陆信息 -->
-    <resultMessage code="010701" key="REDIS_DATABASE_NULL" message="获得REDIS缓存信息为空"/>
-    <resultMessage code="010702" key="LOGIN_SESSION_NULL" message="登陆失效,请重新登陆"/>
-    <resultMessage code="010703" key="TURN_JSON_TO_USER_WRONG" message="格式化JSON数据失败"/>
+    <resultMessage code="010901" key="REDIS_DATABASE_NULL" message="获得REDIS缓存信息为空"/>
+    <resultMessage code="010902" key="LOGIN_SESSION_NULL" message="登陆失效,请重新登陆"/>
+    <resultMessage code="010903" key="TURN_JSON_TO_USER_WRONG" message="格式化JSON数据失败"/>
 
     <!-- 文章精选-->
-    <resultMessage code="010801" key="ARTICLE_IS_NOT_NULL" message="文章已经存在"/>
-    <resultMessage code="010802" key="ARTICLE_IS_NULL" message="文章不存在"/>
+    <resultMessage code="011001" key="ARTICLE_IS_NOT_NULL" message="文章已经存在"/>
+    <resultMessage code="011002" key="ARTICLE_IS_NULL" message="文章不存在"/>
 
     <!-- 客户信息 -->
-    <resultMessage code="010901" key="CUSTOMER_IS_NOT_NULL" message="客户已存在"/>
-    <resultMessage code="010902" key="CUSTOMER_IS_NULL" message="客户不存在"/>
+    <resultMessage code="011101" key="CUSTOMER_IS_NOT_NULL" message="客户已存在"/>
+    <resultMessage code="011102" key="CUSTOMER_IS_NULL" message="客户不存在"/>
 
     <!--回复信息-->
-    <resultMessage code="011001" key="COMMENT_IS_NOT_NULL" message="回复已存在"/>
-    <resultMessage code="011002" key="COMMENT_IS_NULL" message="回复不存在"/>
+    <resultMessage code="011201" key="COMMENT_IS_NOT_NULL" message="回复已存在"/>
+    <resultMessage code="011202" key="COMMENT_IS_NULL" message="回复不存在"/>
     <!-- 收藏信息 -->
-    <resultMessage code="011101" key="FAVORITE_IS_NOT_NULL" message="您已经收藏过了"/>
-    <resultMessage code="011102" key="FAVORITE_IS_NULL" message="收藏信息不存在"/>
+    <resultMessage code="011301" key="FAVORITE_IS_NOT_NULL" message="您已经收藏过了"/>
+    <resultMessage code="011302" key="FAVORITE_IS_NULL" message="收藏信息不存在"/>
 
 
 
     <!--商品-->
-    <resultMessage code="011201" key="GOODS_IS_NOT_NULL" message="商品信息已存在"/>
-    <resultMessage code="011202" key="GOODS_IS_NULL" message="商品信息不存在"/>
-    <resultMessage code="011203" key="GOODS_DETAIL_IS_NULL" message="商品内容不存在"/>
-    <resultMessage code="011204" key="GOODS_DETAIL_IS_NOT_NULL" message="商品内容已存在"/>
-    <resultMessage code="011205" key="GOODS_RESOURCE_IS_NULL" message="商品资源不存在"/>
-    <resultMessage code="011206" key="GOODS_RESOURCE_IS_NOT_NULL" message="商品资源已存在"/>
-    <resultMessage code="011207" key="FAVORITE_GOODS" message="商品已经被收藏"/>
-    <resultMessage code="011208" key="SHOPPING_CART_GOODS" message="购物车中有该商品"/>
-    <resultMessage code="011209" key="ORDER_GOODS" message="订单中有该商品"/>
-    <resultMessage code="011210" key="GOODS_COUNT_MUST_UP_ZERO" message="商品数量必须大于0"/>
+    <resultMessage code="011401" key="GOODS_IS_NOT_NULL" message="商品信息已存在"/>
+    <resultMessage code="011402" key="GOODS_IS_NULL" message="商品信息不存在"/>
+    <resultMessage code="011403" key="GOODS_DETAIL_IS_NULL" message="商品内容不存在"/>
+    <resultMessage code="011404" key="GOODS_DETAIL_IS_NOT_NULL" message="商品内容已存在"/>
+    <resultMessage code="011405" key="GOODS_RESOURCE_IS_NULL" message="商品资源不存在"/>
+    <resultMessage code="011406" key="GOODS_RESOURCE_IS_NOT_NULL" message="商品资源已存在"/>
+    <resultMessage code="011407" key="FAVORITE_GOODS" message="商品已经被收藏"/>
+    <resultMessage code="011408" key="SHOPPING_CART_GOODS" message="购物车中有该商品"/>
+    <resultMessage code="011409" key="ORDER_GOODS" message="订单中有该商品"/>
+    <resultMessage code="011410" key="GOODS_COUNT_MUST_UP_ZERO" message="商品数量必须大于0"/>
     <!--商品详情-->
-    <resultMessage code="011301" key="GOODS_DETAIL_NOT_ENOUGH" message="大小为{0}的商品{1}，数量不足"/>
-    <resultMessage code="011302" key="GOODS_DETAIL_IS_LOCKED" message="亲，已有人拍下刺报备但还未付款，您还有机会哦"/>
-    <resultMessage code="011303" key="GOODS_DETAIL_UN_LOCK_FAILED" message="商品解锁失败"/>
-    <resultMessage code="011304" key="GOODS_STOCK_NOT_ENOUGH" message="商品库存不足"/>
+    <resultMessage code="011501" key="GOODS_DETAIL_NOT_ENOUGH" message="大小为{0}的商品{1}，数量不足"/>
+    <resultMessage code="011502" key="GOODS_DETAIL_IS_LOCKED" message="亲，已有人拍下刺报备但还未付款，您还有机会哦"/>
+    <resultMessage code="011503" key="GOODS_DETAIL_UN_LOCK_FAILED" message="商品解锁失败"/>
+    <resultMessage code="011504" key="GOODS_STOCK_NOT_ENOUGH" message="商品库存不足"/>
 
     <!--订单-->
-    <resultMessage code="011401" key="ORDER_UN_LOCK_FAILED" message="订单解锁失败"/>
-    <resultMessage code="011402" key="ORDER_IS_LOCKED" message="订单已经锁定"/>
-    <resultMessage code="011403" key="SHOPPING_CART_IS_NULL" message="购物车没有该数据"/>
-    <resultMessage code="011404" key="ORDER_IS_NULL" message="订单不存在"/>
-    <resultMessage code="011405" key="SHOPPING_CART_EMPTY" message="购物车未选择任何商品"/>
-    <resultMessage code="011406" key="PRE_PAY_FAILED" message="订单预支付失败"/>
-    <resultMessage code="011407" key="ORDER_ALREADY_SEND" message="订单已经发货，无法退款"/>
-    <resultMessage code="011408" key="ORDER_STATUS_INVALID" message="订单状态异常，请检查订单状态"/>
-    <resultMessage code="011409" key="REFUND_FAILED" message="退款失败：{0}"/>
-    <resultMessage code="011410" key="ALREADY_REFUND" message="退款在审核中了"/>
-    <resultMessage code="011411" key="ORDER_IS_ALREADY_PAY_FOR_BACK" message="订单已经申请了退款"/>
-    <resultMessage code="011412" key="GOODS_ALREADY_IN_SHOPPING_CART" message="商品在购物车已存在"/>
-    <resultMessage code="011413" key="ORDER_ALREADY_PAY" message="您的订单已支付，请勿重复支付"/>
+    <resultMessage code="011601" key="ORDER_UN_LOCK_FAILED" message="订单解锁失败"/>
+    <resultMessage code="011602" key="ORDER_IS_LOCKED" message="订单已经锁定"/>
+    <resultMessage code="011603" key="SHOPPING_CART_IS_NULL" message="购物车没有该数据"/>
+    <resultMessage code="011604" key="ORDER_IS_NULL" message="订单不存在"/>
+    <resultMessage code="011605" key="SHOPPING_CART_EMPTY" message="购物车未选择任何商品"/>
+    <resultMessage code="011606" key="PRE_PAY_FAILED" message="订单预支付失败"/>
+    <resultMessage code="011607" key="ORDER_ALREADY_SEND" message="订单已经发货，无法退款"/>
+    <resultMessage code="011608" key="ORDER_STATUS_INVALID" message="订单状态异常，请检查订单状态"/>
+    <resultMessage code="011609" key="REFUND_FAILED" message="退款失败：{0}"/>
+    <resultMessage code="011610" key="ALREADY_REFUND" message="退款在审核中了"/>
+    <resultMessage code="011611" key="ORDER_IS_ALREADY_PAY_FOR_BACK" message="订单已经申请了退款"/>
+    <resultMessage code="011612" key="GOODS_ALREADY_IN_SHOPPING_CART" message="商品在购物车已存在"/>
+    <resultMessage code="011613" key="ORDER_ALREADY_PAY" message="您的订单已支付，请勿重复支付"/>
 
     <!--地址-->
-    <resultMessage code="011501" key="ADDRESS_IS_NULL" message="用户地址不存在"/>
+    <resultMessage code="011701" key="ADDRESS_IS_NULL" message="用户地址不存在"/>
 
     <!--用户通知-->
-    <resultMessage code="011601" key="NOTIFICATION_IS_NULL" message="用户通知不存在"/>
-    <resultMessage code="011602" key="NOT_ALL_NOTIFICATION" message="用户通知不是全量通知"/>
+    <resultMessage code="011801" key="NOTIFICATION_IS_NULL" message="用户通知不存在"/>
+    <resultMessage code="011802" key="NOT_ALL_NOTIFICATION" message="用户通知不是全量通知"/>
     <!--用户反馈-->
-    <resultMessage code="011701" key="SUGGEST_IS_NULL" message="客户反馈不存在"/>
+    <resultMessage code="011901" key="SUGGEST_IS_NULL" message="客户反馈不存在"/>
 
     <!-- 大全-->
-    <resultMessage code="011801" key="ALL_IS_NOT_NULL" message="大全信息不存在"/>
-    <resultMessage code="011802" key="ALL_IS_NULL" message="大全信息已存在"/>
+    <resultMessage code="012001" key="ALL_IS_NOT_NULL" message="大全信息不存在"/>
+    <resultMessage code="012002" key="ALL_IS_NULL" message="大全信息已存在"/>
     <!-- 爬虫 -->
-    <resultMessage code="011901" key="SPIDER_IS_NULL" message="爬虫文章不存在"/>
+    <resultMessage code="012101" key="SPIDER_IS_NULL" message="爬虫文章不存在"/>
     <!-- 花房-->
-    <resultMessage code="012001" key="CIRCLE_IS_NULL" message="花房项不存在"/>
-    <resultMessage code="012002" key="IMAGE_UPLOAD_FAILED" message="图片上传失败"/>
-    <resultMessage code="012003" key="IMAGE_OVERDUE" message="图片过期"/>
-    <resultMessage code="012004" key="ILLEGAL" message="图片非法"/>
-    <resultMessage code="012005" key="CIRCLE_ADD_FILE" message="添加失败"/>
-    <resultMessage code="012006" key="CIRCLE_ADD_TIMEOUT" message="图片过期，请重新添加图片"/>
-    <resultMessage code="012007" key="PRAISE_IS_NULL" message="用户已取消点赞"/>
-    <resultMessage code="012008" key="FOLLOW_IS_NULL" message="用户已取消关注"/>
-    <resultMessage code="012009" key="DELETE_INVALID" message="删除无效"/>
-    <resultMessage code="012010" key="CIRCLE_REPORT_IS_NULL" message="举报内容不存在"/>
-    <resultMessage code="012011" key="TOO_MANY_CIRCLE_IMAGE" message="最多上传9张图片"/>
+    <resultMessage code="012201" key="CIRCLE_IS_NULL" message="花房项不存在"/>
+    <resultMessage code="012202" key="IMAGE_UPLOAD_FAILED" message="图片上传失败"/>
+    <resultMessage code="012203" key="IMAGE_OVERDUE" message="图片过期"/>
+    <resultMessage code="012204" key="ILLEGAL" message="图片非法"/>
+    <resultMessage code="012205" key="CIRCLE_ADD_FILE" message="添加失败"/>
+    <resultMessage code="012206" key="CIRCLE_ADD_TIMEOUT" message="图片过期，请重新添加图片"/>
+    <resultMessage code="012207" key="PRAISE_IS_NULL" message="用户已取消点赞"/>
+    <resultMessage code="012208" key="FOLLOW_IS_NULL" message="用户已取消关注"/>
+    <resultMessage code="012209" key="DELETE_INVALID" message="删除无效"/>
+    <resultMessage code="012210" key="CIRCLE_REPORT_IS_NULL" message="举报内容不存在"/>
+    <resultMessage code="012211" key="TOO_MANY_CIRCLE_IMAGE" message="最多上传9张图片"/>
     <!--APP_VERSION-->
-    <resultMessage code="012101" key="SYSAPPVER_IS_NULL" message="APP_VERSION为空"/>
-    <resultMessage code="012102" key="SYSAPPVER_IS_NOT_FOUND" message="没有找到APP_VERSION"/>
-    <resultMessage code="012103" key="SYSAPPVER_IS_EXISTS" message="APP_VERSION已经存在"/>
-    <resultMessage code="012104" key="SYSAPPVER_MIDDLE_IS_EXISTS" message="中间表有数据,不可以删除"/>
-    <resultMessage code="012105" key="DELETE_SYSAPPVER_IS_FAILD" message="删除APP_VERSION失败"/>
-    <resultMessage code="012106" key="UPDATE_SYSAPPVER_IS_FAILD" message="修改APP_VERSION失败"/>
-    <resultMessage code="012107" key="DOWNADDRESS_IS_NOT_FOUND" message="下载地址不能为空"/>
-    <resultMessage code="012108" key="WORDS_IS_FULL" message="字数超限"/>
-
-
+    <resultMessage code="012301" key="SYSAPPVER_IS_NULL" message="APP_VERSION为空"/>
+    <resultMessage code="012302" key="SYSAPPVER_IS_NOT_FOUND" message="没有找到APP_VERSION"/>
+    <resultMessage code="012303" key="SYSAPPVER_IS_EXISTS" message="APP_VERSION已经存在"/>
+    <resultMessage code="012304" key="SYSAPPVER_MIDDLE_IS_EXISTS" message="中间表有数据,不可以删除"/>
+    <resultMessage code="012305" key="DELETE_SYSAPPVER_IS_FAILD" message="删除APP_VERSION失败"/>
+    <resultMessage code="012306" key="UPDATE_SYSAPPVER_IS_FAILD" message="修改APP_VERSION失败"/>
+    <resultMessage code="012307" key="DOWNADDRESS_IS_NOT_FOUND" message="下载地址不能为空"/>
+    <resultMessage code="012308" key="WORDS_IS_FULL" message="字数超限"/>
+    <!-- CATEGORY -->
+    <resultMessage code="012401" key="CATEGORY_NOT_NULL" message="商品种类已经存在"/>
+    <resultMessage code="012402" key="CATEGORY_IS_NULL" message="商品种类不存在"/>
+    <!-- THEME -->
+    <resultMessage code="012501" key="THEME_NOT_NULL" message="商品主题已经存在"/>
+    <resultMessage code="012502" key="THEME_IS_NULL" message="商品主题不存在"/>
 
 
 

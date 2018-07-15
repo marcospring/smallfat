@@ -151,5 +151,15 @@ public class ResultConstant {
         String WORDS_IS_FULL = "WORDS_IS_FULL";
 
     }
+
+    public interface Category {
+        String CATEGORY_NOT_NULL = "CATEGORY_NOT_NULL";
+        String CATEGORY_IS_NULL = "CATEGORY_IS_NULL";
+    }
+
+    public interface Theme {
+        String THEME_NOT_NULL = "THEME_NOT_NULL";
+        String THEME_IS_NULL = "THEME_IS_NULL";
+    }
 }
 

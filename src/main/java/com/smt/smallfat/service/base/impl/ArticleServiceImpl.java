@@ -6,8 +6,10 @@ import com.csyy.core.datasource.param.*;
 import com.csyy.core.exception.CommonException;
 import com.csyy.core.obj.Pagination;
 import com.csyy.core.utils.CommonBeanUtils;
+import com.csyy.core.utils.SQLUtil;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.constant.ResultConstant;
+import com.smt.smallfat.po.FatAll;
 import com.smt.smallfat.po.FatArticle;
 import com.smt.smallfat.po.FatComment;
 import com.smt.smallfat.po.FatFavorite;
@@ -102,6 +104,11 @@ public class ArticleServiceImpl extends BaseServiceImpl implements ArticleServic
         params.add(ParamBuilder.nv(Constant.SQLConstants.ORDER_BY_TYPE, Constant.SQLConstants.DESC));
         Pagination<FatArticle> page = queryClassPagination(FatArticle.class, params, pageNo, pageSize);
 
+        Pagination<ArticleVO> pageVO = fillArticleVOPagination(page);
+        return pageVO;
+    }
+
+    private Pagination<ArticleVO> fillArticleVOPagination(Pagination<FatArticle> page) {
         List<FatArticle> data = page.getData();
         List<ArticleVO> datavo = new ArrayList<>(data.size());
         for (FatArticle article : data) {
@@ -243,5 +250,15 @@ public class ArticleServiceImpl extends BaseServiceImpl implements ArticleServic
         Pagination<FlowerHouseItemVO> page = circleService.indexCircleList(userId, pageNo, 5);
         IndexVO vo = new IndexVO(pageVO, page);
         return vo;
+    }
+
+    @Override
+    public Pagination<ArticleVO> search(String title, int pageNo, int pageSize) {
+        CustomSQL where = SQLCreator.where();
+        where.cloumn(FatArticle.FIELD_TITLE).operator(ESQLOperator.LIKE).v(SQLUtil.likeValue(title, SQLUtil
+                .ALL)).operator(ESQLOperator.ORDER_BY).cloumn(FatArticle.FIELD_UPDATE_TIME).operator(ESQLOperator.DESC);
+        Pagination<FatArticle> page = queryClassPagination(FatArticle.class, where, pageNo, pageSize);
+        Pagination<ArticleVO> pageVO = fillArticleVOPagination(page);
+        return pageVO;
     }
 }

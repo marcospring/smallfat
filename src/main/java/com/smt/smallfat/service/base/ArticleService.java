@@ -56,4 +56,6 @@ public interface ArticleService {
     void addArticleObject(FatArticle article);
 
     IndexVO index(Map<String, Object> param);
+
+    Pagination<ArticleVO> search(String title,  int pageNo, int pageSize);
 }

@@ -33,4 +33,14 @@ public class CommentController extends BaseController{
         commentService.deleteComment(id);
         printWriter(response,successResultJSON());
     }
+
+    public void test(HttpServletRequest request, HttpServletResponse response){
+       validation(request, new Validator() {
+            @Override
+            public Object valid(Map<String, Object> var1) {
+
+                return null;
+            }
+        });
+    }
 }

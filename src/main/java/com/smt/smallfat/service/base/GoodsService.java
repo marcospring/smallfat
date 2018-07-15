@@ -7,6 +7,8 @@ import com.smt.smallfat.po.FatCustomer;
 import com.smt.smallfat.po.FatGoods;
 import com.smt.smallfat.po.FatGoodsDetail;
 import com.smt.smallfat.po.FatGoodsResource;
+import com.smt.smallfat.vo.BackendGoodsVO;
+import com.smt.smallfat.vo.GoodsCategoryVO;
 import com.smt.smallfat.vo.GoodsVO;
 
 import java.util.List;
@@ -16,6 +18,8 @@ public interface GoodsService {
 
     String FLEX_COMPANY = "FLEX_COMPANY";
     String GOODS_FLAG = "GOODS_FLAG";
+    int CATEGORY_ENABLE = 1;
+    int CATEGORY_DISABLE = 2;
 
 
     FatGoods addGoods(Map<String, Object> param);
@@ -95,4 +99,15 @@ public interface GoodsService {
     void orderGoods(int id);
 
     List<FatCustomer> shoppingCartUsers(int goodsId);
+
+    Pagination<GoodsVO> search(String title, int pageNo, int pageSize);
+
+    GoodsCategoryVO listGoodsCategory();
+
+    List<GoodsVO> goodsThemeList(int themeId);
+
+
+    List<GoodsVO> nearestGoodsList();
+
+    Pagination<GoodsVO> otherGoodsList(Map<String, Object> param);
 }
