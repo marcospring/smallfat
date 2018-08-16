@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FatOrderItem">
+	<sql id="baseColumnList">
+			u.id as id ,
+			u.disabled as disabled ,
+			u.uuid as uuid ,
+			u.create_user as createUser ,
+			u.create_time as createTime ,
+			u.update_user as updateUser ,
+			u.update_time as updateTime ,
+			u.remark as remark ,
+			u.order_by as orderBy ,
+			u.goods_detail_id as goodsDetailId ,
+			u.price as price ,
+			u.total_count as totalCount ,
+			u.total_price as totalPrice ,
+			u.total_weight as totalWeight ,
+			u.order_id as orderId ,
+			u.customer_id as customerId 
+	</sql>
+	<sql id="searchCriteria">
+		<if test="id != null">
+			and u.id = #{id,jdbcType=NUMERIC}
+		</if>
+		<if test="disabled != null">
+			and u.disabled = #{disabled,jdbcType=NUMERIC}
+		</if>
+		<if test="uuid != null">
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+		</if>
+		<if test="uuidLike != null">
+			and u.uuid like CONCAT('%',#{uuidLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="createUser != null">
+			and u.create_user = #{createUser,jdbcType=NUMERIC}
+		</if>
+		<if test="createTime != null">
+			and u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+			and u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="updateTime != null">
+			and u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="remark != null">
+			and u.remark = #{remark,jdbcType=VARCHAR}
+		</if>
+		<if test="remarkLike != null">
+			and u.remark like CONCAT('%',#{remarkLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="orderBy != null">
+			and u.order_by = #{orderBy,jdbcType=NUMERIC}
+		</if>
+		<if test="goodsDetailId != null">
+			and u.goods_detail_id = #{goodsDetailId,jdbcType=NUMERIC}
+		</if>
+		<if test="price != null">
+			and u.price = #{price,jdbcType=DECIMAL}
+		</if>
+		<if test="totalCount != null">
+			and u.total_count = #{totalCount,jdbcType=NUMERIC}
+		</if>
+		<if test="totalPrice != null">
+			and u.total_price = #{totalPrice,jdbcType=DECIMAL}
+		</if>
+		<if test="totalWeight != null">
+			and u.total_weight = #{totalWeight,jdbcType=DECIMAL}
+		</if>
+		<if test="orderId != null">
+			and u.order_id = #{orderId,jdbcType=NUMERIC}
+		</if>
+		<if test="customerId != null">
+			and u.customer_id = #{customerId,jdbcType=NUMERIC}
+		</if>
+	</sql>
+
+	<!-- 查询列表数据 -->
+	<select id="queryListResult" parameterType="map" resultType="FatOrderItem">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER_ITEM u
+		where
+		    u.disabled = 0
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+			<include refid="Util.mysqlPage" />
+	</select>
+	<select id="queryListResultCount" parameterType="map" resultType="long">
+		select
+			count(u.id)
+		from
+			FAT_ORDER_ITEM u
+		where
+		    u.disabled = 0
+		<include refid="searchCriteria" />
+	</select>
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="FatOrderItem">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER_ITEM u
+		where
+		    u.disabled = 0 
+		    <if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	<select id="queryListResultCountByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="long">
+		select
+			count(u.id)
+		from
+			FAT_ORDER_ITEM u
+		where
+		    u.disabled = 0 
+			<if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	
+	<!-- 查询一条数据 -->
+	<select id="querySingleResultById" parameterType="int" resultType="FatOrderItem">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER_ITEM u
+		where
+		    u.disabled = 0
+			and u.ID = #{id,jdbcType=NUMERIC}
+	</select>
+	
+	<select id="querySingleResultByUUID" parameterType="String" resultType="FatOrderItem">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER_ITEM u
+		where
+			    u.disabled = 0
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+	</select>
+	<select id="querySingleResultByParams" parameterType="map" resultType="FatOrderItem">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER_ITEM u
+		where
+			u.disabled = 0
+			<include refid="searchCriteria" />
+	</select>
+
+	<insert id="save" parameterType="FatOrderItem" useGeneratedKeys="true" keyProperty="id">
+		insert into FAT_ORDER_ITEM(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			order_by,
+			goods_detail_id,
+			price,
+			total_count,
+			total_price,
+			total_weight,
+			order_id,
+			customer_id
+		)values(
+			#{disabled,jdbcType=NUMERIC},
+			#{uuid,jdbcType=VARCHAR},
+			#{createUser,jdbcType=NUMERIC},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateUser,jdbcType=NUMERIC},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{remark,jdbcType=VARCHAR},
+			#{orderBy,jdbcType=NUMERIC},
+			#{goodsDetailId,jdbcType=NUMERIC},
+			#{price,jdbcType=DECIMAL},
+			#{totalCount,jdbcType=NUMERIC},
+			#{totalPrice,jdbcType=DECIMAL},
+			#{totalWeight,jdbcType=DECIMAL},
+			#{orderId,jdbcType=NUMERIC},
+			#{customerId,jdbcType=NUMERIC}
+		)
+	</insert>
+	<insert id="saveBatch" parameterType="ArrayList">
+		insert into FAT_ORDER_ITEM(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			order_by,
+			goods_detail_id,
+			price,
+			total_count,
+			total_price,
+			total_weight,
+			order_id,
+			customer_id
+		)values
+		<foreach collection="list" item="obj" separator=",">
+		(
+			#{obj.disabled,jdbcType=NUMERIC},
+			#{obj.uuid,jdbcType=VARCHAR},
+			#{obj.createUser,jdbcType=NUMERIC},
+			#{obj.createTime,jdbcType=TIMESTAMP},
+			#{obj.updateUser,jdbcType=NUMERIC},
+			#{obj.updateTime,jdbcType=TIMESTAMP},
+			#{obj.remark,jdbcType=VARCHAR},
+			#{obj.orderBy,jdbcType=NUMERIC},
+			#{obj.goodsDetailId,jdbcType=NUMERIC},
+			#{obj.price,jdbcType=DECIMAL},
+			#{obj.totalCount,jdbcType=NUMERIC},
+			#{obj.totalPrice,jdbcType=DECIMAL},
+			#{obj.totalWeight,jdbcType=DECIMAL},
+			#{obj.orderId,jdbcType=NUMERIC},
+			#{obj.customerId,jdbcType=NUMERIC}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="FatOrderItem">
+		update FAT_ORDER_ITEM u
+		<set>
+			u.create_time = #{createTime,jdbcType=TIMESTAMP} 
+ 			<if test="disabled != null">
+				,u.disabled=#{disabled,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateUser != null">
+				,u.update_user=#{updateUser,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateTime != null">
+				,u.update_time=#{updateTime,jdbcType=TIMESTAMP} 
+			</if>
+ 			<if test="remark != null">
+				,u.remark=#{remark,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="orderBy != null">
+				,u.order_by=#{orderBy,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="goodsDetailId != null">
+				,u.goods_detail_id=#{goodsDetailId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="price != null">
+				,u.price=#{price,jdbcType=DECIMAL} 
+			</if>
+ 			<if test="totalCount != null">
+				,u.total_count=#{totalCount,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="totalPrice != null">
+				,u.total_price=#{totalPrice,jdbcType=DECIMAL} 
+			</if>
+ 			<if test="totalWeight != null">
+				,u.total_weight=#{totalWeight,jdbcType=DECIMAL} 
+			</if>
+ 			<if test="orderId != null">
+				,u.order_id=#{orderId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="customerId != null">
+				,u.customer_id=#{customerId,jdbcType=NUMERIC} 
+			</if>
+		</set>
+		where
+            u.ID = #{id,jdbcType=NUMERIC}
+            
+	</update>
+	<!-- 自定义修改列以及修改条件 -->
+	<update id="updateCustomColumnByWhere" parameterType="map" statementType="STATEMENT">
+		UPDATE  FAT_ORDER_ITEM  ${updateSqlStr}
+		where
+			${whereSqlStr}
+	</update>
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelete" parameterType="map">
+		update FAT_ORDER_ITEM u set
+		u.DISABLED = 1
+		<if test="updateTime != null">
+		    ,u.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+            ,u.UPDATE_USER = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		where
+			<if test="id != null">
+				u.ID = #{id,jdbcType=NUMERIC}
+			</if>
+			<if test="id == null and uuid != null">
+				u.uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="id == null and uuid == null">
+				u.id = null
+			</if>
+	</update>
+	<!-- 自定义逻辑条件 -->
+	<update id="logicWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		update FAT_ORDER_ITEM set DISABLED = 1
+		where
+			${whereSqlStr}
+	</update>
+	<!-- 物理删除 -->
+	<delete id="physicalDelete" parameterType="java.lang.Integer">
+		delete from FAT_ORDER_ITEM where id=#{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 自定义物理条件 -->
+	<delete id="physicalWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		DELETE FROM FAT_ORDER_ITEM WHERE ${whereSqlStr}
+	</delete>
+	
+	
+</mapper>

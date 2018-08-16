@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FatOrder">
+	<sql id="baseColumnList">
+			u.id as id ,
+			u.disabled as disabled ,
+			u.uuid as uuid ,
+			u.create_user as createUser ,
+			u.create_time as createTime ,
+			u.update_user as updateUser ,
+			u.update_time as updateTime ,
+			u.remark as remark ,
+			u.order_by as orderBy ,
+			u.state as state ,
+			u.total_price as totalPrice ,
+			u.total_weight as totalWeight ,
+			u.customer_id as customerId ,
+			u.memo as memo ,
+			u.order_no as orderNo ,
+			u.luck_lock as luckLock ,
+			u.flex_no as flexNo ,
+			u.address_id as addressId ,
+			u.postage as postage ,
+			u.transaction_id as transactionId ,
+			u.refund_no as refundNo ,
+			u.exp_company as expCompany ,
+			u.USER_ADDRESS as userAddress 
+	</sql>
+	<sql id="searchCriteria">
+		<if test="id != null">
+			and u.id = #{id,jdbcType=NUMERIC}
+		</if>
+		<if test="disabled != null">
+			and u.disabled = #{disabled,jdbcType=NUMERIC}
+		</if>
+		<if test="uuid != null">
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+		</if>
+		<if test="uuidLike != null">
+			and u.uuid like CONCAT('%',#{uuidLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="createUser != null">
+			and u.create_user = #{createUser,jdbcType=NUMERIC}
+		</if>
+		<if test="createTime != null">
+			and u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+			and u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="updateTime != null">
+			and u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="remark != null">
+			and u.remark = #{remark,jdbcType=VARCHAR}
+		</if>
+		<if test="remarkLike != null">
+			and u.remark like CONCAT('%',#{remarkLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="orderBy != null">
+			and u.order_by = #{orderBy,jdbcType=NUMERIC}
+		</if>
+		<if test="state != null">
+			and u.state = #{state,jdbcType=NUMERIC}
+		</if>
+		<if test="totalPrice != null">
+			and u.total_price = #{totalPrice,jdbcType=DECIMAL}
+		</if>
+		<if test="totalWeight != null">
+			and u.total_weight = #{totalWeight,jdbcType=DECIMAL}
+		</if>
+		<if test="customerId != null">
+			and u.customer_id = #{customerId,jdbcType=NUMERIC}
+		</if>
+		<if test="memo != null">
+			and u.memo = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="memoLike != null">
+			and u.memo like CONCAT('%',#{memoLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="orderNo != null">
+			and u.order_no = #{orderNo,jdbcType=VARCHAR}
+		</if>
+		<if test="orderNoLike != null">
+			and u.order_no like CONCAT('%',#{orderNoLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="luckLock != null">
+			and u.luck_lock = #{luckLock,jdbcType=VARCHAR}
+		</if>
+		<if test="luckLockLike != null">
+			and u.luck_lock like CONCAT('%',#{luckLockLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="flexNo != null">
+			and u.flex_no = #{flexNo,jdbcType=VARCHAR}
+		</if>
+		<if test="flexNoLike != null">
+			and u.flex_no like CONCAT('%',#{flexNoLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="addressId != null">
+			and u.address_id = #{addressId,jdbcType=NUMERIC}
+		</if>
+		<if test="postage != null">
+			and u.postage = #{postage,jdbcType=DECIMAL}
+		</if>
+		<if test="transactionId != null">
+			and u.transaction_id = #{transactionId,jdbcType=VARCHAR}
+		</if>
+		<if test="transactionIdLike != null">
+			and u.transaction_id like CONCAT('%',#{transactionIdLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="refundNo != null">
+			and u.refund_no = #{refundNo,jdbcType=VARCHAR}
+		</if>
+		<if test="refundNoLike != null">
+			and u.refund_no like CONCAT('%',#{refundNoLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="expCompany != null">
+			and u.exp_company = #{expCompany,jdbcType=VARCHAR}
+		</if>
+		<if test="expCompanyLike != null">
+			and u.exp_company like CONCAT('%',#{expCompanyLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="userAddress != null">
+			and u.USER_ADDRESS = #{userAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="userAddressLike != null">
+			and u.USER_ADDRESS like CONCAT('%',#{userAddressLike,jdbcType=VARCHAR},'%') 
+		</if>
+	</sql>
+
+	<!-- 查询列表数据 -->
+	<select id="queryListResult" parameterType="map" resultType="FatOrder">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER u
+		where
+		    u.disabled = 0
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+			<include refid="Util.mysqlPage" />
+	</select>
+	<select id="queryListResultCount" parameterType="map" resultType="long">
+		select
+			count(u.id)
+		from
+			FAT_ORDER u
+		where
+		    u.disabled = 0
+		<include refid="searchCriteria" />
+	</select>
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="FatOrder">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER u
+		where
+		    u.disabled = 0 
+		    <if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	<select id="queryListResultCountByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="long">
+		select
+			count(u.id)
+		from
+			FAT_ORDER u
+		where
+		    u.disabled = 0 
+			<if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	
+	<!-- 查询一条数据 -->
+	<select id="querySingleResultById" parameterType="int" resultType="FatOrder">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER u
+		where
+		    u.disabled = 0
+			and u.ID = #{id,jdbcType=NUMERIC}
+	</select>
+	
+	<select id="querySingleResultByUUID" parameterType="String" resultType="FatOrder">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER u
+		where
+			    u.disabled = 0
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+	</select>
+	<select id="querySingleResultByParams" parameterType="map" resultType="FatOrder">
+		select
+			<include refid="baseColumnList" />
+		from
+			FAT_ORDER u
+		where
+			u.disabled = 0
+			<include refid="searchCriteria" />
+	</select>
+
+	<insert id="save" parameterType="FatOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into FAT_ORDER(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			order_by,
+			state,
+			total_price,
+			total_weight,
+			customer_id,
+			memo,
+			order_no,
+			luck_lock,
+			flex_no,
+			address_id,
+			postage,
+			transaction_id,
+			refund_no,
+			exp_company,
+			USER_ADDRESS
+		)values(
+			#{disabled,jdbcType=NUMERIC},
+			#{uuid,jdbcType=VARCHAR},
+			#{createUser,jdbcType=NUMERIC},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateUser,jdbcType=NUMERIC},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{remark,jdbcType=VARCHAR},
+			#{orderBy,jdbcType=NUMERIC},
+			#{state,jdbcType=NUMERIC},
+			#{totalPrice,jdbcType=DECIMAL},
+			#{totalWeight,jdbcType=DECIMAL},
+			#{customerId,jdbcType=NUMERIC},
+			#{memo,jdbcType=VARCHAR},
+			#{orderNo,jdbcType=VARCHAR},
+			#{luckLock,jdbcType=VARCHAR},
+			#{flexNo,jdbcType=VARCHAR},
+			#{addressId,jdbcType=NUMERIC},
+			#{postage,jdbcType=DECIMAL},
+			#{transactionId,jdbcType=VARCHAR},
+			#{refundNo,jdbcType=VARCHAR},
+			#{expCompany,jdbcType=VARCHAR},
+			#{userAddress,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="saveBatch" parameterType="ArrayList">
+		insert into FAT_ORDER(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			order_by,
+			state,
+			total_price,
+			total_weight,
+			customer_id,
+			memo,
+			order_no,
+			luck_lock,
+			flex_no,
+			address_id,
+			postage,
+			transaction_id,
+			refund_no,
+			exp_company,
+			USER_ADDRESS
+		)values
+		<foreach collection="list" item="obj" separator=",">
+		(
+			#{obj.disabled,jdbcType=NUMERIC},
+			#{obj.uuid,jdbcType=VARCHAR},
+			#{obj.createUser,jdbcType=NUMERIC},
+			#{obj.createTime,jdbcType=TIMESTAMP},
+			#{obj.updateUser,jdbcType=NUMERIC},
+			#{obj.updateTime,jdbcType=TIMESTAMP},
+			#{obj.remark,jdbcType=VARCHAR},
+			#{obj.orderBy,jdbcType=NUMERIC},
+			#{obj.state,jdbcType=NUMERIC},
+			#{obj.totalPrice,jdbcType=DECIMAL},
+			#{obj.totalWeight,jdbcType=DECIMAL},
+			#{obj.customerId,jdbcType=NUMERIC},
+			#{obj.memo,jdbcType=VARCHAR},
+			#{obj.orderNo,jdbcType=VARCHAR},
+			#{obj.luckLock,jdbcType=VARCHAR},
+			#{obj.flexNo,jdbcType=VARCHAR},
+			#{obj.addressId,jdbcType=NUMERIC},
+			#{obj.postage,jdbcType=DECIMAL},
+			#{obj.transactionId,jdbcType=VARCHAR},
+			#{obj.refundNo,jdbcType=VARCHAR},
+			#{obj.expCompany,jdbcType=VARCHAR},
+			#{obj.userAddress,jdbcType=VARCHAR}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="FatOrder">
+		update FAT_ORDER u
+		<set>
+			u.create_time = #{createTime,jdbcType=TIMESTAMP} 
+ 			<if test="disabled != null">
+				,u.disabled=#{disabled,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateUser != null">
+				,u.update_user=#{updateUser,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateTime != null">
+				,u.update_time=#{updateTime,jdbcType=TIMESTAMP} 
+			</if>
+ 			<if test="remark != null">
+				,u.remark=#{remark,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="orderBy != null">
+				,u.order_by=#{orderBy,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="state != null">
+				,u.state=#{state,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="totalPrice != null">
+				,u.total_price=#{totalPrice,jdbcType=DECIMAL} 
+			</if>
+ 			<if test="totalWeight != null">
+				,u.total_weight=#{totalWeight,jdbcType=DECIMAL} 
+			</if>
+ 			<if test="customerId != null">
+				,u.customer_id=#{customerId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="memo != null">
+				,u.memo=#{memo,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="orderNo != null">
+				,u.order_no=#{orderNo,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="luckLock != null">
+				,u.luck_lock=#{luckLock,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="flexNo != null">
+				,u.flex_no=#{flexNo,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="addressId != null">
+				,u.address_id=#{addressId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="postage != null">
+				,u.postage=#{postage,jdbcType=DECIMAL} 
+			</if>
+ 			<if test="transactionId != null">
+				,u.transaction_id=#{transactionId,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="refundNo != null">
+				,u.refund_no=#{refundNo,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="expCompany != null">
+				,u.exp_company=#{expCompany,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="userAddress != null">
+				,u.USER_ADDRESS=#{userAddress,jdbcType=VARCHAR} 
+			</if>
+		</set>
+		where
+            u.ID = #{id,jdbcType=NUMERIC}
+            
+	</update>
+	<!-- 自定义修改列以及修改条件 -->
+	<update id="updateCustomColumnByWhere" parameterType="map" statementType="STATEMENT">
+		UPDATE  FAT_ORDER  ${updateSqlStr}
+		where
+			${whereSqlStr}
+	</update>
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelete" parameterType="map">
+		update FAT_ORDER u set
+		u.DISABLED = 1
+		<if test="updateTime != null">
+		    ,u.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+            ,u.UPDATE_USER = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		where
+			<if test="id != null">
+				u.ID = #{id,jdbcType=NUMERIC}
+			</if>
+			<if test="id == null and uuid != null">
+				u.uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="id == null and uuid == null">
+				u.id = null
+			</if>
+	</update>
+	<!-- 自定义逻辑条件 -->
+	<update id="logicWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		update FAT_ORDER set DISABLED = 1
+		where
+			${whereSqlStr}
+	</update>
+	<!-- 物理删除 -->
+	<delete id="physicalDelete" parameterType="java.lang.Integer">
+		delete from FAT_ORDER where id=#{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 自定义物理条件 -->
+	<delete id="physicalWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		DELETE FROM FAT_ORDER WHERE ${whereSqlStr}
+	</delete>
+	
+	
+</mapper>

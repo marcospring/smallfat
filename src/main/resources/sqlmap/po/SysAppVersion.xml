@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysAppVersion">
+	<sql id="baseColumnList">
+			u.id as id ,
+			u.disabled as disabled ,
+			u.uuid as uuid ,
+			u.create_user as createUser ,
+			u.create_time as createTime ,
+			u.update_user as updateUser ,
+			u.update_time as updateTime ,
+			u.remark as remark ,
+			u.sys_type as sysType ,
+			u.version_no as versionNo ,
+			u.app_update_date as appUpdateDate ,
+			u.is_force as isForce ,
+			u.status as status ,
+			u.memo as memo ,
+			u.app_type as appType ,
+			u.title as title ,
+			u.left_button as leftButton ,
+			u.right_button as rightButton ,
+			u.download_address as downloadAddress 
+	</sql>
+	<sql id="searchCriteria">
+		<if test="id != null">
+			and u.id = #{id,jdbcType=NUMERIC}
+		</if>
+		<if test="disabled != null">
+			and u.disabled = #{disabled,jdbcType=NUMERIC}
+		</if>
+		<if test="uuid != null">
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+		</if>
+		<if test="uuidLike != null">
+			and u.uuid like CONCAT('%',#{uuidLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="createUser != null">
+			and u.create_user = #{createUser,jdbcType=NUMERIC}
+		</if>
+		<if test="createTime != null">
+			and u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+			and u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="updateTime != null">
+			and u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="remark != null">
+			and u.remark = #{remark,jdbcType=VARCHAR}
+		</if>
+		<if test="remarkLike != null">
+			and u.remark like CONCAT('%',#{remarkLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="sysType != null">
+			and u.sys_type = #{sysType,jdbcType=NUMERIC}
+		</if>
+		<if test="versionNo != null">
+			and u.version_no = #{versionNo,jdbcType=VARCHAR}
+		</if>
+		<if test="versionNoLike != null">
+			and u.version_no like CONCAT('%',#{versionNoLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="appUpdateDate != null">
+			and u.app_update_date = #{appUpdateDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="isForce != null">
+			and u.is_force = #{isForce,jdbcType=NUMERIC}
+		</if>
+		<if test="status != null">
+			and u.status = #{status,jdbcType=NUMERIC}
+		</if>
+		<if test="memo != null">
+			and u.memo = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="memoLike != null">
+			and u.memo like CONCAT('%',#{memoLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="appType != null">
+			and u.app_type = #{appType,jdbcType=NUMERIC}
+		</if>
+		<if test="title != null">
+			and u.title = #{title,jdbcType=VARCHAR}
+		</if>
+		<if test="titleLike != null">
+			and u.title like CONCAT('%',#{titleLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="leftButton != null">
+			and u.left_button = #{leftButton,jdbcType=VARCHAR}
+		</if>
+		<if test="leftButtonLike != null">
+			and u.left_button like CONCAT('%',#{leftButtonLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="rightButton != null">
+			and u.right_button = #{rightButton,jdbcType=VARCHAR}
+		</if>
+		<if test="rightButtonLike != null">
+			and u.right_button like CONCAT('%',#{rightButtonLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="downloadAddress != null">
+			and u.download_address = #{downloadAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="downloadAddressLike != null">
+			and u.download_address like CONCAT('%',#{downloadAddressLike,jdbcType=VARCHAR},'%') 
+		</if>
+	</sql>
+
+	<!-- 查询列表数据 -->
+	<select id="queryListResult" parameterType="map" resultType="SysAppVersion">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_APP_VERSION u
+		where
+		    u.disabled = 0
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+			<include refid="Util.mysqlPage" />
+	</select>
+	<select id="queryListResultCount" parameterType="map" resultType="long">
+		select
+			count(u.id)
+		from
+			SYS_APP_VERSION u
+		where
+		    u.disabled = 0
+		<include refid="searchCriteria" />
+	</select>
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="SysAppVersion">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_APP_VERSION u
+		where
+		    u.disabled = 0 
+		    <if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	<select id="queryListResultCountByWhere" parameterType="java.util.Map" statementType="STATEMENT" resultType="long">
+		select
+			count(u.id)
+		from
+			SYS_APP_VERSION u
+		where
+		    u.disabled = 0 
+			<if test="whereSqlStr != null">
+			AND ${whereSqlStr}
+			</if>
+	</select>
+	
+	<!-- 查询一条数据 -->
+	<select id="querySingleResultById" parameterType="int" resultType="SysAppVersion">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_APP_VERSION u
+		where
+		    u.disabled = 0
+			and u.ID = #{id,jdbcType=NUMERIC}
+	</select>
+	
+	<select id="querySingleResultByUUID" parameterType="String" resultType="SysAppVersion">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_APP_VERSION u
+		where
+			    u.disabled = 0
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+	</select>
+	<select id="querySingleResultByParams" parameterType="map" resultType="SysAppVersion">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYS_APP_VERSION u
+		where
+			u.disabled = 0
+			<include refid="searchCriteria" />
+	</select>
+
+	<insert id="save" parameterType="SysAppVersion" useGeneratedKeys="true" keyProperty="id">
+		insert into SYS_APP_VERSION(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			sys_type,
+			version_no,
+			app_update_date,
+			is_force,
+			status,
+			memo,
+			app_type,
+			title,
+			left_button,
+			right_button,
+			download_address
+		)values(
+			#{disabled,jdbcType=NUMERIC},
+			#{uuid,jdbcType=VARCHAR},
+			#{createUser,jdbcType=NUMERIC},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateUser,jdbcType=NUMERIC},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{remark,jdbcType=VARCHAR},
+			#{sysType,jdbcType=NUMERIC},
+			#{versionNo,jdbcType=VARCHAR},
+			#{appUpdateDate,jdbcType=TIMESTAMP},
+			#{isForce,jdbcType=NUMERIC},
+			#{status,jdbcType=NUMERIC},
+			#{memo,jdbcType=VARCHAR},
+			#{appType,jdbcType=NUMERIC},
+			#{title,jdbcType=VARCHAR},
+			#{leftButton,jdbcType=VARCHAR},
+			#{rightButton,jdbcType=VARCHAR},
+			#{downloadAddress,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="saveBatch" parameterType="ArrayList">
+		insert into SYS_APP_VERSION(
+			disabled,
+			uuid,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			remark,
+			sys_type,
+			version_no,
+			app_update_date,
+			is_force,
+			status,
+			memo,
+			app_type,
+			title,
+			left_button,
+			right_button,
+			download_address
+		)values
+		<foreach collection="list" item="obj" separator=",">
+		(
+			#{obj.disabled,jdbcType=NUMERIC},
+			#{obj.uuid,jdbcType=VARCHAR},
+			#{obj.createUser,jdbcType=NUMERIC},
+			#{obj.createTime,jdbcType=TIMESTAMP},
+			#{obj.updateUser,jdbcType=NUMERIC},
+			#{obj.updateTime,jdbcType=TIMESTAMP},
+			#{obj.remark,jdbcType=VARCHAR},
+			#{obj.sysType,jdbcType=NUMERIC},
+			#{obj.versionNo,jdbcType=VARCHAR},
+			#{obj.appUpdateDate,jdbcType=TIMESTAMP},
+			#{obj.isForce,jdbcType=NUMERIC},
+			#{obj.status,jdbcType=NUMERIC},
+			#{obj.memo,jdbcType=VARCHAR},
+			#{obj.appType,jdbcType=NUMERIC},
+			#{obj.title,jdbcType=VARCHAR},
+			#{obj.leftButton,jdbcType=VARCHAR},
+			#{obj.rightButton,jdbcType=VARCHAR},
+			#{obj.downloadAddress,jdbcType=VARCHAR}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="SysAppVersion">
+		update SYS_APP_VERSION u
+		<set>
+			u.create_time = #{createTime,jdbcType=TIMESTAMP} 
+ 			<if test="disabled != null">
+				,u.disabled=#{disabled,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateUser != null">
+				,u.update_user=#{updateUser,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="updateTime != null">
+				,u.update_time=#{updateTime,jdbcType=TIMESTAMP} 
+			</if>
+ 			<if test="remark != null">
+				,u.remark=#{remark,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="sysType != null">
+				,u.sys_type=#{sysType,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="versionNo != null">
+				,u.version_no=#{versionNo,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="appUpdateDate != null">
+				,u.app_update_date=#{appUpdateDate,jdbcType=TIMESTAMP} 
+			</if>
+ 			<if test="isForce != null">
+				,u.is_force=#{isForce,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="status != null">
+				,u.status=#{status,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="memo != null">
+				,u.memo=#{memo,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="appType != null">
+				,u.app_type=#{appType,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="title != null">
+				,u.title=#{title,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="leftButton != null">
+				,u.left_button=#{leftButton,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="rightButton != null">
+				,u.right_button=#{rightButton,jdbcType=VARCHAR} 
+			</if>
+ 			<if test="downloadAddress != null">
+				,u.download_address=#{downloadAddress,jdbcType=VARCHAR} 
+			</if>
+		</set>
+		where
+            u.ID = #{id,jdbcType=NUMERIC}
+            
+	</update>
+	<!-- 自定义修改列以及修改条件 -->
+	<update id="updateCustomColumnByWhere" parameterType="map" statementType="STATEMENT">
+		UPDATE  SYS_APP_VERSION  ${updateSqlStr}
+		where
+			${whereSqlStr}
+	</update>
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelete" parameterType="map">
+		update SYS_APP_VERSION u set
+		u.DISABLED = 1
+		<if test="updateTime != null">
+		    ,u.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null">
+            ,u.UPDATE_USER = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		where
+			<if test="id != null">
+				u.ID = #{id,jdbcType=NUMERIC}
+			</if>
+			<if test="id == null and uuid != null">
+				u.uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="id == null and uuid == null">
+				u.id = null
+			</if>
+	</update>
+	<!-- 自定义逻辑条件 -->
+	<update id="logicWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		update SYS_APP_VERSION set DISABLED = 1
+		where
+			${whereSqlStr}
+	</update>
+	<!-- 物理删除 -->
+	<delete id="physicalDelete" parameterType="java.lang.Integer">
+		delete from SYS_APP_VERSION where id=#{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 自定义物理条件 -->
+	<delete id="physicalWhereDelete" parameterType="java.util.Map" statementType="STATEMENT">
+		DELETE FROM SYS_APP_VERSION WHERE ${whereSqlStr}
+	</delete>
+	
+	
+</mapper>
