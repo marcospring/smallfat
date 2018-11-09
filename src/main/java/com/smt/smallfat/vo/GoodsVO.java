@@ -22,6 +22,7 @@ public class GoodsVO {
     private String shareUrl;
     private String themeIdList;
     private Date publishTime;
+    private int freightHeadId;
 
     public GoodsVO() {
     }
@@ -35,6 +36,7 @@ public class GoodsVO {
         this.resource = resource;
         this.details = details;
         this.categoryId = goods.getCategoryId();
+        this.freightHeadId = goods.getFreightHeadId();
     }
 
 
@@ -149,5 +151,13 @@ public class GoodsVO {
 
     public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public int getFreightHeadId() {
+        return freightHeadId;
+    }
+
+    public void setFreightHeadId(int freightHeadId) {
+        this.freightHeadId = freightHeadId;
     }
 }

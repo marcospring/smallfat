@@ -317,6 +317,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         goodsVO.setFlag(flagBuilder.deleteCharAt(flagBuilder.lastIndexOf(Constant.Separator.COMMA)).toString());
         goodsVO.setPriceArea(buildPriceArea(details));
         goodsVO.setPublishTime(goods.getPublishTime());
+        goodsVO.setFreightHeadId(goods.getFreightHeadId());
         return goodsVO;
     }
 
@@ -355,7 +356,7 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     @Override
     public void addToApp(int id) {
         FatGoods goods = getGoodsById(id);
-        goods.setIsApp(1);
+        goods.setIsApp(UP_APP);
         goods.setPublishTime(new Date());
         factory.getCacheWriteDataSession().update(FatGoods.class, goods);
     }
@@ -459,7 +460,8 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         }
         where.clean();
         where.cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.BETWEEN).v(begin).operator(ESQLOperator.AND)
-                .v(end).operator(ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.DESC);
+                .v(end).operator(ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME)
+                .operator(ESQLOperator.DESC);
         goods = factory.getCacheReadDataSession().queryListResultByWhere(FatGoods.class, where);
         return fillGoodsVOList(goods);
     }
@@ -471,17 +473,18 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
                 (FatGoodsThemeRelation.class, params);
 
     }
+
     @Override
     public Pagination<GoodsVO> otherGoodsList(Map<String, Object> param) {
-        CustomSQL where = SQLCreator.where().cloumn(FatGoods.FIELD_IS_APP).operator(ESQLOperator.EQ).v(1).operator
-                (ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME).operator(ESQLOperator.DESC).operator
-                (ESQLOperator.LIMIT).v(1);
+        CustomSQL where = SQLCreator.where().cloumn(FatGoods.FIELD_IS_APP).operator(ESQLOperator.EQ).v(1)
+                .operator(ESQLOperator.ORDER_BY).cloumn(FatGoods.FIELD_PUBLISH_TIME)
+                .operator(ESQLOperator.DESC).operator(ESQLOperator.LIMIT).v(1);
         List<FatGoods> goods = factory.getCacheReadDataSession().queryListResultByWhere(FatGoods.class, where);
         Date begin = DateUtils.getCurrentDayBegin();
-        Date end = DateUtils.getCurrentDayEnd();
+       // Date end = DateUtils.getCurrentDayEnd();
         if (goods != null && goods.size() > 0) {
             begin = DateUtils.getDayBegin(goods.get(0).getPublishTime());
-            end = DateUtils.getDayEnd(goods.get(0).getPublishTime());
+       //     end = DateUtils.getDayEnd(goods.get(0).getPublishTime());
         }
         int pageNo = StringDefaultValue.intValue(param.get(Constant.PAGE_NO));
         int pageSize = StringDefaultValue.intValue(param.get(Constant.PAGE_SIZE));
@@ -491,5 +494,13 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         Pagination<FatGoods> page = queryClassPagination(FatGoods.class, where, pageNo, pageSize);
         Pagination<GoodsVO> pageVO = fillGoodsVOPagination(page);
         return pageVO;
+    }
+
+    @Override
+    public void downApp(int id) {
+        FatGoods goods = getGoodsById(id);
+        goods.setIsApp(DOWN_APP);
+        goods.setPublishTime(new Date());
+        factory.getCacheWriteDataSession().update(FatGoods.class, goods);
     }
 }

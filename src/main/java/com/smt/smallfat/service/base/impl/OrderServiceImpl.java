@@ -2,6 +2,7 @@ package com.smt.smallfat.service.base.impl;
 
 import com.csyy.common.JSONUtils;
 import com.csyy.common.StringDefaultValue;
+import com.csyy.constant.Constants;
 import com.csyy.core.apisupport.impl.BaseServiceImpl;
 import com.csyy.core.datasource.param.*;
 import com.csyy.core.exception.CommonException;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +51,8 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     private IPush push;
     @Autowired
     NotificationService notificationService;
+    @Autowired
+    FreightService freightService;
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -57,7 +61,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         int goodsDetailId = StringDefaultValue.intValue(param.get(FatShoppingCart.FIELD_GOODS_DETAIL_ID));
         int goodsCount = StringDefaultValue.intValue(param.get(FatShoppingCart.FIELD_GOODS_COUNT));
         int userId = StringDefaultValue.intValue(param.get(FatShoppingCart.FIELD_USER_ID));
-
+        int addressId = StringDefaultValue.intValue(param.get("addressId"));
         if (goodsCount <= 0)
             throw new CommonException(ResultConstant.Goods.GOODS_COUNT_MUST_UP_ZERO);
 
@@ -85,28 +89,44 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             cart.setGoodsTotalPrice(detail.getPrice().multiply(new BigDecimal(cart.getGoodsCount())));
             factory.getCacheWriteDataSession().save(FatShoppingCart.class, cart);
         }
-        ShoppingCardVO result = fillShoppingCardVO(cart.getUserId());
+        ShoppingCardVO result = fillShoppingCardVO(cart.getUserId(), addressId);
         return result;
     }
 
-    private ShoppingCardVO fillShoppingCardVO(int userId) {
+    private ShoppingCardVO fillShoppingCardVO(int userId, int addressId) {
         //查询用户购物车内容
         Param params = ParamBuilder.getInstance().getParam();
         params.add(ParamBuilder.nv(FatShoppingCart.FIELD_USER_ID, userId));
         List<FatShoppingCart> list = factory.getCacheReadDataSession().queryListResult(FatShoppingCart.class, params);
         ShoppingCardVO result = new ShoppingCardVO(list.size());
+        BigDecimal postage = new BigDecimal(0);
+        FatCustomerAddress address = null;
+        if (addressId != 0)
+            address = customerAddressService.getAddressById(addressId);
         //填充返回数据
         for (FatShoppingCart item : list) {
             FatGoodsDetail detail = goodsService.getGoodsDetailById(item.getGoodsDetailId());
-
             GoodsVO goodsVO = goodsService.getGoodsVO(detail.getGoodsId());
+
             ShoppingCardVO.ShoppingCardItem shoppingCardItem = result.new ShoppingCardItem(item.getId(), item
                     .getIsSelected(), goodsVO);
             ShoppingCardVO.ShoppingCardItem.CardItem cardItem = shoppingCardItem.new CardItem(item.getGoodsDetailId(), item
                     .getGoodsCount());
+            //计算物品邮费
+            if (address != null && item.getIsSelected() == 1) {
+                BigDecimal goodsTotalWeight = detail.getWeight().multiply(new BigDecimal(item.getGoodsCount()));
+                logger.info("======================================================");
+                logger.info("goodsWeight:{},goodsCount:{}", detail.getWeight(), item.getGoodsCount());
+                BigDecimal p = freightService.getPostage(address.getAreaCode(), goodsVO.getFreightHeadId(),
+                        goodsTotalWeight);
+                logger.info("=============>最外层邮费:{}", p);
+                postage = postage.add(p);
+            }
+            logger.info("===========================================================");
             shoppingCardItem.setSelectInfo(cardItem);
             result.getItems().add(shoppingCardItem);
         }
+        result.setPostage(postage);
         return result;
     }
 
@@ -171,35 +191,42 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     public OrderVO minusStock(int customerId, int addressId, String memo) {
         Param params = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatShoppingCart.FIELD_USER_ID,
                 customerId)).add(ParamBuilder.nv(FatShoppingCart.FIELD_IS_SELECTED, OrderService.CHECK));
-        List<FatShoppingCart> list = factory.getReadDataSession().queryListResult(FatShoppingCart.class, params);
+        List<FatShoppingCart> list = factory.getCacheWriteDataSession().queryListResult(FatShoppingCart.class, params);
         if (list.size() == 0)
             throw new CommonException(ResultConstant.Order.SHOPPING_CART_EMPTY);
 //        try {
-        List<OperateGoodsDetail> details = fillOperateGoodsDetail(list);
-        FatOrder order = buildOrder(customerId, details, addressId, memo);
-        OrderVO orderVO = new OrderVO(order, customerAddressService.getAddressById(addressId));
-        for (OperateGoodsDetail detail : details) {
-            //加锁商品详情
-            // lock.lock(Constant.Lock.DETAIL_LOCK + customer.getUuid() + "_" + detail.getDetail().getId());
-            //  goodsService.addGoodsDetailLock(detail.getDetail().getId(), customer.getUuid());
-            //减库存
-            logger.info("减库存开始======================》");
-            CustomSQL where = SQLCreator.where();
-            where.cloumn(FatGoodsDetail.FIELD_STOCK).operator(ESQLOperator.MINUS).v(detail.getDetailCount())
-                    .operator(ESQLOperator.GTEQ).v(Constant.WrapperExtend.ZERO).operator(ESQLOperator.AND).cloumn
-                    (FatGoodsDetail.FIELD_ID).operator(ESQLOperator.EQ).v(detail.getDetail().getId());
-            Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatGoodsDetail.FIELD_STOCK,
-                    detail.getDetail().getStock() - detail.getDetailCount()));
-            int count = factory.getCacheWriteDataSession().updateCustomColumnByWhere(FatGoodsDetail.class, param,
-                    where);
-            if (count == 0)
-                throw new CommonException(ResultConstant.Goods.GOODS_DETAIL_IS_LOCKED);
-            FatOrderItem item = addOrderItem(order, detail);
-            orderVO.getItems().add(orderVO.new OrderItem(item, goodsService.getGoodsVoByGoodsDetailId(item.getGoodsDetailId())));
-            logger.info("减库存结束=======================>");
-            //解锁商品
-            //goodsService.cancelGoodsDetailLock(detail.getDetail().getId(), customer.getUuid());
-            //      lock.unLock(Constant.Lock.DETAIL_LOCK + customer.getUuid() + "_" + detail.getDetail().getId());
+        FatCustomerAddress address = factory.getCacheReadDataSession().querySingleResultById(FatCustomerAddress
+                .class, addressId);
+        List<OperateGoods> goodsList = fillOperateGoods(list, address);
+        FatOrder order = buildOrder(customerId, goodsList, address, memo);
+        OrderVO orderVO = new OrderVO(order, address);
+        for (OperateGoods goods : goodsList) {
+            List<OperateGoodsDetail> details = goods.getList();
+            if (details != null && details.size() > 0) {
+                for (OperateGoodsDetail detail : details) {
+                    //加锁商品详情
+                    // lock.lock(Constant.Lock.DETAIL_LOCK + customer.getUuid() + "_" + detail.getDetail().getId());
+                    //  goodsService.addGoodsDetailLock(detail.getDetail().getId(), customer.getUuid());
+                    //减库存
+                    logger.info("减库存开始======================》");
+                    CustomSQL where = SQLCreator.where();
+                    where.cloumn(FatGoodsDetail.FIELD_STOCK).operator(ESQLOperator.MINUS).v(detail.getDetailCount())
+                            .operator(ESQLOperator.GTEQ).v(Constant.WrapperExtend.ZERO).operator(ESQLOperator.AND).cloumn
+                            (FatGoodsDetail.FIELD_ID).operator(ESQLOperator.EQ).v(detail.getDetail().getId());
+                    Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatGoodsDetail.FIELD_STOCK,
+                            detail.getDetail().getStock() - detail.getDetailCount()));
+                    int count = factory.getCacheWriteDataSession().updateCustomColumnByWhere(FatGoodsDetail.class, param,
+                            where);
+                    if (count == 0)
+                        throw new CommonException(ResultConstant.Goods.GOODS_DETAIL_IS_LOCKED);
+                    FatOrderItem item = addOrderItem(order, detail);
+                    orderVO.getItems().add(orderVO.new OrderItem(item, goodsService.getGoodsVoByGoodsDetailId(item.getGoodsDetailId())));
+                    logger.info("减库存结束=======================>");
+                    //解锁商品
+                    //goodsService.cancelGoodsDetailLock(detail.getDetail().getId(), customer.getUuid());
+                    //      lock.unLock(Constant.Lock.DETAIL_LOCK + customer.getUuid() + "_" + detail.getDetail().getId());
+                }
+            }
         }
         //清空购物车内商品
         for (FatShoppingCart cart : list) {
@@ -208,7 +235,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         //添加支付前数量锁定，放入redis   30分钟过期，过期后订单过期，商品归还
         //如果这句出异常数据也会回滚
         factory.getRedisSessionFactory().getSession().setData(Constant.ORDER_PREFIX + order.getOrderNo(), JSONUtils
-                .toJson(details), 30 * 60);
+                .toJson(goodsList), 30 * 60);
 //        factory.getRedisSessionFactory().getSession().setData(Constant.ORDER_PREFIX + order.getOrderNo(), JSONUtils
 //                .toJson(details), 1 * 60);
 
@@ -235,12 +262,20 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return item;
     }
 
-    private FatOrder buildOrder(int customerId, List<OperateGoodsDetail> details, int addressId, String memo) {
+    private FatOrder buildOrder(int customerId, List<OperateGoods> goods, FatCustomerAddress address, String memo) {
         BigDecimal totalWeight = new BigDecimal(0);
         BigDecimal totalPrice = new BigDecimal(0);
-        for (OperateGoodsDetail detail : details) {
-            totalPrice = totalPrice.add(detail.getTotalPrice());
-            totalWeight = totalWeight.add(detail.getTotalWeight());
+        BigDecimal totalPostage = new BigDecimal(0);
+        for (OperateGoods opGoods : goods) {
+            List<OperateGoodsDetail> details = opGoods.getList();
+            if (details != null && details.size() > 0) {
+                for (OperateGoodsDetail detail : details) {
+                    totalPrice = totalPrice.add(detail.getTotalPrice());
+                    totalWeight = totalWeight.add(detail.getTotalWeight());
+
+                }
+            }
+            totalPostage = totalPostage.add(opGoods.getTotalPostage());
         }
         FatOrder order = FatOrder.getInstance(FatOrder.class);
         order.setCustomerId(customerId);
@@ -248,29 +283,60 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         order.setState(Constant.OrderStatus.ORDER_FOR_PAY);
         order.setTotalPrice(totalPrice);
         order.setTotalWeight(totalWeight);
-        order.setAddressId(addressId);
+
+        order.setUserAddress(new StringBuilder(address.getAreaAddress()).append(Constant.WrapperExtend.EMPTY)
+                .append(address.getAddress()).toString());
+        order.setAddressId(address.getId());
         order.setMemo(memo);
-        order.setLuckLock(StringDefaultValue.StringValue(Constant.WrapperExtend.ZERO));
+        order.setPostage(totalPostage);
         order = factory.getCacheWriteDataSession().save(FatOrder.class, order);
         addOrderHistory(order);
 
         return order;
     }
 
-    private List<OperateGoodsDetail> fillOperateGoodsDetail(List<FatShoppingCart> items) {
-        List<OperateGoodsDetail> details = new ArrayList<>(items.size());
+    private List<OperateGoods> fillOperateGoods(List<FatShoppingCart> items, FatCustomerAddress address) {
+        List<OperateGoods> goodsList = new ArrayList<>();
+        HashMap<Integer, OperateGoods> datas = new HashMap<>();
         //计算总重，总价
         for (FatShoppingCart item : items) {
+            //判断库存是否足够
             isGoodsEnough(item.getGoodsDetailId(), item.getGoodsCount());
-            OperateGoodsDetail operateGoodsDetail = new OperateGoodsDetail();
             FatGoodsDetail detail = goodsService.getGoodsDetailById(item.getGoodsDetailId());
+            FatGoods goods = goodsService.getGoodsById(detail.getGoodsId());
+            //设置操作的商品详情数据，总价，总重，总量
+            OperateGoodsDetail operateGoodsDetail = new OperateGoodsDetail();
             operateGoodsDetail.setDetail(detail);
             operateGoodsDetail.setTotalPrice(detail.getPrice().multiply(new BigDecimal(item.getGoodsCount())));
             operateGoodsDetail.setTotalWeight(detail.getWeight().multiply(new BigDecimal(item.getGoodsCount())));
             operateGoodsDetail.setDetailCount(item.getGoodsCount());
-            details.add(operateGoodsDetail);
+            //将操作商品详情，放入操作商品中
+            if (datas.containsKey(detail.getGoodsId())) {
+                OperateGoods opGoods = datas.get(detail.getGoodsId());
+                opGoods.addOperateDetail(operateGoodsDetail);
+            } else {
+                OperateGoods opGoods = new OperateGoods();
+                opGoods.setGoods(goods);
+                opGoods.addOperateDetail(operateGoodsDetail);
+                datas.put(detail.getGoodsId(), opGoods);
+            }
         }
-        return details;
+        //设置邮费商品邮费，由于每个商品可能由不同的商户提供，有不同的运费，所以要按照商品计算邮费
+        for (Integer goodsId : datas.keySet()) {
+            OperateGoods op = datas.get(goodsId);
+            List<OperateGoodsDetail> detailList = op.getList();
+            BigDecimal goodsTotalWeight = new BigDecimal(0);
+            if (detailList != null && detailList.size() > 0) {
+                for (OperateGoodsDetail detail1 : detailList) {
+                    goodsTotalWeight.add(detail1.getTotalWeight());
+                }
+            }
+            BigDecimal postage = freightService.getPostage(address.getAreaCode(), op.getGoods().getFreightHeadId(),
+                    goodsTotalWeight);
+            op.setTotalPostage(postage);
+            goodsList.add(op);
+        }
+        return goodsList;
     }
 
 
@@ -279,6 +345,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         int userId = StringDefaultValue.intValue(param.get(Constant.USER_ID));
         String items = StringDefaultValue.StringValue(param.get(REQUEST_PARAM_ITEMS));
         int isCheck = StringDefaultValue.intValue(param.get(REQUEST_PARAM_IS_CHECK));
+        int addressId = StringDefaultValue.intValue(param.get("addressId"));
         //更新用户购物车为全未选中状态
         updateUserShoppingCartNonSelect(userId);
         //处理信息
@@ -308,7 +375,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                 factory.getCacheWriteDataSession().update(FatShoppingCart.class, cartItem);
             }
         }
-        return fillShoppingCardVO(userId);
+        return fillShoppingCardVO(userId, addressId);
     }
 
     //首先更新所有用户购物车内数据为未选中状态
@@ -324,17 +391,19 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     }
 
     @Override
-    public ShoppingCardVO deleteShoppingCartItem(int id) {
+    public ShoppingCardVO deleteShoppingCartItem(int id, int addressId) {
         FatShoppingCart cart = getShoppingCartById(id);
         int userId = cart.getUserId();
         factory.getCacheWriteDataSession().physicalDelete(FatShoppingCart.class, id);
-        return fillShoppingCardVO(userId);
+        return fillShoppingCardVO(userId, addressId);
     }
 
     @Override
-    public ShoppingCardVO getShoppingCardInfo(int userId) {
-        ShoppingCardVO result = fillShoppingCardVO(userId);
-        return result;
+    public ShoppingCardVO getShoppingCardInfo(int userId, int addressId) {
+        FatCustomerAddress address = customerAddressService.getUserDefaultAddress(userId);
+        if (address != null)
+            return fillShoppingCardVO(userId, address.getId());
+        return fillShoppingCardVO(userId, addressId);
     }
 
     @Override
@@ -375,10 +444,9 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     public OrderVO getOrderVObyOrderNo(String orderNo) {
         Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatOrder.FIELD_ORDER_NO, orderNo));
         FatOrder order = getOrderByOrderNo(orderNo);
-        FatCustomerAddress address = customerAddressService.getAddressById(order.getAddressId());
         param.clean().add(ParamBuilder.nv(FatOrderItem.FIELD_ORDER_ID, order.getId()));
         List<FatOrderItem> items = factory.getCacheReadDataSession().queryListResult(FatOrderItem.class, param);
-        OrderVO vo = new OrderVO(order, address);
+        OrderVO vo = new OrderVO(order, customerAddressService.getAddressById(order.getAddressId()));
         for (FatOrderItem item : items) {
             GoodsVO goodsVO = goodsService.getGoodsVoByGoodsDetailId(item.getGoodsDetailId());
             OrderVO.OrderItem itemVo = vo.new OrderItem(item, goodsVO);
@@ -410,8 +478,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             throw new CommonException(ResultConstant.Order.ORDER_IS_LOCKED);
         }
 
-        FatCustomerAddress address = customerAddressService.getAddressById(order.getAddressId());
-        return new OrderVO(order, address);
+        return new OrderVO(order, customerAddressService.getAddressById(order.getAddressId()));
     }
 
     @Override
@@ -561,6 +628,14 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatOrder.FIELD_ID, order.getId()));
         factory.getCacheWriteDataSession().logicDelete(FatOrder.class, param);
     }
+
+    @Override
+    public void refuseRefund(String orderNo) {
+        FatOrder order = getOrderByOrderNo(orderNo);
+        order.setState(Constant.OrderStatus.ALREADY_PAY);
+        factory.getCacheWriteDataSession().update(FatOrder.class, order);
+        addOrderHistory(order);
+    }
 }
 
 class OperateGoodsDetail {
@@ -599,5 +674,43 @@ class OperateGoodsDetail {
 
     public void setTotalWeight(BigDecimal totalWeight) {
         this.totalWeight = totalWeight;
+    }
+
+
+}
+
+class OperateGoods {
+    private FatGoods goods;
+    private List<OperateGoodsDetail> list;
+    private BigDecimal totalPostage;
+
+    public BigDecimal getTotalPostage() {
+        return totalPostage;
+    }
+
+    public void setTotalPostage(BigDecimal totalPostage) {
+        this.totalPostage = totalPostage;
+    }
+
+    public FatGoods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(FatGoods goods) {
+        this.goods = goods;
+    }
+
+    public List<OperateGoodsDetail> getList() {
+        return list;
+    }
+
+    public void setList(List<OperateGoodsDetail> list) {
+        this.list = list;
+    }
+
+    public void addOperateDetail(OperateGoodsDetail detail) {
+        if (this.list == null)
+            list = new ArrayList<>();
+        list.add(detail);
     }
 }

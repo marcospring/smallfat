@@ -16,7 +16,8 @@
 			u.area_address as areaAddress ,
 			u.address as address ,
 			u.is_default as isDefault ,
-			u.user_id as userId 
+			u.user_id as userId ,
+			u.area_code as areaCode 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -81,6 +82,12 @@
 		</if>
 		<if test="userId != null">
 			and u.user_id = #{userId,jdbcType=NUMERIC}
+		</if>
+		<if test="areaCode != null">
+			and u.area_code = #{areaCode,jdbcType=VARCHAR}
+		</if>
+		<if test="areaCodeLike != null">
+			and u.area_code like CONCAT('%',#{areaCodeLike,jdbcType=VARCHAR},'%') 
 		</if>
 	</sql>
 
@@ -174,7 +181,8 @@
 			area_address,
 			address,
 			is_default,
-			user_id
+			user_id,
+			area_code
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -189,7 +197,8 @@
 			#{areaAddress,jdbcType=VARCHAR},
 			#{address,jdbcType=VARCHAR},
 			#{isDefault,jdbcType=NUMERIC},
-			#{userId,jdbcType=NUMERIC}
+			#{userId,jdbcType=NUMERIC},
+			#{areaCode,jdbcType=VARCHAR}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -207,7 +216,8 @@
 			area_address,
 			address,
 			is_default,
-			user_id
+			user_id,
+			area_code
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -224,7 +234,8 @@
 			#{obj.areaAddress,jdbcType=VARCHAR},
 			#{obj.address,jdbcType=VARCHAR},
 			#{obj.isDefault,jdbcType=NUMERIC},
-			#{obj.userId,jdbcType=NUMERIC}
+			#{obj.userId,jdbcType=NUMERIC},
+			#{obj.areaCode,jdbcType=VARCHAR}
 		)
 		</foreach>
 	</insert>
@@ -266,6 +277,9 @@
 			</if>
  			<if test="userId != null">
 				,u.user_id=#{userId,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="areaCode != null">
+				,u.area_code=#{areaCode,jdbcType=VARCHAR} 
 			</if>
 		</set>
 		where

@@ -57,5 +57,12 @@ public class OrderController extends BaseController{
         orderService.handOrderOverdue(orderNo);
         printWriter(response,successResultJSON());
     }
+    @RequestMapping("/refuseRefund")
+    public void refuseRefund(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> params = nullAbleValidation(request,FatOrder.FIELD_ORDER_NO);
+        String orderNo = StringDefaultValue.StringValue(params.get(FatOrder.FIELD_ORDER_NO));
+        orderService.refuseRefund(orderNo);
+        printWriter(response,successResultJSON());
+    }
 
 }

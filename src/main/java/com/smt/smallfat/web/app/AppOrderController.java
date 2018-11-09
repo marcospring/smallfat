@@ -67,7 +67,8 @@ public class AppOrderController extends BaseController {
     public void getShoppingCardInfo(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = nullAbleValidation(request, Constant.USER_ID);
         int userId = StringDefaultValue.intValue(param.get(Constant.USER_ID));
-        ShoppingCardVO result = orderService.getShoppingCardInfo(userId);
+        int addressId = StringDefaultValue.intValue(param.get("addressId"));
+        ShoppingCardVO result = orderService.getShoppingCardInfo(userId, addressId);
         printWriter(response, successResultJSON(result));
     }
 
@@ -75,7 +76,8 @@ public class AppOrderController extends BaseController {
     public void deleteShoppingCardItem(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> param = nullAbleValidation(request, FatShoppingCart.FIELD_ID);
         int id = StringDefaultValue.intValue(param.get(FatShoppingCart.FIELD_ID));
-        ShoppingCardVO result = orderService.deleteShoppingCartItem(id);
+        int addressId = StringDefaultValue.intValue(param.get("addressId"));
+        ShoppingCardVO result = orderService.deleteShoppingCartItem(id, addressId);
         printWriter(response, successResultJSON(result));
     }
 
@@ -98,19 +100,19 @@ public class AppOrderController extends BaseController {
     }
 
     @RequestMapping("/refund")
-    public void refund(HttpServletRequest request, HttpServletResponse response){
-        Map<String,Object> param = nullAbleValidation(request,FatOrder.FIELD_ORDER_NO,Constant.USER_ID);
+    public void refund(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = nullAbleValidation(request, FatOrder.FIELD_ORDER_NO, Constant.USER_ID);
         String orderNo = StringDefaultValue.StringValue(param.get(FatOrder.FIELD_ORDER_NO));
         int userId = StringDefaultValue.intValue(param.get(Constant.USER_ID));
-        OrderVO order =orderService.refund(orderNo, userId);
-        printWriter(response,successResultJSON(order));
+        OrderVO order = orderService.refund(orderNo, userId);
+        printWriter(response, successResultJSON(order));
     }
 
     @RequestMapping("/cusDelOrder")
-    public void cusDelOrder(HttpServletRequest request, HttpServletResponse response){
-        Map<String,Object> param = nullAbleValidation(request,FatOrder.FIELD_ORDER_NO);
+    public void cusDelOrder(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> param = nullAbleValidation(request, FatOrder.FIELD_ORDER_NO);
         String orderNo = StringDefaultValue.StringValue(param.get(FatOrder.FIELD_ORDER_NO));
         orderService.cusDelOrder(orderNo);
-        printWriter(response,successResultJSON());
+        printWriter(response, successResultJSON());
     }
 }

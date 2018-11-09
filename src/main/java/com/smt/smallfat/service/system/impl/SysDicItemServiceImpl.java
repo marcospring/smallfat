@@ -50,19 +50,17 @@ public class SysDicItemServiceImpl extends BaseServiceImpl implements SysDicItem
 
     @Override
     public SysDicItemVo updateSysDicItem(Map<String, Object> param) {
-        int id = StringDefaultValue.intValue(param.get(SysDicItem.FIELD_DIC_ID));
+        int id = StringDefaultValue.intValue(param.get(SysDicItem.FIELD_ID));
         String value = StringDefaultValue.StringValue(param.get(SysDicItem.FIELD_DIC_ITEM_VALUE));
-
-        int dicItemid = StringDefaultValue.intValue(param.get(SysDicItem.FIELD_ID));
+//        int dicItemid = StringDefaultValue.intValue(param.get(SysDicItem.FIELD_ID));
         SysDicItem sysDicItem = factory.getCacheReadDataSession().querySingleResultById(SysDicItem.class, id);
         if (sysDicItem == null)
             throw new CommonException(ResultConstant.SysDicResult.SYSDICITEM_IS_NULL);
         Param params = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(SysDicItem.FIELD_DIC_ID, sysDicItem.getDicId()))
-                .add(ParamBuilder.nv(SysDicItem.FIELD_DIC_ITEM_VALUE, StringDefaultValue.StringValue(param.get(SysDicItem.FIELD_DIC_ITEM_VALUE))));
+                .add(ParamBuilder.nv(SysDicItem.FIELD_DIC_ITEM_VALUE, value));
         List<SysDicItem> dicItemByParam = factory.getCacheReadDataSession().queryListResult(SysDicItem.class, params);
-        ;
         if (dicItemByParam.size() != 0) {
-            if (dicItemByParam.stream().filter(p -> p.getId() != dicItemid).count() > 0) {
+            if (dicItemByParam.stream().filter(p -> p.getId() != id).count() > 0) {
                 throw new CommonException(ResultConstant.SysDicResult.SYSDICITEM_IS_EXIST);
             }
         }

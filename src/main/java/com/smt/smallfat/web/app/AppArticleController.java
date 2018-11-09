@@ -76,8 +76,5 @@ public class AppArticleController extends BaseController {
         printWriter(response, successResultJSON(vo));
     }
 
-    @RequestMapping("/getArticgetArticleTypeleById")
-    public void getArticleType(HttpServletRequest request, HttpServletResponse response){
 
-    }
 }

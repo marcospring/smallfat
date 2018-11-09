@@ -2,14 +2,16 @@ package com.smt.smallfat.service.base.impl;
 
 import com.csyy.common.StringDefaultValue;
 import com.csyy.core.apisupport.impl.BaseServiceImpl;
-import com.csyy.core.datasource.param.Param;
-import com.csyy.core.datasource.param.ParamBuilder;
+import com.csyy.core.datasource.param.*;
 import com.csyy.core.exception.CommonException;
 import com.csyy.core.obj.Pagination;
 import com.csyy.core.utils.CommonBeanUtils;
 import com.smt.smallfat.constant.Constant;
 import com.smt.smallfat.constant.ResultConstant;
+import com.smt.smallfat.po.FatComment;
 import com.smt.smallfat.po.FatCustomer;
+import com.smt.smallfat.po.FatSucculentCircle;
+import com.smt.smallfat.po.FatSucculentPraise;
 import com.smt.smallfat.service.base.CustomerService;
 import com.smt.smallfat.service.house.CircleService;
 import com.smt.smallfat.vo.UserVO;
@@ -36,6 +38,16 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
     public void deleteCustomer(int id) {
         getCustomerById(id);
         factory.getCacheWriteDataSession().physicalDelete(FatCustomer.class, id);
+        //删点赞
+        CustomSQL where = SQLCreator.where().cloumn(FatSucculentPraise.FIELD_CIRCLE_ID).operator(ESQLOperator.EQ).v(id);
+        factory.getCacheWriteDataSession().physicalWhereDelete(FatSucculentPraise.class, where);
+        //删评论
+        CustomSQL commentWhere = SQLCreator.where().cloumn(FatComment.FIELD_ARTICLE_ID).operator(ESQLOperator.EQ).v(id)
+                .operator(ESQLOperator.AND).cloumn(FatComment.FIELD_COMMENT_TYPE).operator(ESQLOperator.EQ).v
+                        (Constant.CommentType.CIRCLE);
+        factory.getCacheWriteDataSession().physicalWhereDelete(FatComment.class, commentWhere);
+        //删除花房
+        factory.getCacheWriteDataSession().physicalDelete(FatSucculentCircle.class, id);
     }
 
     @Override

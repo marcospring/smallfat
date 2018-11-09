@@ -20,7 +20,8 @@
 			u.email as email ,
 			u.ip_address as ipAddress ,
 			u.last_login_time as lastLoginTime ,
-			u.status as status 
+			u.status as status ,
+			u.shop_id as shopId 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -109,6 +110,9 @@
 		</if>
 		<if test="status != null">
 			and u.status = #{status,jdbcType=NUMERIC}
+		</if>
+		<if test="shopId != null">
+			and u.shop_id = #{shopId,jdbcType=NUMERIC}
 		</if>
 	</sql>
 
@@ -206,7 +210,8 @@
 			email,
 			ip_address,
 			last_login_time,
-			status
+			status,
+			shop_id
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -225,7 +230,8 @@
 			#{email,jdbcType=VARCHAR},
 			#{ipAddress,jdbcType=VARCHAR},
 			#{lastLoginTime,jdbcType=TIMESTAMP},
-			#{status,jdbcType=NUMERIC}
+			#{status,jdbcType=NUMERIC},
+			#{shopId,jdbcType=NUMERIC}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -247,7 +253,8 @@
 			email,
 			ip_address,
 			last_login_time,
-			status
+			status,
+			shop_id
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -268,7 +275,8 @@
 			#{obj.email,jdbcType=VARCHAR},
 			#{obj.ipAddress,jdbcType=VARCHAR},
 			#{obj.lastLoginTime,jdbcType=TIMESTAMP},
-			#{obj.status,jdbcType=NUMERIC}
+			#{obj.status,jdbcType=NUMERIC},
+			#{obj.shopId,jdbcType=NUMERIC}
 		)
 		</foreach>
 	</insert>
@@ -322,6 +330,9 @@
 			</if>
  			<if test="status != null">
 				,u.status=#{status,jdbcType=NUMERIC} 
+			</if>
+ 			<if test="shopId != null">
+				,u.shop_id=#{shopId,jdbcType=NUMERIC} 
 			</if>
 		</set>
 		where

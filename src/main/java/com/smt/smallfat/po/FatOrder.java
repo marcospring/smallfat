@@ -1,9 +1,7 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
-
-import java.math.BigDecimal;
-
+import  java.math.BigDecimal;
 /**
  * FatOrder实体
  * 
@@ -62,6 +60,14 @@ public class FatOrder extends BasePo {
 	private String  refundNo = "";
 	/**退款订单号 对应的静态变量值*/
 	public static final String FIELD_REFUND_NO = "refundNo";
+	/**快递公司*/
+	private String  expCompany = "";
+	/**快递公司 对应的静态变量值*/
+	public static final String FIELD_EXP_COMPANY = "expCompany";
+	/***/
+	private String  userAddress = "";
+	/** 对应的静态变量值*/
+	public static final String FIELD_USER_ADDRESS = "userAddress";
 	
 	public Integer getState() {
 		return state;
@@ -134,5 +140,17 @@ public class FatOrder extends BasePo {
 	}
 	public void setRefundNo(String refundNo) {
 		this.refundNo = refundNo;
+	}
+	public String getExpCompany() {
+		return expCompany;
+	}
+	public void setExpCompany(String expCompany) {
+		this.expCompany = expCompany;
+	}
+	public String getUserAddress() {
+		return userAddress;
+	}
+	public void setUserAddress(String userAddress) {
+		this.userAddress = userAddress;
 	}
 }

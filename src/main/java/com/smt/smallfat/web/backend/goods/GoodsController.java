@@ -164,4 +164,11 @@ public class GoodsController extends BaseController {
         printWriter(response, successResultJSON(customers));
     }
 
+    @RequestMapping("/downApp")
+    public void downShelf(HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> param = nullAbleValidation(request, FatGoods.FIELD_ID);
+        int id = StringDefaultValue.intValue(param.get(FatGoods.FIELD_ID));
+        goodsService.downApp(id);
+        printWriter(response, successResultJSON());
+    }
 }

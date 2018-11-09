@@ -130,7 +130,6 @@
     <resultMessage code="011613" key="ORDER_ALREADY_PAY" message="您的订单已支付，请勿重复支付"/>
 
     <!--地址-->
-    <resultMessage code="011701" key="ADDRESS_IS_NULL" message="用户地址不存在"/>
 
     <!--用户通知-->
     <resultMessage code="011801" key="NOTIFICATION_IS_NULL" message="用户通知不存在"/>
@@ -170,6 +169,12 @@
     <!-- THEME -->
     <resultMessage code="012501" key="THEME_NOT_NULL" message="商品主题已经存在"/>
     <resultMessage code="012502" key="THEME_IS_NULL" message="商品主题不存在"/>
+    <!--FREIGHT-->
+    <resultMessage code="012601" key="TABLE_IS_NOT_NULL" message="运费表已存在"/>
+    <resultMessage code="012602" key="TABLE_IS_NULL" message="运费表不存在"/>
+    <resultMessage code="012603" key="BODY_AREA_IS_NOT_NULL" message="省已经添加"/>
+    <resultMessage code="012604" key="BODY_IS_NULL" message="运费项不存在"/>
+    <resultMessage code="012605" key="BODY_HEAD_CAN_NOT_MODIFY" message="运费项不能修改运费表Id"/>
 
 
 

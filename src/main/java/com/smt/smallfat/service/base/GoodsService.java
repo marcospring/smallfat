@@ -21,6 +21,9 @@ public interface GoodsService {
     int CATEGORY_ENABLE = 1;
     int CATEGORY_DISABLE = 2;
 
+    int UP_APP = 1;
+    int DOWN_APP = 2;
+
 
     FatGoods addGoods(Map<String, Object> param);
 
@@ -95,6 +98,8 @@ public interface GoodsService {
     void returnInventory(int goodsDetailId, int returnCount);
 
     void addToApp(int id);
+
+    void downApp(int id);
 
     void orderGoods(int id);
 

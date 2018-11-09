@@ -1,4 +1,5 @@
 package com.smt.smallfat.po;
+
 import com.csyy.core.obj.BasePo;
 import  java.util.Date;
 /**
@@ -51,6 +52,10 @@ public class SysUser extends BasePo {
 	private Integer  status = 0;
 	/**状态 0启用 1禁用 对应的静态变量值*/
 	public static final String FIELD_STATUS = "status";
+	/**商户ID*/
+	private Integer  shopId = 0;
+	/**商户ID 对应的静态变量值*/
+	public static final String FIELD_SHOP_ID = "shopId";
 	
 	public String getUsername() {
 		return username;
@@ -111,5 +116,11 @@ public class SysUser extends BasePo {
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public Integer getShopId() {
+		return shopId;
+	}
+	public void setShopId(Integer shopId) {
+		this.shopId = shopId;
 	}
 }

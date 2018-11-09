@@ -54,6 +54,8 @@ public class SysUserVo extends BaseVo {
      */
     private String roles ;
 
+    private int shopId;
+
     public String getUsername() {
         return username;
     }
@@ -140,5 +142,13 @@ public class SysUserVo extends BaseVo {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public int getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(int shopId) {
+        this.shopId = shopId;
     }
 }

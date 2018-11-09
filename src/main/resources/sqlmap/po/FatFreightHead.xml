@@ -12,7 +12,7 @@
 			u.remark as remark ,
 			u.order_by as orderBy ,
 			u.shop_id as shopId ,
-			u.company_id as companyId ,
+			u.company_code as companyCode ,
 			u.express_type as expressType 
 	</sql>
 	<sql id="searchCriteria">
@@ -52,8 +52,11 @@
 		<if test="shopId != null">
 			and u.shop_id = #{shopId,jdbcType=NUMERIC}
 		</if>
-		<if test="companyId != null">
-			and u.company_id = #{companyId,jdbcType=NUMERIC}
+		<if test="companyCode != null">
+			and u.company_code = #{companyCode,jdbcType=VARCHAR}
+		</if>
+		<if test="companyCodeLike != null">
+			and u.company_code like CONCAT('%',#{companyCodeLike,jdbcType=VARCHAR},'%') 
 		</if>
 		<if test="expressType != null">
 			and u.express_type = #{expressType,jdbcType=NUMERIC}
@@ -146,7 +149,7 @@
 			remark,
 			order_by,
 			shop_id,
-			company_id,
+			company_code,
 			express_type
 		)values(
 			#{disabled,jdbcType=NUMERIC},
@@ -158,7 +161,7 @@
 			#{remark,jdbcType=VARCHAR},
 			#{orderBy,jdbcType=NUMERIC},
 			#{shopId,jdbcType=NUMERIC},
-			#{companyId,jdbcType=NUMERIC},
+			#{companyCode,jdbcType=VARCHAR},
 			#{expressType,jdbcType=NUMERIC}
 		)
 	</insert>
@@ -173,7 +176,7 @@
 			remark,
 			order_by,
 			shop_id,
-			company_id,
+			company_code,
 			express_type
 		)values
 		<foreach collection="list" item="obj" separator=",">
@@ -187,7 +190,7 @@
 			#{obj.remark,jdbcType=VARCHAR},
 			#{obj.orderBy,jdbcType=NUMERIC},
 			#{obj.shopId,jdbcType=NUMERIC},
-			#{obj.companyId,jdbcType=NUMERIC},
+			#{obj.companyCode,jdbcType=VARCHAR},
 			#{obj.expressType,jdbcType=NUMERIC}
 		)
 		</foreach>
@@ -216,8 +219,8 @@
  			<if test="shopId != null">
 				,u.shop_id=#{shopId,jdbcType=NUMERIC} 
 			</if>
- 			<if test="companyId != null">
-				,u.company_id=#{companyId,jdbcType=NUMERIC} 
+ 			<if test="companyCode != null">
+				,u.company_code=#{companyCode,jdbcType=VARCHAR} 
 			</if>
  			<if test="expressType != null">
 				,u.express_type=#{expressType,jdbcType=NUMERIC} 

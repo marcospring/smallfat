@@ -48,6 +48,10 @@ public class FatGoods extends BasePo {
 	private Date  publishTime = new Date();
 	/**发布时间 对应的静态变量值*/
 	public static final String FIELD_PUBLISH_TIME = "publishTime";
+	/**运费表头ID*/
+	private Integer  freightHeadId = 0;
+	/**运费表头ID 对应的静态变量值*/
+	public static final String FIELD_FREIGHT_HEAD_ID = "freightHeadId";
 	
 	public String getTitle() {
 		return title;
@@ -102,5 +106,11 @@ public class FatGoods extends BasePo {
 	}
 	public void setPublishTime(Date publishTime) {
 		this.publishTime = publishTime;
+	}
+	public Integer getFreightHeadId() {
+		return freightHeadId;
+	}
+	public void setFreightHeadId(Integer freightHeadId) {
+		this.freightHeadId = freightHeadId;
 	}
 }

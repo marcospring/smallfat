@@ -19,7 +19,8 @@
 			u.is_push as isPush ,
 			u.is_app as isApp ,
 			u.category_id as categoryId ,
-			u.publish_time as publishTime 
+			u.publish_time as publishTime ,
+			u.freight_head_id as freightHeadId 
 	</sql>
 	<sql id="searchCriteria">
 		<if test="id != null">
@@ -96,6 +97,9 @@
 		</if>
 		<if test="publishTime != null">
 			and u.publish_time = #{publishTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="freightHeadId != null">
+			and u.freight_head_id = #{freightHeadId,jdbcType=NUMERIC}
 		</if>
 	</sql>
 
@@ -192,7 +196,8 @@
 			is_push,
 			is_app,
 			category_id,
-			publish_time
+			publish_time,
+			freight_head_id
 		)values(
 			#{disabled,jdbcType=NUMERIC},
 			#{uuid,jdbcType=VARCHAR},
@@ -210,7 +215,8 @@
 			#{isPush,jdbcType=NUMERIC},
 			#{isApp,jdbcType=NUMERIC},
 			#{categoryId,jdbcType=NUMERIC},
-			#{publishTime,jdbcType=TIMESTAMP}
+			#{publishTime,jdbcType=TIMESTAMP},
+			#{freightHeadId,jdbcType=NUMERIC}
 		)
 	</insert>
 	<insert id="saveBatch" parameterType="ArrayList">
@@ -231,7 +237,8 @@
 			is_push,
 			is_app,
 			category_id,
-			publish_time
+			publish_time,
+			freight_head_id
 		)values
 		<foreach collection="list" item="obj" separator=",">
 		(
@@ -251,7 +258,8 @@
 			#{obj.isPush,jdbcType=NUMERIC},
 			#{obj.isApp,jdbcType=NUMERIC},
 			#{obj.categoryId,jdbcType=NUMERIC},
-			#{obj.publishTime,jdbcType=TIMESTAMP}
+			#{obj.publishTime,jdbcType=TIMESTAMP},
+			#{obj.freightHeadId,jdbcType=NUMERIC}
 		)
 		</foreach>
 	</insert>
@@ -302,6 +310,9 @@
 			</if>
  			<if test="publishTime != null">
 				,u.publish_time=#{publishTime,jdbcType=TIMESTAMP} 
+			</if>
+ 			<if test="freightHeadId != null">
+				,u.freight_head_id=#{freightHeadId,jdbcType=NUMERIC} 
 			</if>
 		</set>
 		where

@@ -37,7 +37,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .apiInfo(apiInfo())
                 .groupName("smallfat-api")
                 .select()   // 选择那些路径和api会生成document
-                .apis(RequestHandlerSelectors.basePackage("com.smt.smallfat.web.app"))
+                .apis(RequestHandlerSelectors.basePackage("com.smt.smallfat.web"))
                // .paths(paths())
                 //.apis(RequestHandlerSelectors.any())  // 对所有api进行监控
                 //.paths(PathSelectors.any())   // 对所有路径进行监控

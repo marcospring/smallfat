@@ -1,7 +1,6 @@
 package com.smt.smallfat.po;
 
 import com.csyy.core.obj.BasePo;
-
 /**
  * FatCustomerAddress实体
  * 
@@ -36,6 +35,10 @@ public class FatCustomerAddress extends BasePo {
 	private Integer  userId = 0;
 	/**客户ID 对应的静态变量值*/
 	public static final String FIELD_USER_ID = "userId";
+	/**省CODE*/
+	private String  areaCode = "";
+	/**省CODE 对应的静态变量值*/
+	public static final String FIELD_AREA_CODE = "areaCode";
 	
 	public String getReceiveName() {
 		return receiveName;
@@ -72,5 +75,11 @@ public class FatCustomerAddress extends BasePo {
 	}
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	public String getAreaCode() {
+		return areaCode;
+	}
+	public void setAreaCode(String areaCode) {
+		this.areaCode = areaCode;
 	}
 }

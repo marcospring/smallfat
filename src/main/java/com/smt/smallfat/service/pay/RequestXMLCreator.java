@@ -7,11 +7,14 @@ import com.smt.smallfat.service.pay.obj.PayResponse;
 import com.smt.smallfat.utils.XmlUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import java.io.StringReader;
 import java.util.*;
 
 public class RequestXMLCreator {
@@ -105,7 +108,15 @@ public class RequestXMLCreator {
 
     public PayCallBackResponse buildResponse(String xml) throws DocumentException {
         PayCallBackResponse response = new PayCallBackResponse();
-        Document doc = DocumentHelper.parseText(xml);
+        SAXReader reader = new SAXReader();
+        //防止DTD注入攻击   xee
+        try {
+            reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+        getEncoding(xml);
+        Document doc = reader.read(new InputSource(new StringReader(xml)));
         Element root = doc.getRootElement();
         response.setReturn_code(StringDefaultValue.StringValue(root.elementText("return_code")));
         response.setAppid(StringDefaultValue.StringValue(root.elementText("appid")));
@@ -152,6 +163,28 @@ public class RequestXMLCreator {
         StringBuilder builder = new StringBuilder(PayConstant.PAY_CALL_BACK_FAIL_RESPONSE_FRONT);
         builder.append(msg).append(PayConstant.PAY_CALL_BACK_FAIL_RESPONSE_END);
         return builder.toString();
+    }
+
+
+    private String getEncoding(String text) {
+        String result = null;
+        String xml = text.trim();
+        if (xml.startsWith("<?xml")) {
+            int end = xml.indexOf("?>");
+            String sub = xml.substring(0, end);
+            StringTokenizer tokens = new StringTokenizer(sub, " =\"'");
+            while (tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                if ("encoding".equals(token)) {
+                    if (!tokens.hasMoreTokens()) {
+                        break;
+                    }
+                    result = tokens.nextToken();
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
 }

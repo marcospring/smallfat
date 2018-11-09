@@ -187,4 +187,9 @@ public class ThemeServiceImpl extends BaseServiceImpl implements ThemeService {
         return id(FatGoodsTheme.class, id, ResultConstant.Theme.THEME_IS_NULL);
     }
 
+    @Override
+    public List<FatGoodsTheme> themeList(Map<String, Object> params) {
+        return factory.getCacheReadDataSession().queryListResult(FatGoodsTheme.class,ParamBuilder.getInstance()
+                .getParam().add(params));
+    }
 }

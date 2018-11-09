@@ -107,4 +107,11 @@ public class CustomerAddressServiceImpl extends BaseServiceImpl implements Custo
                 , params, pageNo, pageSize);
         return page;
     }
+
+    @Override
+    public FatCustomerAddress getUserDefaultAddress(int userId) {
+        Param param = ParamBuilder.getInstance().getParam().add(ParamBuilder.nv(FatCustomerAddress.FIELD_USER_ID,
+                userId)).add(ParamBuilder.nv(FatCustomerAddress.FIELD_IS_DEFAULT,DEFAULT));
+        return factory.getCacheReadDataSession().querySingleResultByParams(FatCustomerAddress.class,param);
+    }
 }

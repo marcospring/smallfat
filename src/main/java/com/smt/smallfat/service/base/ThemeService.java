@@ -16,4 +16,5 @@ public interface ThemeService {
     void publishTheme(int id);
     void cancelTheme(int id);
     FatGoodsTheme getThemeById(int id);
+    List<FatGoodsTheme> themeList(Map<String, Object> params);
 }

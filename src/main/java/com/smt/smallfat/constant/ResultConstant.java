@@ -161,5 +161,13 @@ public class ResultConstant {
         String THEME_NOT_NULL = "THEME_NOT_NULL";
         String THEME_IS_NULL = "THEME_IS_NULL";
     }
+
+    public interface Freight{
+        String TABLE_IS_NOT_NULL = "TABLE_IS_NOT_NULL";
+        String TABLE_IS_NULL = "TABLE_IS_NULL";
+        String BODY_AREA_IS_NOT_NULL ="BODY_AREA_IS_NOT_NULL";
+        String BODY_IS_NULL ="BODY_IS_NULL";
+        String BODY_HEAD_CAN_NOT_MODIFY = "BODY_HEAD_CAN_NOT_MODIFY";
+    }
 }
 

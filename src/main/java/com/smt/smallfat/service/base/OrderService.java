@@ -51,9 +51,9 @@ public interface OrderService {
 
     ShoppingCardVO updateShoppingCart(Map<String, Object> param);
 
-    ShoppingCardVO deleteShoppingCartItem(int id);
+    ShoppingCardVO deleteShoppingCartItem(int id,int addressId);
 
-    ShoppingCardVO getShoppingCardInfo(int userId);
+    ShoppingCardVO getShoppingCardInfo(int userId,int addressId);
 
     FatOrder getOrderByOrderNo(String orderNo);
 
@@ -84,5 +84,7 @@ public interface OrderService {
     List<FatOrderItem> getOrderItemListByOrderId(int orderId);
 
     void cusDelOrder(String orderNo);
+
+    void refuseRefund(String orderNo);
 
 }

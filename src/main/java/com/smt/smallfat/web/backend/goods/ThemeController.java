@@ -79,4 +79,12 @@ public class ThemeController extends BaseController {
         printWriter(response,successResultJSON(vo));
 
     }
+
+    @RequestMapping("/allThemeList")
+    public void allThemeList(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> params = getRequestParams(request);
+        List<FatGoodsTheme> list = themeService.themeList(params);
+        printWriter(response,successResultJSON(list));
+
+    }
 }

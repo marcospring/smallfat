@@ -1,6 +1,7 @@
 package com.smt.smallfat.service.base;
 
 import com.csyy.core.obj.Pagination;
+import com.smt.smallfat.po.FatCustomer;
 import com.smt.smallfat.po.FatCustomerAddress;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface CustomerAddressService {
     FatCustomerAddress setDefaultAddress(int id);
 
     Pagination<FatCustomerAddress> pageAddress(Map<String, Object> param);
+
+    FatCustomerAddress getUserDefaultAddress(int userId);
 }
